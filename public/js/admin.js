@@ -59,22 +59,124 @@
 
   function renderTab() {
     if (tab === 'listings') return renderListings();
+    if (tab === 'brokers') return renderBrokers();
     if (tab === 'leads') return renderLeads();
     if (tab === 'ndas') return renderNdas();
+  }
+
+  // Cached so the listing editor can offer a broker dropdown.
+  let brokerCache = [];
+  async function loadBrokers() {
+    try { brokerCache = await BK.adminListBrokers(); } catch (e) { brokerCache = []; }
+    return brokerCache;
+  }
+  const brokerName = (id) => {
+    const b = brokerCache.find((x) => x.id === id);
+    return b ? b.name : null;
+  };
+
+  // ---------------- BROKERS ----------------
+  async function renderBrokers() {
+    main.innerHTML = '<div class="empty">Loading…</div>';
+    const rows = await loadBrokers();
+    main.innerHTML = `
+      <div class="toolbar">
+        <h2>Brokers <span class="muted" style="font-size:15px;font-weight:400">(${rows.length})</span></h2>
+        <button class="btn btn-primary" id="new-broker">+ New Broker</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>Name</th><th>Title</th><th>Phone</th><th>Email</th><th>Public</th><th>Order</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map((b) => `
+            <tr>
+              <td><strong>${esc(b.name)}</strong><div class="muted" style="font-size:12px">/broker/${esc(b.slug)}</div></td>
+              <td>${esc(b.title || '—')}</td>
+              <td>${esc(b.phone || '—')}</td>
+              <td>${esc(b.email || '—')}</td>
+              <td>${b.is_active ? '<span class="badge badge-active">Live</span>' : '<span class="badge badge-draft">Hidden</span>'}</td>
+              <td>${esc(b.sort_order)}</td>
+              <td><div class="row-actions">
+                <button class="btn btn-ghost btn-sm" data-edit-b="${b.id}">Edit</button>
+                <button class="btn btn-danger btn-sm" data-del-b="${b.id}">Delete</button>
+              </div></td>
+            </tr>`).join('') || '<tr><td colspan="7" class="muted" style="text-align:center;padding:30px">No brokers yet.</td></tr>'}
+        </tbody>
+      </table>
+      <p class="form-note" style="margin-top:10px">Brokers appear on the public site at <code>/brokers</code>, each with a profile page listing the businesses they represent. Deleting a broker leaves their listings unassigned rather than removing them.</p>`;
+    document.getElementById('new-broker').addEventListener('click', () => openBrokerEditor(null));
+    main.querySelectorAll('[data-edit-b]').forEach((btn) => btn.addEventListener('click', () =>
+      openBrokerEditor(rows.find((r) => r.id === btn.dataset.editB))));
+    main.querySelectorAll('[data-del-b]').forEach((btn) => btn.addEventListener('click', async () => {
+      const b = rows.find((r) => r.id === btn.dataset.delB);
+      if (!confirm(`Delete ${b.name}? Their listings stay, but become unassigned.`)) return;
+      try { await BK.deleteBroker(b.id); toast('Broker deleted', 'ok'); renderBrokers(); }
+      catch (e) { toast(e.message, 'err'); }
+    }));
+  }
+
+  function openBrokerEditor(broker) {
+    const b = Object.assign({ is_active: true, sort_order: 0 }, broker || {});
+    const isNew = !b.id;
+    const back = document.createElement('div');
+    back.className = 'modal-back';
+    back.innerHTML = `
+      <div class="modal">
+        <div class="modal-head"><h3>${isNew ? 'New Broker' : 'Edit Broker'}</h3><button class="modal-x">×</button></div>
+        <div class="modal-body">
+          <form id="broker-form">
+            <div class="form-row">
+              <div class="field"><label>Name *</label><input name="name" value="${esc(b.name)}" required/></div>
+              <div class="field"><label>URL slug *</label><input name="slug" value="${esc(b.slug)}" placeholder="mary-lee" required/></div>
+            </div>
+            <div class="field"><label>Title</label><input name="title" value="${esc(b.title)}" placeholder="Licensed NYS Commercial &amp; Residential Broker"/></div>
+            <div class="form-row">
+              <div class="field"><label>Phone</label><input name="phone" value="${esc(b.phone)}"/></div>
+              <div class="field"><label>Email</label><input name="email" value="${esc(b.email)}"/></div>
+            </div>
+            <div class="form-row">
+              <div class="field"><label>License #</label><input name="license_no" value="${esc(b.license_no)}"/></div>
+              <div class="field"><label>Sort order</label><input name="sort_order" type="number" value="${val(b.sort_order)}"/></div>
+            </div>
+            <div class="field"><label>Photo URL</label><input name="photo_url" value="${esc(b.photo_url)}" placeholder="https://… (Supabase Storage public URL)"/>
+              <span class="form-note">Leave blank to show initials instead.</span></div>
+            <div class="field"><label>Bio</label><textarea name="bio">${esc(b.bio)}</textarea></div>
+            <label style="display:flex;gap:8px;align-items:center;margin-bottom:14px"><input type="checkbox" name="is_active" ${b.is_active ? 'checked' : ''} style="width:auto"/> Show on the public site</label>
+            <button class="btn btn-primary" type="submit">${isNew ? 'Create Broker' : 'Save Changes'}</button>
+          </form>
+        </div>
+      </div>`;
+    document.body.appendChild(back);
+    back.querySelector('.modal-x').addEventListener('click', () => back.remove());
+    back.querySelector('#broker-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const d = Object.fromEntries(new FormData(e.target).entries());
+      if (!d.name || !d.slug) return toast('Name and slug are required', 'err');
+      const row = {
+        id: b.id, name: d.name, slug: d.slug, title: d.title || null, phone: d.phone || null,
+        email: d.email || null, license_no: d.license_no || null, photo_url: d.photo_url || null,
+        bio: d.bio || null, is_active: !!d.is_active, sort_order: Number(d.sort_order || 0),
+      };
+      if (!row.id) delete row.id;
+      try { await BK.saveBroker(row); toast('Broker saved', 'ok'); back.remove(); renderBrokers(); }
+      catch (err) { toast(err.message, 'err'); }
+    });
   }
 
   // ---------------- LISTINGS ----------------
   async function renderListings() {
     main.innerHTML = '<div class="empty">Loading…</div>';
     let rows;
-    try { rows = await BK.adminListListings(); } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    try {
+      await loadBrokers();
+      rows = await BK.adminListListings();
+    } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     main.innerHTML = `
       <div class="toolbar">
         <h2>Listings <span class="muted" style="font-size:15px;font-weight:400">(${rows.length})</span></h2>
         <button class="btn btn-primary" id="new-listing">+ New Listing</button>
       </div>
       <table class="table">
-        <thead><tr><th>Business</th><th>Status</th><th>Category</th><th>Location</th><th>Asking</th><th>Cash Flow</th><th></th></tr></thead>
+        <thead><tr><th>Business</th><th>Status</th><th>Category</th><th>Location</th><th>Broker</th><th>Asking</th><th>Cash Flow</th><th></th></tr></thead>
         <tbody>
           ${rows.map((l) => `
             <tr>
@@ -82,13 +184,14 @@
               <td><span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span></td>
               <td>${esc(l.category || '—')}</td>
               <td>${esc(fmt.location(l))}</td>
+              <td>${brokerName(l.broker_id) ? esc(brokerName(l.broker_id)) : '<span class="muted">Unassigned</span>'}</td>
               <td>${esc(fmt.moneyOr(l.asking_price, '—'))}</td>
               <td>${esc(fmt.moneyOr(l.cash_flow, '—'))}</td>
               <td><div class="row-actions">
                 <button class="btn btn-ghost btn-sm" data-edit="${l.id}">Edit</button>
                 <button class="btn btn-danger btn-sm" data-del="${l.id}">Delete</button>
               </div></td>
-            </tr>`).join('') || '<tr><td colspan="7" class="muted" style="text-align:center;padding:30px">No listings yet. Create your first one.</td></tr>'}
+            </tr>`).join('') || '<tr><td colspan="8" class="muted" style="text-align:center;padding:30px">No listings yet. Create your first one.</td></tr>'}
         </tbody>
       </table>`;
     document.getElementById('new-listing').addEventListener('click', () => openListingEditor(null));
@@ -136,9 +239,18 @@
         <div class="modal-head"><h3>${isNew ? 'New Listing' : 'Edit Listing'}</h3><button class="modal-x">×</button></div>
         <div class="modal-body">
           <form id="listing-form">
-            <div class="field"><label>Status</label>
-              <select name="status">${STATUSES.map((s) => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${fmt.statusLabel(s)}</option>`).join('')}</select>
-              <span class="form-note">Active / Under Offer / Sold are publicly visible. Draft & Withdrawn are hidden.</span>
+            <div class="form-row">
+              <div class="field"><label>Status</label>
+                <select name="status">${STATUSES.map((s) => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${fmt.statusLabel(s)}</option>`).join('')}</select>
+                <span class="form-note">Active / Under Offer / Sold are publicly visible. Draft & Withdrawn are hidden.</span>
+              </div>
+              <div class="field"><label>Listed by</label>
+                <select name="broker_id">
+                  <option value="">— Unassigned —</option>
+                  ${brokerCache.map((b) => `<option value="${b.id}" ${l.broker_id === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}
+                </select>
+                <span class="form-note">Shown on the listing and routes its inquiries to that broker.</span>
+              </div>
             </div>
             <label style="display:flex;gap:8px;align-items:center;margin-bottom:14px"><input type="checkbox" name="is_featured" ${l.is_featured ? 'checked' : ''} style="width:auto"/> Feature on the homepage</label>
 
@@ -183,6 +295,7 @@
       MONEY_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] === '' ? null : Number(d[f[0]]); });
       LONG_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] || null; });
       row.status = d.status;
+      row.broker_id = d.broker_id || null;
       ['is_featured', 'is_ffe_included', 'is_inventory_included', 'seller_financing', 'is_franchise']
         .forEach((k) => { row[k] = !!d[k]; });
       try {
@@ -264,7 +377,11 @@
   let leadCache = [];
   async function renderLeads() {
     main.innerHTML = '<div class="empty">Loading…</div>';
-    try { leadCache = await BK.listLeads(); } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    try {
+      await loadBrokers();
+      listingCache = await BK.adminListListings();
+      leadCache = await BK.listLeads();
+    } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     const byStage = {}; STAGES.forEach((s) => (byStage[s[0]] = []));
     leadCache.forEach((l) => { (byStage[l.stage] || (byStage[l.stage] = [])).push(l); });
 
@@ -287,6 +404,7 @@
 
   function leadCardHTML(l) {
     const listing = findListingTitle(l.listing_id);
+    const broker = brokerName(l.broker_id);
     return `<div class="lead-card ${l.type}" data-lead="${l.id}">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
         <span class="ln">${esc(l.name)}</span>
@@ -294,14 +412,16 @@
       </div>
       <div class="lm">${esc(l.email || l.phone || '')}</div>
       ${listing ? `<div class="lm" style="color:var(--blue)">${esc(listing)}</div>` : ''}
+      ${broker ? `<div class="lm">→ ${esc(broker)}</div>` : ''}
       <div class="lm">${esc((l.message || '').slice(0, 60))}</div>
     </div>`;
   }
 
+  // Resolved from the real listings query (works live and in demo), not DEMO_LISTINGS.
+  let listingCache = [];
   function findListingTitle(id) {
     if (!id) return null;
-    const src = window.DEMO_LISTINGS || [];
-    const l = src.find((x) => x.id === id);
+    const l = listingCache.find((x) => x.id === id);
     return l ? l.title : null;
   }
 
@@ -358,7 +478,10 @@
   async function renderNdas() {
     main.innerHTML = '<div class="empty">Loading…</div>';
     let rows = [];
-    try { rows = await BK.listNdas(); } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+    try {
+      listingCache = await BK.adminListListings();
+      rows = await BK.listNdas();
+    } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     main.innerHTML = `
       <div class="toolbar"><h2>Signed NDAs <span class="muted" style="font-size:15px;font-weight:400">(${rows.length})</span></h2></div>
       ${BK.isDemo ? '<p class="muted">NDA signatures appear here once the site is live on Supabase. In demo mode, signing an NDA on the public site creates a buyer lead in the <strong>NDA Signed</strong> column instead.</p>' : ''}

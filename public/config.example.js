@@ -17,8 +17,6 @@ window.BROKERAGE_CONFIG = {
   CONTACT_ADDRESS: '123 Main St, City, ST 00000',
   WEBSITE: 'www.example.com',
 
-  // Team shown on the public "About / Our Team" section. Add one entry per person.
-  TEAM: [
-    { name: 'Broker Name', title: 'Licensed Broker', phone: '(555) 123-4567', email: 'broker@example.com', bio: 'Short professional bio.' },
-  ],
+  // NOTE: brokers are NOT configured here. They're real CMS data — manage them
+  // in /admin → Brokers. They appear at /brokers, each with a profile page.
 };

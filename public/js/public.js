@@ -4,6 +4,7 @@
   const app = document.getElementById('app');
   const cfg = BK.config;
   let ALL = [];            // cached live listings
+  let BROKERS = [];        // cached active brokers
   let filters = { q: '', category: '', state: '' };
 
   // ---------- utilities ----------
@@ -229,9 +230,9 @@
             </div>
 
             <div class="block" id="inquire">
-              <h2>Contact the broker about this business</h2>
+              <h2>Contact ${l.broker ? esc(l.broker.name) : 'the broker'} about this business</h2>
               <p class="muted">Send an inquiry and we'll follow up, typically within one business day.</p>
-              <div style="max-width:560px">${contactFormHTML('inquiry', l.id)}</div>
+              <div style="max-width:560px">${contactFormHTML('inquiry', l.id, l.broker ? l.broker.id : null)}</div>
             </div>
           </div>
 
@@ -248,6 +249,21 @@
                 ${hasDocs ? '<button class="btn btn-gold btn-block" id="nda-btn">🔒 Unlock Confidential Documents</button>' : ''}
               </div>
             </div>
+            ${l.broker ? `
+              <div class="listed-by">
+                <div class="listed-by-label">Listed by</div>
+                <a class="listed-by-row" href="/broker/${esc(l.broker.slug)}" data-link>
+                  ${avatarHTML(l.broker, 'listed-by-avatar')}
+                  <div>
+                    <div class="listed-by-name">${esc(l.broker.name)}</div>
+                    <div class="listed-by-title">${esc(l.broker.title || '')}</div>
+                  </div>
+                </a>
+                <div class="listed-by-contact">
+                  ${l.broker.phone ? `<a href="tel:${tel(l.broker.phone)}">📞 ${esc(l.broker.phone)}</a>` : ''}
+                  ${l.broker.email ? `<a href="mailto:${esc(l.broker.email)}">✉️ ${esc(l.broker.email)}</a>` : ''}
+                </div>
+              </div>` : ''}
             <p class="form-note" style="margin-top:12px">Listing ID: ${esc(l.slug)}. All information deemed reliable but not guaranteed.</p>
           </aside>
         </div>
@@ -266,9 +282,9 @@
   }
 
   // ---------- forms ----------
-  function contactFormHTML(type, listingId) {
+  function contactFormHTML(type, listingId, brokerId) {
     return `
-      <form id="form-inquiry" data-listing="${listingId || ''}" data-type="${type}">
+      <form id="form-inquiry" data-listing="${listingId || ''}" data-type="${type}" data-broker="${brokerId || ''}">
         <div class="form-row">
           <div class="field"><label>Name *</label><input name="name" required /></div>
           <div class="field"><label>Email *</label><input name="email" type="email" required /></div>
@@ -280,18 +296,28 @@
       </form>`;
   }
 
+  const tel = (p) => esc(String(p || '').replace(/[^0-9+]/g, ''));
+  const initials = (name) => esc((name || '?').split(' ').map((w) => w[0]).slice(0, 2).join(''));
+
+  // Broker avatar: real photo if set, else initials tile.
+  function avatarHTML(b, cls) {
+    return b.photo_url
+      ? `<img class="${cls} photo" src="${esc(b.photo_url)}" alt="${esc(b.name)}" />`
+      : `<div class="${cls}">${initials(b.name)}</div>`;
+  }
+
   function teamHTML() {
-    const team = cfg.TEAM || [];
-    if (!team.length) return '';
-    return `<div class="team-grid">${team.map((m) => `
+    if (!BROKERS.length) return '';
+    return `<div class="team-grid">${BROKERS.map((m) => `
       <div class="team-card">
-        <div class="team-avatar">${esc((m.name || '?').split(' ').map((w) => w[0]).slice(0, 2).join(''))}</div>
-        <div class="team-name">${esc(m.name)}</div>
+        ${avatarHTML(m, 'team-avatar')}
+        <div class="team-name"><a href="/broker/${esc(m.slug)}" data-link>${esc(m.name)}</a></div>
         <div class="team-title">${esc(m.title || '')}</div>
         <p class="team-bio">${esc(m.bio || '')}</p>
         <div class="team-contact">
-          ${m.phone ? `<a href="tel:${esc(m.phone.replace(/[^0-9+]/g, ''))}">${esc(m.phone)}</a>` : ''}
+          ${m.phone ? `<a href="tel:${tel(m.phone)}">${esc(m.phone)}</a>` : ''}
           ${m.email ? `<a href="mailto:${esc(m.email)}">${esc(m.email)}</a>` : ''}
+          <a href="/broker/${esc(m.slug)}" data-link>View profile &amp; listings →</a>
         </div>
       </div>`).join('')}</div>`;
   }
@@ -299,11 +325,73 @@
   function contactDetailsHTML() {
     const rows = [];
     if (cfg.CONTACT_ADDRESS) rows.push(`<div>📍 ${esc(cfg.CONTACT_ADDRESS)}</div>`);
-    (cfg.TEAM || []).forEach((m) => {
-      rows.push(`<div>👤 <strong>${esc(m.name)}</strong>${m.phone ? ` · <a href="tel:${esc(m.phone.replace(/[^0-9+]/g, ''))}">${esc(m.phone)}</a>` : ''}${m.email ? ` · <a href="mailto:${esc(m.email)}">${esc(m.email)}</a>` : ''}</div>`);
+    BROKERS.forEach((m) => {
+      rows.push(`<div>👤 <strong>${esc(m.name)}</strong>${m.phone ? ` · <a href="tel:${tel(m.phone)}">${esc(m.phone)}</a>` : ''}${m.email ? ` · <a href="mailto:${esc(m.email)}">${esc(m.email)}</a>` : ''}</div>`);
     });
     if (!rows.length && cfg.CONTACT_EMAIL) rows.push(`<div>✉️ <a href="mailto:${esc(cfg.CONTACT_EMAIL)}">${esc(cfg.CONTACT_EMAIL)}</a></div>`);
     return `<div class="contact-details">${rows.join('')}</div>`;
+  }
+
+  // ---------- BROKER PROFILE (/broker/:slug) ----------
+  async function renderBroker(slug) {
+    app.innerHTML = '<div class="wrap"><div class="empty">Loading…</div></div>';
+    let b;
+    try { b = await BK.getBrokerBySlug(slug); }
+    catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load this profile.</div></div>`; return; }
+    if (!b) {
+      app.innerHTML = `<div class="wrap"><div class="empty">Broker not found. <a href="/" data-link>Back to listings</a></div></div>`;
+      return;
+    }
+    let mine = [];
+    try { mine = await BK.listListingsByBroker(b.id); } catch (e) {}
+    const active = mine.filter((l) => l.status !== 'sold');
+    const sold = mine.filter((l) => l.status === 'sold');
+
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › <a href="/brokers" data-link>Our Brokers</a> › ${esc(b.name)}</div>
+        <div class="broker-hero block">
+          ${avatarHTML(b, 'broker-photo')}
+          <div class="broker-info">
+            <h1>${esc(b.name)}</h1>
+            <div class="broker-title">${esc(b.title || '')}</div>
+            ${b.license_no ? `<div class="muted" style="font-size:13px">License #${esc(b.license_no)}</div>` : ''}
+            <p class="broker-bio">${esc(b.bio || '')}</p>
+            <div class="broker-actions">
+              ${b.phone ? `<a class="btn btn-primary" href="tel:${tel(b.phone)}">📞 ${esc(b.phone)}</a>` : ''}
+              ${b.email ? `<a class="btn btn-ghost" href="mailto:${esc(b.email)}">✉️ ${esc(b.email)}</a>` : ''}
+            </div>
+          </div>
+        </div>
+
+        <div class="section-head"><h2>Current Listings</h2><span class="results-count">${active.length}</span></div>
+        <div class="grid">${active.length ? active.map(cardHTML).join('') : `<div class="empty">No active listings right now.</div>`}</div>
+
+        ${sold.length ? `
+          <div class="section-head"><h2>Recently Sold</h2><span class="results-count">${sold.length}</span></div>
+          <div class="grid">${sold.map(cardHTML).join('')}</div>` : ''}
+
+        <div class="block">
+          <h2>Contact ${esc(b.name.split(' ')[0])}</h2>
+          <p class="muted">Send a message directly — it goes straight to ${esc(b.name.split(' ')[0])}.</p>
+          <div style="max-width:560px">${contactFormHTML('inquiry', null, b.id)}</div>
+        </div>
+      </div>`;
+    wireForm('form-inquiry', 'inquiry');
+  }
+
+  // ---------- BROKERS INDEX (/brokers) ----------
+  async function renderBrokers() {
+    if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › Our Brokers</div>
+        <div class="block">
+          <h2>Our Brokers</h2>
+          <p class="muted">${esc(cfg.BRAND_TAGLINE || '')}</p>
+          ${teamHTML()}
+        </div>
+      </div>`;
   }
 
   function sellFormHTML() {
@@ -335,7 +423,8 @@
       try {
         await BK.submitInquiry({
           name: data.name, email: data.email, phone: data.phone, message: data.message,
-          company: data.company, listing_id: form.dataset.listing || null, type: form.dataset.type || type,
+          company: data.company, listing_id: form.dataset.listing || null,
+          broker_id: form.dataset.broker || null, type: form.dataset.type || type,
         });
         form.reset();
         toast('Thank you — your message has been sent.', 'ok');
@@ -407,13 +496,20 @@
   // ---------- router ----------
   async function render() {
     const path = location.pathname;
+
+    const mb = path.match(/^\/broker\/([^\/?#]+)/);
+    if (mb) return renderBroker(decodeURIComponent(mb[1]));
+    if (/^\/brokers\/?$/.test(path)) return renderBrokers();
+
     const m = path.match(/^\/listing\/([^\/?#]+)/);
     if (m) return renderDetail(decodeURIComponent(m[1]));
+
     // home — ensure data loaded
     if (!ALL.length) {
       try { ALL = await BK.listPublicListings(); }
       catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load listings. ${BK.isDemo ? '' : 'Check your Supabase configuration.'}</div></div>`; return; }
     }
+    if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
     renderHome();
     // scroll to hash section if present
     if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }

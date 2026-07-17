@@ -171,6 +171,36 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .team-bio { font-size: 14px; color: #35485c; margin: 0 0 12px; }
 .team-contact { display: flex; flex-direction: column; gap: 3px; font-size: 14px; font-weight: 600; }
 .contact-details { display: flex; flex-direction: column; gap: 6px; font-size: 15px; color: #35485c; }
+.team-avatar.photo { object-fit: cover; }
+.team-name a { color: var(--navy); }
+
+/* Broker profile page */
+.broker-hero { display: flex; gap: 26px; align-items: flex-start; }
+.broker-photo { width: 132px; height: 132px; border-radius: 50%; flex: 0 0 132px; background: var(--navy);
+  color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif);
+  font-size: 44px; font-weight: 700; object-fit: cover; }
+.broker-info h1 { font-family: var(--serif); font-size: 28px; margin: 0 0 2px; }
+.broker-title { color: var(--blue); font-weight: 600; font-size: 15px; }
+.broker-bio { color: #35485c; font-size: 15px; margin: 12px 0 16px; }
+.broker-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+/* "Listed by" card in the listing sidebar */
+.listed-by { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px 18px; margin-top: 14px; }
+.listed-by-label { font-size: 11px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted); font-weight: 700; margin-bottom: 10px; }
+.listed-by-row { display: flex; gap: 12px; align-items: center; text-decoration: none; }
+.listed-by-row:hover { text-decoration: none; }
+.listed-by-row:hover .listed-by-name { color: var(--blue); }
+.listed-by-avatar { width: 46px; height: 46px; border-radius: 50%; flex: 0 0 46px; background: var(--navy);
+  color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif);
+  font-weight: 700; font-size: 17px; object-fit: cover; }
+.listed-by-name { font-weight: 700; color: var(--navy); font-size: 15px; }
+.listed-by-title { font-size: 12px; color: var(--muted); }
+.listed-by-contact { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+
+@media (max-width: 620px) {
+  .broker-hero { flex-direction: column; }
+}
 
 /* ---------- Empty / banner ---------- */
 .demo-banner { background: #fdf6e3; border-bottom: 1px solid #f0e2b8; color: #7a5b00; font-size: 13px; text-align: center; padding: 7px 12px; }

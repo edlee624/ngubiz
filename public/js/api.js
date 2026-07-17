@@ -46,7 +46,13 @@
   const LIVE_STATUSES = ['active', 'under_offer', 'sold'];
 
   // ---- DEMO helpers -------------------------------------------------------
-  function demoAll() { return (window.DEMO_LISTINGS || []).map((l) => Object.assign({}, l)); }
+  function demoBrokers() { return (window.DEMO_BROKERS || []).map((b) => Object.assign({}, b)); }
+  // Mirror the `broker:brokers(*)` join Supabase returns, so render code is identical.
+  function attachBroker(l) {
+    l.broker = (window.DEMO_BROKERS || []).find((b) => b.id === l.broker_id) || null;
+    return l;
+  }
+  function demoAll() { return (window.DEMO_LISTINGS || []).map((l) => attachBroker(Object.assign({}, l))); }
   function demoLive() { return demoAll().filter((l) => LIVE_STATUSES.indexOf(l.status) !== -1); }
 
   // Simulated auth + lead store for demo admin.
@@ -94,7 +100,7 @@
       if (this.isDemo) return demoLive();
       return wrap(
         sb.from('listings')
-          .select('*, listing_images(*)')
+          .select('*, listing_images(*), broker:brokers(*)')
           .in('status', LIVE_STATUSES)
           .order('is_featured', { ascending: false })
           .order('updated_at', { ascending: false })
@@ -103,24 +109,73 @@
     async getListingBySlug(slug) {
       if (this.isDemo) return demoLive().find((l) => l.slug === slug) || null;
       const rows = await wrap(
-        sb.from('listings').select('*, listing_images(*)').eq('slug', slug).limit(1)
+        sb.from('listings').select('*, listing_images(*), broker:brokers(*)').eq('slug', slug).limit(1)
       );
       return rows && rows[0] ? rows[0] : null;
+    },
+
+    // ===================== BROKERS =======================================
+    async listBrokers() {
+      if (this.isDemo) return demoBrokers().filter((b) => b.is_active).sort((a, c) => a.sort_order - c.sort_order);
+      return wrap(sb.from('brokers').select('*').eq('is_active', true).order('sort_order'));
+    },
+    async getBrokerBySlug(slug) {
+      if (this.isDemo) return demoBrokers().find((b) => b.slug === slug && b.is_active) || null;
+      const rows = await wrap(sb.from('brokers').select('*').eq('slug', slug).limit(1));
+      return rows && rows[0] ? rows[0] : null;
+    },
+    async listListingsByBroker(brokerId) {
+      if (this.isDemo) return demoLive().filter((l) => l.broker_id === brokerId);
+      return wrap(
+        sb.from('listings').select('*, listing_images(*)')
+          .eq('broker_id', brokerId).in('status', LIVE_STATUSES)
+          .order('is_featured', { ascending: false })
+      );
+    },
+    async adminListBrokers() {
+      if (this.isDemo) return demoBrokers().sort((a, c) => a.sort_order - c.sort_order);
+      return wrap(sb.from('brokers').select('*').order('sort_order'));
+    },
+    async saveBroker(row) {
+      if (this.isDemo) {
+        const all = window.DEMO_BROKERS;
+        if (row.id) {
+          const i = all.findIndex((x) => x.id === row.id);
+          if (i !== -1) all[i] = Object.assign(all[i], row);
+        } else { row.id = uid(); all.push(row); }
+        return row;
+      }
+      if (row.id) return wrap(sb.from('brokers').update(row).eq('id', row.id).select().single());
+      return wrap(sb.from('brokers').insert(row).select().single());
+    },
+    async deleteBroker(id) {
+      if (this.isDemo) {
+        const all = window.DEMO_BROKERS; const i = all.findIndex((x) => x.id === id);
+        if (i !== -1) all.splice(i, 1); return;
+      }
+      await wrap(sb.from('brokers').delete().eq('id', id));
     },
 
     // ===================== PUBLIC WRITES (RPCs) ==========================
     async submitInquiry(p) {
       if (this.isDemo) {
+        // Mirror the RPC: an explicit broker wins, else inherit from the listing.
+        let broker = p.broker_id || null;
+        if (!broker && p.listing_id) {
+          const l = (window.DEMO_LISTINGS || []).find((x) => x.id === p.listing_id);
+          broker = (l && l.broker_id) || null;
+        }
         demoState.leads.unshift({
           id: uid(), type: p.type || 'inquiry', stage: 'new', name: p.name, email: p.email,
-          phone: p.phone || '', listing_id: p.listing_id || null, message: p.message || '',
-          source: 'website', created_at: new Date().toISOString(),
+          phone: p.phone || '', listing_id: p.listing_id || null, broker_id: broker,
+          message: p.message || '', source: 'website', created_at: new Date().toISOString(),
         });
         return;
       }
       await wrap(sb.rpc('submit_inquiry', {
         p_name: p.name, p_email: p.email, p_message: p.message || '',
         p_phone: p.phone || null, p_listing_id: p.listing_id || null, p_type: p.type || 'inquiry',
+        p_broker_id: p.broker_id || null,
       }));
     },
     async signNda(p) {
@@ -141,7 +196,7 @@
     // ===================== ADMIN: LISTINGS ===============================
     async adminListListings() {
       if (this.isDemo) return demoAll();
-      return wrap(sb.from('listings').select('*, listing_images(*)').order('updated_at', { ascending: false }));
+      return wrap(sb.from('listings').select('*, listing_images(*), broker:brokers(*)').order('updated_at', { ascending: false }));
     },
     async saveListing(row) {
       if (this.isDemo) {
@@ -156,7 +211,8 @@
         return row;
       }
       const payload = Object.assign({}, row);
-      delete payload.listing_images; delete payload.documents;
+      // Strip joined/child relations — these aren't columns on `listings`.
+      delete payload.listing_images; delete payload.documents; delete payload.broker;
       if (row.id) return wrap(sb.from('listings').update(payload).eq('id', row.id).select().single());
       return wrap(sb.from('listings').insert(payload).select().single());
     },

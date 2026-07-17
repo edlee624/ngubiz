@@ -2,6 +2,8 @@
   "rewrites": [
     { "source": "/admin/**", "destination": "/admin.html" },
     { "source": "/listing/**", "destination": "/index.html" },
+    { "source": "/broker/**", "destination": "/index.html" },
+    { "source": "/brokers", "destination": "/index.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }
