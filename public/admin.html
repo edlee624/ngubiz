@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex" />
+  <title>Admin — Meridian Business Brokers</title>
+  <link rel="stylesheet" href="/css/styles.css" />
+</head>
+<body>
+  <div id="demo-banner" class="demo-banner hidden">
+    Demo mode — changes are in-memory only and reset on reload. Add Supabase keys in <code>public/config.js</code> to persist.
+  </div>
+
+  <div id="login-view">
+    <div class="login-wrap">
+      <h1>Broker Admin</h1>
+      <p class="muted" id="login-sub">Sign in to manage listings and leads.</p>
+      <form id="login-form">
+        <div class="field"><label>Email</label><input name="email" type="email" required /></div>
+        <div class="field"><label>Password</label><input name="password" type="password" required /></div>
+        <button class="btn btn-primary btn-block" type="submit">Sign in</button>
+      </form>
+    </div>
+  </div>
+
+  <div id="app-view" class="hidden">
+    <header class="admin-header">
+      <div class="wrap">
+        <span class="name" id="admin-brand">NGU Business Real Estate, LLC</span>
+        <div class="admin-tabs">
+          <button data-tab="listings" class="active">Listings</button>
+          <button data-tab="leads">Leads</button>
+          <button data-tab="ndas">NDAs</button>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center">
+          <a href="/" target="_blank" class="btn btn-ghost btn-sm" style="color:#cfe0f0;border-color:#2c4a6b">View site ↗</a>
+          <button class="btn btn-ghost btn-sm" id="logout" style="color:#cfe0f0;border-color:#2c4a6b">Sign out</button>
+        </div>
+      </div>
+    </header>
+    <main class="wrap" id="admin-main" style="padding-bottom:60px"></main>
+  </div>
+
+  <script src="/js/vendor/supabase.umd.js"></script>
+  <script src="/config.js"></script>
+  <script src="/js/demo-data.js"></script>
+  <script src="/js/api.js"></script>
+  <script src="/js/admin.js"></script>
+</body>
+</html>

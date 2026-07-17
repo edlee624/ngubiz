@@ -1,0 +1,13 @@
+{
+  "name": "biz-brokerage",
+  "version": "0.1.0",
+  "description": "Business Brokerage CMS — public listings site + leads/CRM + NDA-gated documents. Static SPA on Supabase.",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public -p 3000",
+    "build": "echo 'Static site, no build step needed'"
+  },
+  "devDependencies": {
+    "serve": "^14.0.0"
+  }
+}

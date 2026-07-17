@@ -1,0 +1,437 @@
+// Public site: listings grid + listing detail, contact form, NDA-gated docs.
+(function () {
+  const BK = window.BK, fmt = BK.fmt;
+  const app = document.getElementById('app');
+  const cfg = BK.config;
+  let ALL = [];            // cached live listings
+  let filters = { q: '', category: '', state: '' };
+
+  // ---------- utilities ----------
+  const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function toast(msg, kind) {
+    const t = document.createElement('div');
+    t.className = 'toast ' + (kind || '');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 3400);
+  }
+
+  function primaryImage(l) {
+    const imgs = l.listing_images || [];
+    const p = imgs.find((i) => i.is_primary) || imgs[0];
+    return p ? p.url : null;
+  }
+
+  function navigate(path) {
+    history.pushState({}, '', path);
+    render();
+  }
+
+  // ---------- branding ----------
+  function applyBranding() {
+    if (cfg.BRAND_NAME) {
+      document.querySelectorAll('#brand-name, #footer-brand').forEach((e) => (e.textContent = cfg.BRAND_NAME));
+      document.title = 'Businesses for Sale — ' + cfg.BRAND_NAME;
+    }
+    if (cfg.BRAND_TAGLINE) document.getElementById('brand-tag').textContent = cfg.BRAND_TAGLINE;
+    const fc = document.getElementById('footer-contact');
+    if (fc) {
+      const bits = [cfg.CONTACT_ADDRESS, cfg.CONTACT_PHONE, cfg.CONTACT_EMAIL, cfg.WEBSITE].filter(Boolean);
+      fc.textContent = bits.join('  ·  ');
+    }
+    document.getElementById('year').textContent = '2026';
+    if (BK.isDemo) document.getElementById('demo-banner').classList.remove('hidden');
+  }
+
+  // ---------- HOME ----------
+  function renderHome() {
+    const cats = [...new Set(ALL.map((l) => l.category).filter(Boolean))].sort();
+    const states = [...new Set(ALL.map((l) => l.state).filter(Boolean))].sort();
+
+    const filtered = ALL.filter((l) => {
+      const hay = (l.title + ' ' + (l.headline || '') + ' ' + (l.category || '') + ' ' + fmt.location(l)).toLowerCase();
+      if (filters.q && hay.indexOf(filters.q.toLowerCase()) === -1) return false;
+      if (filters.category && l.category !== filters.category) return false;
+      if (filters.state && l.state !== filters.state) return false;
+      return true;
+    });
+
+    app.innerHTML = `
+      <section class="hero">
+        <div class="wrap">
+          <h1>Established businesses for sale</h1>
+          <p>${esc(cfg.BRAND_TAGLINE || 'Confidential opportunities, matched to serious buyers.')}</p>
+          <div class="searchbar">
+            <input id="f-q" type="search" placeholder="Search by name, industry, or location…" value="${esc(filters.q)}" />
+            <select id="f-cat">
+              <option value="">All industries</option>
+              ${cats.map((c) => `<option value="${esc(c)}" ${c === filters.category ? 'selected' : ''}>${esc(c)}</option>`).join('')}
+            </select>
+            <select id="f-state">
+              <option value="">All locations</option>
+              ${states.map((s) => `<option value="${esc(s)}" ${s === filters.state ? 'selected' : ''}>${esc(s)}</option>`).join('')}
+            </select>
+            <button class="btn btn-gold" id="f-clear">Reset</button>
+          </div>
+        </div>
+      </section>
+
+      <div class="wrap">
+        <div class="section-head">
+          <h2>Current Listings</h2>
+          <span class="results-count">${filtered.length} ${filtered.length === 1 ? 'business' : 'businesses'}</span>
+        </div>
+        <div class="grid" id="grid">
+          ${filtered.length ? filtered.map(cardHTML).join('') : '<div class="empty">No listings match your search.</div>'}
+        </div>
+
+        <div class="block" id="about">
+          <h2>About ${esc(cfg.BRAND_NAME || 'our firm')}</h2>
+          <p class="muted">${esc(cfg.BRAND_TAGLINE || '')} We facilitate business sales and acquisitions, working confidentially with buyers and sellers from first conversation to close.</p>
+          ${teamHTML()}
+        </div>
+
+        <div class="block" id="sell">
+          <h2>Thinking of selling your business?</h2>
+          <p class="muted">We work confidentially to value, package, and sell established businesses. Tell us about yours and we'll be in touch — no obligation.</p>
+          <div style="max-width:560px">${sellFormHTML()}</div>
+        </div>
+
+        <div class="block" id="contact">
+          <h2>Contact us</h2>
+          <p class="muted">Questions about a listing or the buying process? Send a note and we'll follow up.</p>
+          ${contactDetailsHTML()}
+          <div style="max-width:560px;margin-top:16px">${contactFormHTML('inquiry', null)}</div>
+        </div>
+      </div>`;
+
+    // wire search
+    const q = document.getElementById('f-q');
+    q.addEventListener('input', debounce((e) => { filters.q = e.target.value; rerenderGrid(); }, 180));
+    document.getElementById('f-cat').addEventListener('change', (e) => { filters.category = e.target.value; rerenderGrid(); });
+    document.getElementById('f-state').addEventListener('change', (e) => { filters.state = e.target.value; rerenderGrid(); });
+    document.getElementById('f-clear').addEventListener('click', () => { filters = { q: '', category: '', state: '' }; renderHome(); });
+
+    wireForm('form-sell', 'seller');
+    wireForm('form-inquiry', 'inquiry');
+  }
+
+  function rerenderGrid() {
+    // lightweight re-filter without rebuilding the whole page
+    const grid = document.getElementById('grid');
+    const count = document.querySelector('.results-count');
+    if (!grid) return renderHome();
+    const filtered = ALL.filter((l) => {
+      const hay = (l.title + ' ' + (l.headline || '') + ' ' + (l.category || '') + ' ' + fmt.location(l)).toLowerCase();
+      if (filters.q && hay.indexOf(filters.q.toLowerCase()) === -1) return false;
+      if (filters.category && l.category !== filters.category) return false;
+      if (filters.state && l.state !== filters.state) return false;
+      return true;
+    });
+    grid.innerHTML = filtered.length ? filtered.map(cardHTML).join('') : '<div class="empty">No listings match your search.</div>';
+    if (count) count.textContent = `${filtered.length} ${filtered.length === 1 ? 'business' : 'businesses'}`;
+  }
+
+  function cardHTML(l) {
+    const img = primaryImage(l);
+    return `
+      <a class="card" href="/listing/${esc(l.slug)}" data-link>
+        <div class="thumb">
+          ${img ? `<img src="${esc(img)}" alt="${esc(l.title)}" loading="lazy" />` : ''}
+          <span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span>
+          ${l.is_featured ? '<span class="badge badge-featured right">Featured</span>' : ''}
+        </div>
+        <div class="body">
+          <span class="cat">${esc(l.category || 'Business')}</span>
+          <h3 class="title">${esc(l.title)}</h3>
+          <div class="loc">${esc(fmt.location(l))}</div>
+          <div class="fin">
+            <div><div class="lbl">Asking Price</div><div class="val">${esc(fmt.moneyOr(l.asking_price))}</div></div>
+            <div><div class="lbl">Cash Flow</div><div class="val">${esc(fmt.moneyOr(l.cash_flow, '—'))}</div></div>
+          </div>
+        </div>
+      </a>`;
+  }
+
+  // ---------- DETAIL ----------
+  async function renderDetail(slug) {
+    app.innerHTML = '<div class="wrap"><div class="empty">Loading listing…</div></div>';
+    let l;
+    try { l = await BK.getListingBySlug(slug); }
+    catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load this listing.</div></div>`; return; }
+    if (!l) {
+      app.innerHTML = `<div class="wrap"><div class="empty">Listing not found. <a href="/" data-link>Back to all listings</a></div></div>`;
+      return;
+    }
+
+    const imgs = (l.listing_images || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
+    const main = primaryImage(l) || (imgs[0] && imgs[0].url);
+    const hasDocs = (l.documents || []).length > 0 || !BK.isDemo; // live: may have docs we can't see until NDA
+
+    const fin = [
+      ['Asking Price', fmt.moneyOr(l.asking_price)],
+      ['Cash Flow', fmt.money(l.cash_flow)],
+      ['Gross Revenue', fmt.money(l.gross_revenue)],
+      ['EBITDA', fmt.money(l.ebitda)],
+      ['FF&E', l.ffe != null ? fmt.money(l.ffe) + (l.is_ffe_included ? ' (incl.)' : '') : null],
+      ['Inventory', l.inventory != null ? fmt.money(l.inventory) + (l.is_inventory_included ? ' (incl.)' : '') : null],
+      ['Real Estate', l.real_estate_value != null ? fmt.money(l.real_estate_value) : null],
+      ['Rent', l.rent != null ? fmt.money(l.rent) + '/mo' : null],
+    ].filter((r) => r[1]);
+
+    const details = [
+      ['Location', fmt.location(l) + (l.county ? ` (${l.county})` : '')],
+      ['Category', l.category],
+      ['Year Established', l.established_year],
+      ['Employees', l.employees],
+      ['Real Estate', l.real_estate],
+      ['Building Size', l.building_sf],
+      ['Lease Expiration', l.lease_expiration],
+      ['Franchise', l.is_franchise ? 'Yes' : null],
+      ['Seller Financing', l.seller_financing ? 'Available' : null],
+      ['Support & Training', l.support_training],
+      ['Reason for Selling', l.reason_for_selling],
+      ['Facilities', l.facilities],
+      ['Competition', l.competition],
+      ['Growth & Expansion', l.growth_expansion],
+    ].filter((r) => r[1]);
+
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="/" data-link>Listings</a> › ${esc(l.category || 'Business')} › ${esc(l.title)}</div>
+        <div class="detail">
+          <div class="detail-main">
+            <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
+              <span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span>
+              ${l.is_featured ? '<span class="badge badge-featured">Featured</span>' : ''}
+            </div>
+            <h1>${esc(l.title)}</h1>
+            <div class="sub">${esc(l.headline || '')}</div>
+
+            <div class="gallery">
+              <div class="main"><img id="gimg" src="${esc(main || '')}" alt="${esc(l.title)}" /></div>
+              ${imgs.length > 1 ? `<div class="thumbs">${imgs.map((im, i) =>
+                `<img src="${esc(im.url)}" data-src="${esc(im.url)}" class="${im.url === main ? 'active' : ''}" alt="${esc(im.caption || '')}" />`).join('')}</div>` : ''}
+            </div>
+
+            <div class="block">
+              <h2>Business Description</h2>
+              <div class="desc">${esc(l.description || 'No description provided.')}</div>
+            </div>
+
+            <div class="block">
+              <h2>Detailed Information</h2>
+              <table class="detail-table">
+                ${details.map((r) => `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}
+              </table>
+            </div>
+
+            <div class="block" id="inquire">
+              <h2>Contact the broker about this business</h2>
+              <p class="muted">Send an inquiry and we'll follow up, typically within one business day.</p>
+              <div style="max-width:560px">${contactFormHTML('inquiry', l.id)}</div>
+            </div>
+          </div>
+
+          <aside class="finbox">
+            <div class="price-card">
+              <div class="price-head">
+                <div class="lbl">Asking Price</div>
+                <div class="amt">${esc(fmt.moneyOr(l.asking_price))}</div>
+              </div>
+              ${fin.slice(1).map((r) => `<div class="finrow"><span class="k">${esc(r[0])}</span><span class="v">${esc(r[1])}</span></div>`).join('')}
+              ${l.seller_financing ? '<div class="seller-fin">✓ Seller financing available</div>' : ''}
+              <div class="cta">
+                <a href="#inquire" class="btn btn-primary btn-block">Contact Broker</a>
+                ${hasDocs ? '<button class="btn btn-gold btn-block" id="nda-btn">🔒 Unlock Confidential Documents</button>' : ''}
+              </div>
+            </div>
+            <p class="form-note" style="margin-top:12px">Listing ID: ${esc(l.slug)}. All information deemed reliable but not guaranteed.</p>
+          </aside>
+        </div>
+      </div>`;
+
+    // gallery thumbnails
+    app.querySelectorAll('.thumbs img').forEach((t) => t.addEventListener('click', () => {
+      document.getElementById('gimg').src = t.dataset.src;
+      app.querySelectorAll('.thumbs img').forEach((x) => x.classList.remove('active'));
+      t.classList.add('active');
+    }));
+
+    wireForm('form-inquiry', 'inquiry');
+    const ndaBtn = document.getElementById('nda-btn');
+    if (ndaBtn) ndaBtn.addEventListener('click', () => openNda(l));
+  }
+
+  // ---------- forms ----------
+  function contactFormHTML(type, listingId) {
+    return `
+      <form id="form-inquiry" data-listing="${listingId || ''}" data-type="${type}">
+        <div class="form-row">
+          <div class="field"><label>Name *</label><input name="name" required /></div>
+          <div class="field"><label>Email *</label><input name="email" type="email" required /></div>
+        </div>
+        <div class="field"><label>Phone</label><input name="phone" /></div>
+        <div class="field"><label>Message *</label><textarea name="message" required placeholder="I'd like more information about this business…"></textarea></div>
+        <button class="btn btn-primary" type="submit">Send Inquiry</button>
+        <span class="form-note" style="margin-left:10px">Your information is kept confidential.</span>
+      </form>`;
+  }
+
+  function teamHTML() {
+    const team = cfg.TEAM || [];
+    if (!team.length) return '';
+    return `<div class="team-grid">${team.map((m) => `
+      <div class="team-card">
+        <div class="team-avatar">${esc((m.name || '?').split(' ').map((w) => w[0]).slice(0, 2).join(''))}</div>
+        <div class="team-name">${esc(m.name)}</div>
+        <div class="team-title">${esc(m.title || '')}</div>
+        <p class="team-bio">${esc(m.bio || '')}</p>
+        <div class="team-contact">
+          ${m.phone ? `<a href="tel:${esc(m.phone.replace(/[^0-9+]/g, ''))}">${esc(m.phone)}</a>` : ''}
+          ${m.email ? `<a href="mailto:${esc(m.email)}">${esc(m.email)}</a>` : ''}
+        </div>
+      </div>`).join('')}</div>`;
+  }
+
+  function contactDetailsHTML() {
+    const rows = [];
+    if (cfg.CONTACT_ADDRESS) rows.push(`<div>📍 ${esc(cfg.CONTACT_ADDRESS)}</div>`);
+    (cfg.TEAM || []).forEach((m) => {
+      rows.push(`<div>👤 <strong>${esc(m.name)}</strong>${m.phone ? ` · <a href="tel:${esc(m.phone.replace(/[^0-9+]/g, ''))}">${esc(m.phone)}</a>` : ''}${m.email ? ` · <a href="mailto:${esc(m.email)}">${esc(m.email)}</a>` : ''}</div>`);
+    });
+    if (!rows.length && cfg.CONTACT_EMAIL) rows.push(`<div>✉️ <a href="mailto:${esc(cfg.CONTACT_EMAIL)}">${esc(cfg.CONTACT_EMAIL)}</a></div>`);
+    return `<div class="contact-details">${rows.join('')}</div>`;
+  }
+
+  function sellFormHTML() {
+    return `
+      <form id="form-sell" data-type="seller">
+        <div class="form-row">
+          <div class="field"><label>Name *</label><input name="name" required /></div>
+          <div class="field"><label>Email *</label><input name="email" type="email" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Phone</label><input name="phone" /></div>
+          <div class="field"><label>Business / Industry</label><input name="company" /></div>
+        </div>
+        <div class="field"><label>Tell us about your business *</label><textarea name="message" required placeholder="Industry, location, approximate revenue, and your timeframe…"></textarea></div>
+        <button class="btn btn-gold" type="submit">Request a Confidential Consultation</button>
+      </form>`;
+  }
+
+  function wireForm(id, type) {
+    const form = document.getElementById(id);
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const btn = form.querySelector('button[type=submit]');
+      const data = Object.fromEntries(new FormData(form).entries());
+      if (!data.name || !data.email) return toast('Name and email are required', 'err');
+      btn.disabled = true;
+      const label = btn.textContent; btn.textContent = 'Sending…';
+      try {
+        await BK.submitInquiry({
+          name: data.name, email: data.email, phone: data.phone, message: data.message,
+          company: data.company, listing_id: form.dataset.listing || null, type: form.dataset.type || type,
+        });
+        form.reset();
+        toast('Thank you — your message has been sent.', 'ok');
+      } catch (err) {
+        toast(err.message || 'Something went wrong.', 'err');
+      } finally { btn.disabled = false; btn.textContent = label; }
+    });
+  }
+
+  // ---------- NDA modal ----------
+  function openNda(l) {
+    const back = document.createElement('div');
+    back.className = 'modal-back';
+    back.innerHTML = `
+      <div class="modal">
+        <div class="modal-head"><h3>Confidentiality Agreement</h3><button class="modal-x" aria-label="Close">×</button></div>
+        <div class="modal-body">
+          <p class="muted" style="margin-top:0">To access confidential documents for <strong>${esc(l.title)}</strong>, please review and accept the terms below.</p>
+          <div class="nda-terms">
+            The undersigned acknowledges that any information provided regarding this business is confidential.
+            I agree not to disclose, copy, or use any such information except to evaluate a potential acquisition,
+            not to contact the owner, employees, customers, or suppliers directly, and to return or destroy all
+            materials upon request. This acknowledgement is legally binding.
+          </div>
+          <form id="form-nda">
+            <div class="form-row">
+              <div class="field"><label>Full legal name *</label><input name="name" required /></div>
+              <div class="field"><label>Email *</label><input name="email" type="email" required /></div>
+            </div>
+            <div class="field"><label>Phone</label><input name="phone" /></div>
+            <label style="display:flex;gap:8px;font-size:13px;color:var(--muted);align-items:flex-start;margin-bottom:14px">
+              <input type="checkbox" name="agree" required style="width:auto;margin-top:3px" />
+              <span>I have read and agree to the terms of this confidentiality agreement, and my typed name serves as my electronic signature.</span>
+            </label>
+            <button class="btn btn-gold btn-block" type="submit">Sign &amp; Unlock Documents</button>
+          </form>
+          <div id="nda-docs" class="hidden"></div>
+        </div>
+      </div>`;
+    document.body.appendChild(back);
+    const close = () => back.remove();
+    back.querySelector('.modal-x').addEventListener('click', close);
+    back.addEventListener('click', (e) => { if (e.target === back) close(); });
+
+    back.querySelector('#form-nda').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const d = Object.fromEntries(new FormData(form).entries());
+      if (!d.agree) return toast('Please accept the agreement to continue.', 'err');
+      const btn = form.querySelector('button');
+      btn.disabled = true; btn.textContent = 'Signing…';
+      try {
+        const docs = await BK.signNda({ listing_id: l.id, name: d.name, email: d.email, phone: d.phone });
+        form.classList.add('hidden');
+        const wrap = back.querySelector('#nda-docs');
+        wrap.classList.remove('hidden');
+        wrap.innerHTML = `
+          <p style="color:var(--green);font-weight:600">✓ NDA signed. ${docs && docs.length ? 'Your documents are below.' : 'Thank you — the broker will send documents shortly.'}</p>
+          ${(docs || []).map((doc) => `<div class="finrow"><span class="k">📄 ${esc(doc.name)}</span>
+            <a class="v" href="${esc(doc.file_url)}" ${doc.file_url && doc.file_url.indexOf('#') !== 0 ? 'target="_blank" rel="noopener"' : ''}>Download</a></div>`).join('')}
+          ${BK.isDemo ? '<p class="form-note" style="margin-top:12px">(Demo mode — document links are placeholders.)</p>' : ''}`;
+      } catch (err) {
+        toast(err.message || 'Could not record signature.', 'err');
+        btn.disabled = false; btn.textContent = 'Sign & Unlock Documents';
+      }
+    });
+  }
+
+  // ---------- router ----------
+  async function render() {
+    const path = location.pathname;
+    const m = path.match(/^\/listing\/([^\/?#]+)/);
+    if (m) return renderDetail(decodeURIComponent(m[1]));
+    // home — ensure data loaded
+    if (!ALL.length) {
+      try { ALL = await BK.listPublicListings(); }
+      catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load listings. ${BK.isDemo ? '' : 'Check your Supabase configuration.'}</div></div>`; return; }
+    }
+    renderHome();
+    // scroll to hash section if present
+    if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
+  }
+
+  // intercept internal links
+  document.addEventListener('click', (e) => {
+    const a = e.target.closest('a[data-link]');
+    if (a && a.getAttribute('href').indexOf('/') === 0) {
+      e.preventDefault();
+      navigate(a.getAttribute('href'));
+      window.scrollTo(0, 0);
+    }
+  });
+  window.addEventListener('popstate', render);
+
+  function debounce(fn, ms) { let t; return function () { clearTimeout(t); const a = arguments, c = this; t = setTimeout(() => fn.apply(c, a), ms); }; }
+
+  applyBranding();
+  render();
+})();
