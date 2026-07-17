@@ -26,6 +26,10 @@ no build step, the browser talks to Postgres directly, and Row Level Security
   Negotiating → Closed) covering buyers, sellers, and general inquiries
 - **NDAs** — record of everyone who signed, and for which listing
 
+> **Setting this up on fresh GitHub / Vercel / Supabase accounts?**
+> See **[SETUP.md](SETUP.md)** — accounts live under `nguedwardlee@gmail.com`,
+> separate from the `edlee624@gmail.com` accounts used by the other repos.
+
 ## Run locally (demo mode)
 
 With `public/config.js` left on its placeholder values, the site runs in
