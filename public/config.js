@@ -18,11 +18,19 @@ window.BROKERAGE_CONFIG = {
   // WEBSITE intentionally unset. Set it to the current domain when there is
   // one and the footer will pick it up.
 
-  // Firm description, from the existing NGU site.
-  ABOUT: 'NGU Business Real Estate, LLC is a family-owned residential and commercial brokerage. ' +
-         'Our primary focus is small to mid-sized businesses in and around the NYC area. ' +
-         'We help existing business owners sell their business and prospective buyers find a ' +
-         'business that fits their needs.',
+  // Firm description. Shown in the About Us panel, one <p> per entry.
+  // Stored in normal case; the heading is uppercased by CSS for display.
+  ABOUT_HEADING: 'About NGU Business Real Estate, LLC',
+  ABOUT: [
+    'NGU Business Real Estate, LLC is a family-owned residential and commercial brokerage. ' +
+    'Our primary focus is small to mid-sized businesses in and around the NYC area. ' +
+    'We help existing business owners sell their business and prospective buyers find a ' +
+    'business that fits their needs.',
+
+    'Over the past 15 years, we’ve worked with hundreds of businesses, helping owners find ' +
+    'the right buyers. We’ve listed dry cleaners, laundromats, commercial laundries and ' +
+    'hospitality linen servicers, as well as beauty salons, restaurants, delis, and grocers.',
+  ],
 
   // Shown on listings and in the footer.
   DISCLAIMER: 'All figures shown are expressed by the seller. All commissions are paid by the seller.',

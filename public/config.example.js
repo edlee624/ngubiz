@@ -19,7 +19,11 @@ window.BROKERAGE_CONFIG = {
   CONTACT_ADDRESS: '123 Main St, City, ST 00000',
   WEBSITE: 'www.example.com',
 
-  ABOUT: 'A paragraph describing the firm — shown in the About section.',
+  ABOUT_HEADING: 'About Your Brokerage, LLC',
+  ABOUT: [
+    'First paragraph describing the firm — shown in the About Us panel.',
+    'Second paragraph. Add as many as you like; each renders as its own <p>.',
+  ],
   DISCLAIMER: 'All figures shown are expressed by the seller. All commissions are paid by the seller.',
   SELL_CTA: 'Contact us to list your business',
 

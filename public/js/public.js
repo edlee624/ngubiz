@@ -110,8 +110,7 @@
 
         <div class="block" id="about">
           <h2>About Us</h2>
-          <p class="about-text">${esc(cfg.ABOUT || cfg.BRAND_TAGLINE || '')}</p>
-          <h3 style="margin:26px 0 0">Our Brokers</h3>
+          ${aboutPanelHTML()}
           ${teamHTML()}
         </div>
 
@@ -326,6 +325,17 @@
     }
   }, true);
 
+  // Firm blurb shown above the broker profiles. ABOUT may be an array of
+  // paragraphs or a single string (older config), so accept both.
+  function aboutPanelHTML() {
+    const paras = Array.isArray(cfg.ABOUT) ? cfg.ABOUT : (cfg.ABOUT ? [cfg.ABOUT] : []);
+    if (!paras.length && !cfg.ABOUT_HEADING) return '';
+    return `<section class="about-panel">
+      ${cfg.ABOUT_HEADING ? `<h3 class="about-panel-heading">${esc(cfg.ABOUT_HEADING)}</h3>` : ''}
+      ${paras.map((p) => `<p class="about-text">${esc(p)}</p>`).join('')}
+    </section>`;
+  }
+
   function teamHTML() {
     if (!BROKERS.length) return '';
     return `<div class="team-grid">${BROKERS.map((m) => `
@@ -369,7 +379,7 @@
 
     app.innerHTML = `
       <div class="wrap">
-        <div class="breadcrumb"><a href="/" data-link>Home</a> › <a href="/brokers" data-link>Our Brokers</a> › ${esc(b.name)}</div>
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › <a href="/brokers" data-link>About Us</a> › ${esc(b.name)}</div>
         <div class="broker-hero block">
           ${avatarHTML(b, 'broker-photo')}
           <div class="broker-info">
@@ -405,10 +415,10 @@
     if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
     app.innerHTML = `
       <div class="wrap">
-        <div class="breadcrumb"><a href="/" data-link>Home</a> › Our Brokers</div>
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › About Us</div>
         <div class="block">
-          <h2>Our Brokers</h2>
-          <p class="muted">${esc(cfg.BRAND_TAGLINE || '')}</p>
+          <h2>About Us</h2>
+          ${aboutPanelHTML()}
           ${teamHTML()}
         </div>
       </div>`;
