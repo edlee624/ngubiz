@@ -18,17 +18,19 @@ no build step, the browser talks to Postgres directly, and Row Level Security
   businesses that broker represents (current + recently sold)
 - **Contact form** on every listing → creates a lead, routed to that listing's broker
 - **"Sell a business"** form → creates a seller lead
-- **NDA flow**: buyers sign a confidentiality agreement to unlock confidential
-  documents (CIM, financials)
+
+The site does **not** distribute confidential material. There is no document
+download and no NDA flow: it advertises listings and captures enquiries, and
+CIMs/financials are sent by the broker off-platform once an NDA is signed.
 
 **Broker admin** (`/admin`)
 - Sign in (Supabase Auth)
-- **Listings** — full CRUD, photos, NDA-gated documents, and broker assignment
+- **Listings** — full CRUD, photos, and agent assignment (all / one / several)
 - **Brokers** — full CRUD; drives the public profile pages and inquiry routing
 - **Leads** — a pipeline board (New → Contacted → NDA Signed → Qualified →
   Negotiating → Closed) covering buyers, sellers, and general inquiries,
-  each showing its listing and assigned broker
-- **NDAs** — record of everyone who signed, and for which listing
+  each showing its listing and assigned broker. The *NDA Signed* stage is
+  moved by hand — NDAs are handled off-platform.
 
 > **Setting this up on fresh GitHub / Vercel / Supabase accounts?**
 > See **[SETUP.md](SETUP.md)** — accounts live under `nguedwardlee@gmail.com`,

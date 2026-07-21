@@ -93,7 +93,7 @@
       { id: 'l1', type: 'buyer', stage: 'qualified', name: 'Jordan Ellis', email: 'jordan@example.com', phone: '(555) 200-1010', listing_id: 'demo-1', message: 'Interested in the salon — have funds ready.', budget: '$300k–$450k', timeframe: '60 days', source: 'website', created_at: '2026-06-28T15:00:00Z' },
       { id: 'l2', type: 'seller', stage: 'new', name: 'Pat Morgan', email: 'pat@example.com', phone: '(555) 200-2020', listing_id: null, message: 'I own a landscaping company and may want to sell next year.', budget: '', timeframe: '6–12 months', source: 'website', created_at: '2026-07-01T18:30:00Z' },
       { id: 'l3', type: 'inquiry', stage: 'contacted', name: 'Sam Rivera', email: 'sam@example.com', phone: '', listing_id: 'demo-3', message: 'Is seller financing negotiable on the HVAC business?', budget: '', timeframe: '', source: 'website', created_at: '2026-07-03T12:10:00Z' },
-      { id: 'l4', type: 'buyer', stage: 'nda_signed', name: 'Alex Chen', email: 'alex@example.com', phone: '(555) 200-4040', listing_id: 'demo-2', message: 'Signed NDA to access documents', budget: '', timeframe: '', source: 'website', created_at: '2026-07-04T09:45:00Z' },
+      { id: 'l4', type: 'buyer', stage: 'nda_signed', name: 'Alex Chen', email: 'alex@example.com', phone: '(555) 200-4040', listing_id: 'demo-2', message: 'NDA signed offline; sent the CIM by email.', budget: '', timeframe: '', source: 'website', created_at: '2026-07-04T09:45:00Z' },
     ];
   }
   function uid() { return 'x' + Math.abs(Date.now() ^ (Math.floor(performance.now() * 1000))).toString(36); }
@@ -211,21 +211,6 @@
         p_broker_id: p.broker_id || null,
       }));
     },
-    async signNda(p) {
-      if (this.isDemo) {
-        const l = demoAll().find((x) => x.id === p.listing_id);
-        demoState.leads.unshift({
-          id: uid(), type: 'buyer', stage: 'nda_signed', name: p.name, email: p.email,
-          phone: p.phone || '', listing_id: p.listing_id, message: 'Signed NDA to access documents',
-          source: 'website', created_at: new Date().toISOString(),
-        });
-        return (l && l.documents) || [];
-      }
-      return wrap(sb.rpc('sign_nda', {
-        p_listing_id: p.listing_id, p_name: p.name, p_email: p.email, p_phone: p.phone || null,
-      }));
-    },
-
     // ===================== ADMIN: LISTINGS ===============================
     async adminListListings() {
       if (this.isDemo) return demoAll();
@@ -294,34 +279,6 @@
         return;
       }
       await wrap(sb.from('listing_images').delete().eq('id', img.id));
-    },
-
-    // ===================== ADMIN: DOCUMENTS =============================
-    async listDocuments(listingId) {
-      if (this.isDemo) {
-        const l = window.DEMO_LISTINGS.find((x) => x.id === listingId);
-        return ((l && l.documents) || []).map((d) => Object.assign({}, d));
-      }
-      return wrap(sb.from('documents').select('*').eq('listing_id', listingId).order('sort_order'));
-    },
-    async addDocument(listingId, row) {
-      if (this.isDemo) {
-        const l = window.DEMO_LISTINGS.find((x) => x.id === listingId);
-        if (l) { l.documents = l.documents || []; l.documents.push(Object.assign({ id: uid() }, row)); }
-        return;
-      }
-      await wrap(sb.from('documents').insert(Object.assign({ listing_id: listingId }, row)));
-    },
-    async deleteDocument(doc) {
-      if (this.isDemo) {
-        window.DEMO_LISTINGS.forEach((l) => { if (l.documents) l.documents = l.documents.filter((d) => d.id !== doc.id); });
-        return;
-      }
-      await wrap(sb.from('documents').delete().eq('id', doc.id));
-    },
-    async listNdas() {
-      if (this.isDemo) return [];
-      return wrap(sb.from('ndas').select('*').order('signed_at', { ascending: false }));
     },
 
     // ===================== ADMIN: LEADS =================================

@@ -176,7 +176,6 @@
 
     const imgs = (l.listing_images || []).slice().sort((a, b) => (a.sort_order || 0) - (b.sort_order || 0));
     const main = primaryImage(l) || (imgs[0] && imgs[0].url);
-    const hasDocs = (l.documents || []).length > 0 || !BK.isDemo; // live: may have docs we can't see until NDA
 
     const fin = [
       ['Asking Price', fmt.moneyOr(l.asking_price)],
@@ -253,7 +252,6 @@
               ${l.seller_financing ? '<div class="seller-fin">✓ Seller financing available</div>' : ''}
               <div class="cta">
                 <a href="#inquire" class="btn btn-primary btn-block">Contact Broker</a>
-                ${hasDocs ? '<button class="btn btn-gold btn-block" id="nda-btn">🔒 Unlock Confidential Documents</button>' : ''}
               </div>
             </div>
             ${(l.agents && l.agents.length) ? `
@@ -287,8 +285,6 @@
     }));
 
     wireForm('form-inquiry', 'inquiry');
-    const ndaBtn = document.getElementById('nda-btn');
-    if (ndaBtn) ndaBtn.addEventListener('click', () => openNda(l));
   }
 
   // ---------- forms ----------
@@ -455,65 +451,6 @@
       } catch (err) {
         toast(err.message || 'Something went wrong.', 'err');
       } finally { btn.disabled = false; btn.textContent = label; }
-    });
-  }
-
-  // ---------- NDA modal ----------
-  function openNda(l) {
-    const back = document.createElement('div');
-    back.className = 'modal-back';
-    back.innerHTML = `
-      <div class="modal">
-        <div class="modal-head"><h3>Confidentiality Agreement</h3><button class="modal-x" aria-label="Close">×</button></div>
-        <div class="modal-body">
-          <p class="muted" style="margin-top:0">To access confidential documents for <strong>${esc(l.title)}</strong>, please review and accept the terms below.</p>
-          <div class="nda-terms">
-            The undersigned acknowledges that any information provided regarding this business is confidential.
-            I agree not to disclose, copy, or use any such information except to evaluate a potential acquisition,
-            not to contact the owner, employees, customers, or suppliers directly, and to return or destroy all
-            materials upon request. This acknowledgement is legally binding.
-          </div>
-          <form id="form-nda">
-            <div class="form-row">
-              <div class="field"><label>Full legal name *</label><input name="name" required /></div>
-              <div class="field"><label>Email *</label><input name="email" type="email" required /></div>
-            </div>
-            <div class="field"><label>Phone</label><input name="phone" /></div>
-            <label style="display:flex;gap:8px;font-size:13px;color:var(--muted);align-items:flex-start;margin-bottom:14px">
-              <input type="checkbox" name="agree" required style="width:auto;margin-top:3px" />
-              <span>I have read and agree to the terms of this confidentiality agreement, and my typed name serves as my electronic signature.</span>
-            </label>
-            <button class="btn btn-gold btn-block" type="submit">Sign &amp; Unlock Documents</button>
-          </form>
-          <div id="nda-docs" class="hidden"></div>
-        </div>
-      </div>`;
-    document.body.appendChild(back);
-    const close = () => back.remove();
-    back.querySelector('.modal-x').addEventListener('click', close);
-    back.addEventListener('click', (e) => { if (e.target === back) close(); });
-
-    back.querySelector('#form-nda').addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const form = e.target;
-      const d = Object.fromEntries(new FormData(form).entries());
-      if (!d.agree) return toast('Please accept the agreement to continue.', 'err');
-      const btn = form.querySelector('button');
-      btn.disabled = true; btn.textContent = 'Signing…';
-      try {
-        const docs = await BK.signNda({ listing_id: l.id, name: d.name, email: d.email, phone: d.phone });
-        form.classList.add('hidden');
-        const wrap = back.querySelector('#nda-docs');
-        wrap.classList.remove('hidden');
-        wrap.innerHTML = `
-          <p style="color:var(--green);font-weight:600">✓ NDA signed. ${docs && docs.length ? 'Your documents are below.' : 'Thank you — the broker will send documents shortly.'}</p>
-          ${(docs || []).map((doc) => `<div class="finrow"><span class="k">📄 ${esc(doc.name)}</span>
-            <a class="v" href="${esc(doc.file_url)}" ${doc.file_url && doc.file_url.indexOf('#') !== 0 ? 'target="_blank" rel="noopener"' : ''}>Download</a></div>`).join('')}
-          ${BK.isDemo ? '<p class="form-note" style="margin-top:12px">(Demo mode — document links are placeholders.)</p>' : ''}`;
-      } catch (err) {
-        toast(err.message || 'Could not record signature.', 'err');
-        btn.disabled = false; btn.textContent = 'Sign & Unlock Documents';
-      }
     });
   }
 

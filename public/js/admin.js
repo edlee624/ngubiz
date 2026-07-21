@@ -61,7 +61,6 @@
     if (tab === 'listings') return renderListings();
     if (tab === 'brokers') return renderBrokers();
     if (tab === 'leads') return renderLeads();
-    if (tab === 'ndas') return renderNdas();
   }
 
   // Cached so the listing editor can offer a broker dropdown.
@@ -285,13 +284,10 @@
             <button class="btn btn-primary" type="submit">${isNew ? 'Create Listing' : 'Save Changes'}</button>
           </form>
 
-          ${isNew ? '<p class="form-note" style="margin-top:14px">Save the listing first, then reopen it to add photos and documents.</p>' : `
+          ${isNew ? '<p class="form-note" style="margin-top:14px">Save the listing first, then reopen it to add photos.</p>' : `
           <hr style="margin:24px 0;border:none;border-top:1px solid var(--line)"/>
           <h4>Photos</h4>
-          <div id="img-area"></div>
-          <hr style="margin:24px 0;border:none;border-top:1px solid var(--line)"/>
-          <h4>Confidential Documents <span class="muted" style="font-weight:400;font-size:13px">— released after a buyer signs the NDA</span></h4>
-          <div id="doc-area"></div>`}
+          <div id="img-area"></div>`}
         </div>
       </div>`;
     document.body.appendChild(back);
@@ -352,7 +348,7 @@
       } catch (err) { toast(err.message, 'err'); }
     });
 
-    if (!isNew) { renderImages(back, l); renderDocs(back, l); }
+    if (!isNew) renderImages(back, l);
   }
 
   function fieldHTML(f, l) {
@@ -389,35 +385,6 @@
     return (l && l.listing_images) || [];
   }
 
-  async function renderDocs(back, l) {
-    const area = back.querySelector('#doc-area');
-    let docs = [];
-    try { docs = await BK.listDocuments(l.id); } catch (e) {}
-    area.innerHTML = `
-      <div style="margin-bottom:12px">
-        ${docs.map((d) => `<div class="finrow"><span class="k">📄 ${esc(d.name)} ${d.requires_nda ? '<span class="lead-type-tag inquiry">NDA</span>' : ''}</span>
-          <button class="btn btn-danger btn-sm" data-doc="${d.id}">Remove</button></div>`).join('') || '<p class="muted">No documents yet.</p>'}
-      </div>
-      <div class="form-row">
-        <div class="field"><label>Document name</label><input id="doc-name" placeholder="Confidential Information Memorandum"/></div>
-        <div class="field"><label>File URL</label><input id="doc-url" placeholder="https://… (Supabase Storage)"/></div>
-      </div>
-      <label style="display:flex;gap:6px;align-items:center;margin-bottom:10px"><input type="checkbox" id="doc-nda" checked style="width:auto"/> Require signed NDA before release</label>
-      <button class="btn btn-ghost btn-sm" id="add-doc">+ Add document</button>`;
-    back.querySelector('#add-doc').addEventListener('click', async () => {
-      const name = back.querySelector('#doc-name').value.trim();
-      const url = back.querySelector('#doc-url').value.trim();
-      if (!name || !url) return toast('Document name and URL are required', 'err');
-      try {
-        await BK.addDocument(l.id, { name, file_url: url, requires_nda: back.querySelector('#doc-nda').checked, is_available: true });
-        renderDocs(back, l); toast('Document added', 'ok');
-      } catch (e) { toast(e.message, 'err'); }
-    });
-    area.querySelectorAll('[data-doc]').forEach((b) => b.addEventListener('click', async () => {
-      try { await BK.deleteDocument(docs.find((d) => d.id === b.dataset.doc)); renderDocs(back, l); }
-      catch (e) { toast(e.message, 'err'); }
-    }));
-  }
 
   // ---------------- LEADS ----------------
   let leadCache = [];
@@ -527,26 +494,6 @@
         toast('Lead saved', 'ok'); back.remove(); renderLeads();
       } catch (err) { toast(err.message, 'err'); }
     });
-  }
-
-  // ---------------- NDAs ----------------
-  async function renderNdas() {
-    main.innerHTML = '<div class="empty">Loading…</div>';
-    let rows = [];
-    try {
-      listingCache = await BK.adminListListings();
-      rows = await BK.listNdas();
-    } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
-    main.innerHTML = `
-      <div class="toolbar"><h2>Signed NDAs <span class="muted" style="font-size:15px;font-weight:400">(${rows.length})</span></h2></div>
-      ${BK.isDemo ? '<p class="muted">NDA signatures appear here once the site is live on Supabase. In demo mode, signing an NDA on the public site creates a buyer lead in the <strong>NDA Signed</strong> column instead.</p>' : ''}
-      <table class="table">
-        <thead><tr><th>Signer</th><th>Email</th><th>Phone</th><th>Listing</th><th>Signed</th></tr></thead>
-        <tbody>
-          ${rows.map((n) => `<tr><td><strong>${esc(n.signer_name)}</strong></td><td>${esc(n.signer_email)}</td><td>${esc(n.signer_phone || '—')}</td><td>${esc(findListingTitle(n.listing_id) || '—')}</td><td>${esc(fmt.date(n.signed_at))}</td></tr>`).join('')
-            || (BK.isDemo ? '' : '<tr><td colspan="5" class="muted" style="text-align:center;padding:30px">No NDAs signed yet.</td></tr>')}
-        </tbody>
-      </table>`;
   }
 
   init();
