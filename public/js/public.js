@@ -53,8 +53,6 @@
       document.querySelectorAll('#brand-name, #footer-brand').forEach((e) => (e.textContent = cfg.BRAND_NAME));
       document.title = 'Businesses for Sale — ' + cfg.BRAND_NAME;
     }
-    if (cfg.BRAND_TAGLINE) document.getElementById('brand-tag').textContent = cfg.BRAND_TAGLINE;
-
     // Logo replaces the wordmark when one is configured.
     const logo = document.getElementById('brand-logo');
     if (logo && cfg.LOGO_URL) {

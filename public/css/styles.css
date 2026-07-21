@@ -60,14 +60,13 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 
 /* ---------- Public header ---------- */
 .site-header { background: var(--navy); color: #fff; position: sticky; top: 0; z-index: 20; }
-.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 66px; }
-.brand { display: flex; flex-direction: column; }
+.site-header .wrap { display: flex; align-items: center; justify-content: space-between; height: 96px; gap: 16px; }
+.brand { display: flex; align-items: center; }
 .brand a { color: #fff; }
 .brand .name { font-family: var(--serif); font-size: 21px; font-weight: 700; letter-spacing: .01em; }
 .brand-link { display: inline-flex; align-items: center; }
 /* Logo art is dark-on-white, so give it a light plate to sit on in the navy bar. */
-.brand-logo { height: 42px; width: auto; background: #fff; padding: 4px 8px; border-radius: 6px; }
-.brand .tag { font-size: 12px; color: #9db4cf; }
+.brand-logo { height: 68px; width: auto; background: #fff; padding: 6px 12px; border-radius: 8px; }
 .site-header nav a { color: #cfe0f0; margin-left: 22px; font-weight: 500; font-size: 15px; }
 .site-header nav a:hover { color: #fff; }
 
@@ -119,7 +118,8 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .detail-table td:first-child { color: var(--muted); width: 42%; font-weight: 600; }
 
 /* Financial sidebar */
-.finbox { position: sticky; top: 86px; }
+/* Clears the sticky header (96px) plus a little breathing room. */
+.finbox { position: sticky; top: 116px; }
 .finbox .price-card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .finbox .price-head { background: var(--navy); color: #fff; padding: 18px 22px; }
 .finbox .price-head .lbl { font-size: 12px; text-transform: uppercase; letter-spacing: .05em; color: #9db4cf; }
@@ -262,6 +262,10 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
   .row-body .title { font-size: 19px; }
 }
 @media (max-width: 620px) {
+  /* Scale the logo down so it and the nav still fit on one line. */
+  .site-header .wrap { height: 74px; }
+  .brand-logo { height: 48px; padding: 4px 8px; }
+  .finbox { top: 94px; }
   /* Stack the row: image on top, details beneath. */
   .listing-row { grid-template-columns: 1fr; }
   .row-thumb { aspect-ratio: 3 / 2; min-height: 0; }
