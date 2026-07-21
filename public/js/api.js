@@ -308,7 +308,8 @@
     async addImage(listingId, url, caption) {
       if (this.isDemo) {
         const l = window.DEMO_LISTINGS.find((x) => x.id === listingId);
-        if (l) { l.listing_images = l.listing_images || []; l.listing_images.push({ url, caption, sort_order: l.listing_images.length }); }
+        // Give demo images an id too, so deleting one can identify it.
+        if (l) { l.listing_images = l.listing_images || []; l.listing_images.push({ id: uid(), url, caption, sort_order: l.listing_images.length }); }
         return;
       }
       await wrap(sb.from('listing_images').insert({ listing_id: listingId, url, caption: caption || null }));
@@ -316,10 +317,15 @@
     async deleteImage(img) {
       if (this.isDemo) {
         window.DEMO_LISTINGS.forEach((l) => {
-          if (l.listing_images) l.listing_images = l.listing_images.filter((im) => im !== img && im.id !== img.id);
+          if (!l.listing_images) return;
+          // Match on identity, or on id when BOTH have one. Comparing ids
+          // blindly matched undefined === undefined and deleted every image.
+          l.listing_images = l.listing_images.filter((im) =>
+            !(im === img || (im.id && img.id && im.id === img.id)));
         });
         return;
       }
+      if (!img || !img.id) throw new Error('Cannot delete: image has no id');
       await wrap(sb.from('listing_images').delete().eq('id', img.id));
     },
 

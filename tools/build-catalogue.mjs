@@ -35,6 +35,14 @@ const BROKERS = [
 const brokerFor = (category) =>
   (category === 'Restaurant / Café' || category === 'Barbershop') ? 'edward-lee' : 'mary-lee';
 
+// Closed deals are shown as a portfolio, not as offers, so their financial
+// figures are not published. The numbers stay in the source below as the firm's
+// own record — flip this to true to publish them again. Prose for sold listings
+// is written without figures too, since nulling the columns alone would leave
+// the same numbers sitting in the description underneath.
+const SHOW_FIGURES_ON_SOLD = false;
+const hideFigures = (x) => !SHOW_FIGURES_ON_SOLD && x.status === 'sold';
+
 // --------------------------------------------------------------- listings ---
 // status: 'active' | 'sold'. price/cf/rev/rent in dollars (rent monthly).
 const L = [
@@ -60,11 +68,11 @@ const L = [
     blurb:'A spacious East Harlem laundromat under the current owner for about seven years, with newer machines and an absentee model supported by employee profit sharing.' },
 
   { slug:'cafe-pizzeria-ues', status:'sold',
-    title:'Café / Restaurant / Pizzeria – Upper East Side', headline:'Established 2004 · pre-pandemic revenue ~$3MM',
+    title:'Café / Restaurant / Pizzeria – Upper East Side', headline:'Established 2004 · original owners retiring',
     category:'Restaurant / Café', city:'Upper East Side', county:'Manhattan', price:null, cf:null, rev:3000000, rent:null,
     sf:'1,700 SF + 1,700 SF basement', lease:null, established:2004,
     facilities:'Full café/restaurant/pizzeria build-out. Original owners retiring.',
-    blurb:'A long-running Upper East Side café, restaurant and pizzeria established in 2004 with pre-pandemic revenue near $3MM. Sold as the original owners retired.' },
+    blurb:'A long-running Upper East Side café, restaurant and pizzeria established in 2004 with a strong pre-pandemic trading history. Sold as the original owners retired.' },
 
   { slug:'dry-cleaners-lower-east-side', status:'sold',
     title:'Dry Cleaners – Lower East Side', headline:'Partial absentee · finance-district clientele',
@@ -92,105 +100,105 @@ const L = [
     category:'Laundromat', city:'Queens', county:'Queens', price:139000, cf:84000, rev:348000, rent:2800,
     sf:'600 SF', lease:'10+ year lease', established:null,
     facilities:'Compact, efficient store with very low rent — an ideal first business.',
-    blurb:'A 50+ year Queens laundromat with a standout low rent of $2,800 and a 10+ year lease. About $348k revenue and $84k cash flow — a great starter opportunity.' },
+    blurb:'A 50+ year Queens laundromat with a standout low rent and a 10+ year lease in place — an ideal first business.' },
 
   { slug:'dry-cleaners-bronx-yankee-stadium', status:'sold',
     title:'Dry Cleaners – Close to Yankee Stadium', headline:'40+ years established · busy Bronx corridor',
     category:'Dry Cleaners', city:'Bronx', county:'Bronx', price:null, cf:100000, rev:400000, rent:3200,
     sf:'900 SF + 900 SF basement', lease:'7 years + 4-year option', established:null,
     facilities:'Established plant near Yankee Stadium with a long operating history.',
-    blurb:'A busy Bronx dry cleaner near Yankee Stadium, 40+ years established (12 under the current owner), with ~$400k revenue and ~$100k cash flow.' },
+    blurb:'A busy Bronx dry cleaner near Yankee Stadium, 40+ years established (12 under the current owner), with a steady local trade.' },
 
   { slug:'laundromat-washington-heights-absentee', status:'sold',
     title:'Laundromat – Absentee, Long Lease', headline:'14-year lease · expansion upside',
     category:'Laundromat', city:'Washington Heights', county:'Manhattan', price:399000, cf:118000, rev:455000, rent:8539,
     sf:'1,000 SF', lease:'14-year lease', established:null,
     facilities:'Absentee-run with a long 14-year lease. Upside via wholesale, pickup/delivery, and dry cleaning.',
-    blurb:'An absentee-run Washington Heights laundromat with a 14-year lease, ~$455k revenue and ~$118k cash flow, and clear expansion paths into wholesale, pickup/delivery and dry cleaning.' },
+    blurb:'An absentee-run Washington Heights laundromat with a long 14-year lease, and clear expansion paths into wholesale, pickup/delivery and dry cleaning.' },
 
   { slug:'laundromat-harlem-low-rent', status:'sold',
     title:'Laundromat – Absentee, Low Rent, Long Lease', headline:'15-year lease · coin and drop-off only',
     category:'Laundromat', city:'Harlem', county:'Manhattan', price:450000, cf:102000, rev:367000, rent:4637,
     sf:'1,400 SF', lease:'15-year lease', established:null,
     facilities:'Absentee-run on a long 15-year lease with low rent. Currently coin and drop-off revenue only.',
-    blurb:'A Harlem laundromat with an exceptional 15-year lease and low rent, ~$367k revenue and ~$102k cash flow from coin and drop-off alone — room to add wholesale and delivery.' },
+    blurb:'A Harlem laundromat with an exceptional 15-year lease and low rent, trading on coin and drop-off alone — room to add wholesale and delivery.' },
 
   { slug:'laundromat-harlem-absentee', status:'sold',
     title:'Laundromat – Absentee, Long Lease', headline:'11-year lease · wholesale upside',
     category:'Laundromat', city:'Harlem', county:'Manhattan', price:399000, cf:91000, rev:360000, rent:4819,
     sf:'1,100 SF', lease:'11-year lease', established:null,
     facilities:'Absentee-run with an 11-year lease. Opportunity to grow via wholesale accounts.',
-    blurb:'An absentee Harlem laundromat with an 11-year lease, ~$360k revenue and ~$91k cash flow, with upside from adding wholesale.' },
+    blurb:'An absentee Harlem laundromat with an 11-year lease and upside from adding wholesale accounts.' },
 
   { slug:'barbershop-ues', status:'sold',
     title:'Barbershop – Long Lease, Low Rent', headline:'5 chairs · established Upper East Side clientele',
     category:'Barbershop', city:'Upper East Side', county:'Manhattan', price:95000, cf:84000, rev:119000, rent:2850,
     sf:'500 SF', lease:'8-year lease', established:null,
     facilities:'Five-chair barbershop with a loyal, established customer base and low rent.',
-    blurb:'A profitable Upper East Side barbershop with five chairs, a loyal clientele, an 8-year lease and low rent — ~$119k revenue on ~$84k cash flow.' },
+    blurb:'A profitable Upper East Side barbershop with five chairs, a loyal clientele, an 8-year lease and low rent.' },
 
   { slug:'dry-cleaners-uws', status:'sold',
     title:'Dry Cleaners – Great Location, Long Lease', headline:'30+ years established · Upper West Side',
     category:'Dry Cleaners', city:'Upper West Side', county:'Manhattan', price:79000, cf:70000, rev:270000, rent:6600,
     sf:'500 SF + 500 SF basement', lease:'10-year lease', established:null,
     facilities:'Well-located Upper West Side plant with a long operating history.',
-    blurb:'A 30+ year Upper West Side dry cleaner (17 under the current owner) in a prime location, with a 10-year lease, ~$270k revenue and ~$70k cash flow.' },
+    blurb:'A 30+ year Upper West Side dry cleaner (17 under the current owner) in a prime location, with a 10-year lease.' },
 
   { slug:'wash-fold-drop-store-ues', status:'sold',
     title:'Wash & Fold Laundry / Drop Store', headline:'Upper East Side · simple drop-store model',
     category:'Laundromat', city:'Upper East Side', county:'Manhattan', price:99000, cf:70000, rev:200000, rent:5600,
     sf:'800 SF + 800 SF basement', lease:'10-year lease', established:null,
     facilities:'8 washers and 8 dryers. Straightforward wash & fold / drop-store with no wholesale accounts.',
-    blurb:'An Upper East Side wash & fold and drop store, 35 years established, with 8 washers/dryers, a 10-year lease, ~$200k revenue and ~$70k cash flow — untapped wholesale potential.' },
+    blurb:'An Upper East Side wash & fold and drop store, 35 years established, with eight washers and dryers and a 10-year lease — untapped wholesale potential.' },
 
   { slug:'laundromat-washington-heights-absentee-run', status:'sold',
     title:'Laundromat – Absentee Run', headline:'31 machines · no real-estate tax',
     category:'Laundromat', city:'Washington Heights', county:'Manhattan', price:249000, cf:70000, rev:310000, rent:7000,
     sf:'750 SF + 750 SF basement', lease:'10-year lease', established:null,
     facilities:'31 machines (17 washers, 14 dryers). Absentee-run; rent includes no separate real-estate tax.',
-    blurb:'An absentee-run Washington Heights laundromat with 31 machines, a 10-year lease and ~$310k revenue on ~$70k cash flow.' },
+    blurb:'An absentee-run Washington Heights laundromat with 31 machines and a 10-year lease.' },
 
   { slug:'bagel-shop-cafe-bronx', status:'sold',
-    title:'Bagel Shop / Café – Long Lease, Low Rent', headline:'Luxury residential building · ~$936k revenue',
+    title:'Bagel Shop / Café – Long Lease, Low Rent', headline:'Luxury residential building · long lease, low rent',
     category:'Restaurant / Café', city:'Bronx', county:'Bronx', price:399000, cf:null, rev:936000, rent:4600,
     sf:'1,500 SF', lease:'10 years + 5-year option', established:null,
     facilities:'Located in a luxury residential building in an up-and-coming neighborhood. Low rent with no increase for two years and no real-estate tax.',
-    blurb:'A high-volume Bronx bagel shop and café in a luxury residential building, ~$936k in revenue, with a long lease and very favorable rent terms.' },
+    blurb:'A high-volume Bronx bagel shop and café in a luxury residential building, with a long lease and very favorable rent terms.' },
 
   { slug:'laundromat-harlem-great-location', status:'sold',
-    title:'Laundromat – Great Location, Long Lease', headline:'All-new equipment · ~$135k cash flow',
+    title:'Laundromat – Great Location, Long Lease', headline:'All-new equipment · walk-in and drop-off',
     category:'Laundromat', city:'Harlem', county:'Manhattan', price:749000, cf:135000, rev:445000, rent:14500,
     sf:'1,800 SF + 1,800 SF basement', lease:'10 years + 5-year option', established:2022,
     facilities:'35 washers and 36 dryers, all new. Walk-in and drop-off only — no commercial accounts yet.',
-    blurb:'A modern, high-performing Harlem laundromat built out about two years ago with all-new equipment, ~$445k revenue and ~$135k cash flow from walk-in/drop-off alone — commercial accounts are the obvious next step.' },
+    blurb:'A modern, high-performing Harlem laundromat built out about two years ago with all-new equipment, trading on walk-in and drop-off alone — commercial accounts are the obvious next step.' },
 
   { slug:'laundromat-astoria-large', status:'sold',
     title:'Laundromat – Astoria, Large Space, Long Lease', headline:'52 newer machines · expansion potential',
     category:'Laundromat', city:'Astoria', county:'Queens', price:399000, cf:120000, rev:315600, rent:5400,
     sf:'1,800 SF + 1,000 SF basement', lease:'New 10-year lease', established:null,
     facilities:'52 machines (26 washers, 26 dryers), about three years old. Upside via hotel, hospital and wholesale accounts.',
-    blurb:'A large Astoria laundromat with 52 newer machines, a fresh 10-year lease, ~$315k revenue and ~$120k cash flow, with strong commercial expansion potential.' },
+    blurb:'A large Astoria laundromat with 52 newer machines and a fresh 10-year lease, with strong commercial expansion potential.' },
 
   { slug:'dry-cleaners-midtown-east', status:'sold',
     title:'Dry Cleaners – Great Location', headline:'Midtown East · pickup/delivery upside',
     category:'Dry Cleaners', city:'Midtown East', county:'Manhattan', price:99000, cf:95000, rev:394000, rent:7400,
     sf:'400 SF + 400 SF basement', lease:'5 years + 5-year option', established:null,
     facilities:'Compact Midtown East plant. Growth opportunity through pickup/delivery and online ordering.',
-    blurb:'A well-located Midtown East dry cleaner, 21 years established (16 under the current owner), with ~$394k revenue and ~$95k cash flow — room to grow via pickup/delivery and online.' },
+    blurb:'A well-located Midtown East dry cleaner, 21 years established (16 under the current owner) — room to grow via pickup/delivery and online.' },
 
   { slug:'greek-turkish-restaurant-tribeca', status:'sold',
     title:'Greek / Turkish Restaurant – Tribeca', headline:'4.5-star rated · dine-in and delivery',
     category:'Restaurant / Café', city:'Tribeca', county:'Manhattan', price:179000, cf:null, rev:720000, rent:10000,
     sf:'1,000 SF + 1,000 SF basement', lease:'10-year lease', established:null,
     facilities:'Well-reviewed (4.5 stars) Mediterranean restaurant with dine-in and delivery. Marketing is the clear growth lever.',
-    blurb:'A well-reviewed Tribeca Greek/Turkish restaurant with ~$720k revenue, a 10-year lease and a 4.5-star reputation across dine-in and delivery.' },
+    blurb:'A well-reviewed Tribeca Greek/Turkish restaurant with a 10-year lease and a 4.5-star reputation across dine-in and delivery.' },
 
   { slug:'cafe-pizzeria-ues-flagship', status:'sold',
-    title:'Café / Restaurant / Pizzeria – Upper East Side', headline:'Established 2004 · ~$3MM revenue',
+    title:'Café / Restaurant / Pizzeria – Upper East Side', headline:'Established 2004 · flagship location',
     category:'Restaurant / Café', city:'Upper East Side', county:'Manhattan', price:999000, cf:280000, rev:3000000, rent:29200,
     sf:'1,700 SF + 1,700 SF basement', lease:'10-year lease', established:2004,
     facilities:'Flagship UES café/restaurant/pizzeria. Upside via staffing efficiency and menu diversification.',
-    blurb:'A flagship Upper East Side café, restaurant and pizzeria established in 2004, with ~$3MM revenue and ~$280k cash flow on a 10-year lease.' },
+    blurb:'A flagship Upper East Side café, restaurant and pizzeria established in 2004, on a 10-year lease.' },
 ];
 
 // ------------------------------------------------------------- photos ------
@@ -247,6 +255,7 @@ const demoBrokers = BROKERS.map((b) => ({
 
 const demoListings = L.map((x) => {
   const hue = HUE[x.category] || 210;
+  const hide = hideFigures(x);
   return {
     id: 'ngu-' + x.slug, slug: x.slug, status: x.status, is_featured: !!x.featured,
     broker_id: 'ngu-broker-' + brokerFor(x.category),
@@ -255,11 +264,13 @@ const demoListings = L.map((x) => {
     broker_ids: ['ngu-broker-' + brokerFor(x.category)],
     title: x.title, headline: x.headline || null, category: x.category,
     city: x.city, state: 'NY', county: x.county || null,
-    asking_price: x.price, cash_flow: x.cf, gross_revenue: x.rev, ebitda: null,
-    ffe: null, inventory: null, real_estate_value: null, rent: x.rent,
+    asking_price: hide ? null : x.price, cash_flow: hide ? null : x.cf,
+    gross_revenue: hide ? null : x.rev, ebitda: null,
+    ffe: null, inventory: null, real_estate_value: null, rent: hide ? null : x.rent,
     is_ffe_included: true, is_inventory_included: true, seller_financing: false,
     established_year: x.established || null, employees: null,
-    real_estate: 'Leased', building_sf: x.sf || null, lease_expiration: x.lease || null,
+    real_estate: 'Leased', building_sf: x.sf || null,
+    lease_expiration: hide ? null : (x.lease || null),
     is_franchise: false, location_note: 'Exact address disclosed after NDA',
     reason_for_selling: null, support_training: null, growth_expansion: null,
     competition: null, facilities: x.facilities || null,
@@ -304,11 +315,12 @@ on conflict (slug) do nothing;
 }
 
 for (const x of L) {
+  const hide = hideFigures(x);
   sql += `insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values (${q(x.slug)}, ${q(x.status)}, ${b(x.featured)}, ${q(x.title)}, ${q(x.headline)}, ${q(x.category)}, ${q(x.city)}, 'NY', ${q(x.county)},
-  ${n(x.price)}, ${n(x.cf)}, ${n(x.rev)}, ${n(x.rent)}, ${n(x.established)}, 'Leased', ${q(x.sf)}, ${q(x.lease)},
+  ${hide ? 'null' : n(x.price)}, ${hide ? 'null' : n(x.cf)}, ${hide ? 'null' : n(x.rev)}, ${hide ? 'null' : n(x.rent)}, ${n(x.established)}, 'Leased', ${q(x.sf)}, ${hide ? 'null' : q(x.lease)},
   'Exact address disclosed after NDA', ${q(x.facilities)}, ${q(x.blurb)},
   (select id from public.brokers where slug = ${q(brokerFor(x.category))}))
 on conflict (slug) do nothing;
@@ -364,21 +376,38 @@ writeFileSync(join(ROOT, 'supabase', 'listing_photos.sql'), photoSql);
 // rent, lease): these are closed deals shown as a portfolio, not offers.
 // ON CONFLICT DO NOTHING means listings still present are left exactly as they
 // are — this only fills in what is missing.
-let restoreSql = `-- Restore listings that were deleted, with their photos.
--- Generated by tools/build-catalogue.mjs.
+let restoreSql = `-- Restore deleted listings, and take financial figures off closed deals.
+-- Generated by tools/build-catalogue.mjs. Safe to re-run.
 --
--- Financial figures are intentionally NOT set: asking price, cash flow, gross
--- revenue, rent and lease are all left null. Listings that still exist are
--- skipped untouched (ON CONFLICT DO NOTHING), so this is safe to re-run.
+-- Two things happen here:
+--   1. Any listing missing from the database is re-inserted, with its photo.
+--   2. Every SOLD listing has its figures cleared - asking price, cash flow,
+--      gross revenue, rent and lease - and its headline and description
+--      replaced with wording that does not quote figures. Clearing the columns
+--      alone would leave the same numbers sitting in the paragraph beneath.
+--
+-- ACTIVE listings keep their figures and their wording untouched.
 
 `;
 for (const x of L) {
+  const hide = hideFigures(x);
   restoreSql += `insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
+  asking_price, cash_flow, gross_revenue, rent, lease_expiration,
   established_year, real_estate, building_sf, location_note, facilities, description, broker_id)
 values (${q(x.slug)}, ${q(x.status)}, ${b(x.featured)}, ${q(x.title)}, ${q(x.headline)}, ${q(x.category)}, ${q(x.city)}, 'NY', ${q(x.county)},
+  ${hide ? 'null' : n(x.price)}, ${hide ? 'null' : n(x.cf)}, ${hide ? 'null' : n(x.rev)}, ${hide ? 'null' : n(x.rent)}, ${hide ? 'null' : q(x.lease)},
   ${n(x.established)}, 'Leased', ${q(x.sf)}, 'Exact address disclosed after NDA', ${q(x.facilities)}, ${q(x.blurb)},
   (select id from public.brokers where slug = ${q(brokerFor(x.category))}))
-on conflict (slug) do nothing;
+on conflict (slug) do nothing;`;
+  if (hide) {
+    restoreSql += `
+-- already present? strip its figures and refresh the wording
+update public.listings set
+  asking_price = null, cash_flow = null, gross_revenue = null, rent = null, lease_expiration = null,
+  headline = ${q(x.headline)}, description = ${q(x.blurb)}
+where slug = ${q(x.slug)};`;
+  }
+  restoreSql += `
 insert into public.listing_brokers (listing_id, broker_id)
 select l.id, b.id from public.listings l, public.brokers b
 where l.slug = ${q(x.slug)} and b.slug = ${q(brokerFor(x.category))}

@@ -84,9 +84,9 @@ on conflict do nothing;
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
-values ('cafe-pizzeria-ues', 'sold', false, 'Café / Restaurant / Pizzeria – Upper East Side', 'Established 2004 · pre-pandemic revenue ~$3MM', 'Restaurant / Café', 'Upper East Side', 'NY', 'Manhattan',
-  null, null, 3000000, null, 2004, 'Leased', '1,700 SF + 1,700 SF basement', null,
-  'Exact address disclosed after NDA', 'Full café/restaurant/pizzeria build-out. Original owners retiring.', 'A long-running Upper East Side café, restaurant and pizzeria established in 2004 with pre-pandemic revenue near $3MM. Sold as the original owners retired.',
+values ('cafe-pizzeria-ues', 'sold', false, 'Café / Restaurant / Pizzeria – Upper East Side', 'Established 2004 · original owners retiring', 'Restaurant / Café', 'Upper East Side', 'NY', 'Manhattan',
+  null, null, null, null, 2004, 'Leased', '1,700 SF + 1,700 SF basement', null,
+  'Exact address disclosed after NDA', 'Full café/restaurant/pizzeria build-out. Original owners retiring.', 'A long-running Upper East Side café, restaurant and pizzeria established in 2004 with a strong pre-pandemic trading history. Sold as the original owners retired.',
   (select id from public.brokers where slug = 'edward-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'cafe-pizzeria-ues')
@@ -104,7 +104,7 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('dry-cleaners-lower-east-side', 'sold', false, 'Dry Cleaners – Lower East Side', 'Partial absentee · finance-district clientele', 'Dry Cleaners', 'Lower East Side', 'NY', 'Manhattan',
-  null, null, null, 4600, null, 'Leased', null, null,
+  null, null, null, null, null, 'Leased', null, null,
   'Exact address disclosed after NDA', 'Partial absentee operation serving a clientele of nearby finance employees.', 'A Lower East Side dry cleaner of 7+ years, run partially absentee, serving the surrounding finance workforce.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
@@ -161,8 +161,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('laundromat-queens-low-rent', 'sold', false, 'Laundromat – Long Lease, Low Rent', '50+ years · great starter business', 'Laundromat', 'Queens', 'NY', 'Queens',
-  139000, 84000, 348000, 2800, null, 'Leased', '600 SF', '10+ year lease',
-  'Exact address disclosed after NDA', 'Compact, efficient store with very low rent — an ideal first business.', 'A 50+ year Queens laundromat with a standout low rent of $2,800 and a 10+ year lease. About $348k revenue and $84k cash flow — a great starter opportunity.',
+  null, null, null, null, null, 'Leased', '600 SF', null,
+  'Exact address disclosed after NDA', 'Compact, efficient store with very low rent — an ideal first business.', 'A 50+ year Queens laundromat with a standout low rent and a 10+ year lease in place — an ideal first business.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-queens-low-rent')
@@ -180,8 +180,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('dry-cleaners-bronx-yankee-stadium', 'sold', false, 'Dry Cleaners – Close to Yankee Stadium', '40+ years established · busy Bronx corridor', 'Dry Cleaners', 'Bronx', 'NY', 'Bronx',
-  null, 100000, 400000, 3200, null, 'Leased', '900 SF + 900 SF basement', '7 years + 4-year option',
-  'Exact address disclosed after NDA', 'Established plant near Yankee Stadium with a long operating history.', 'A busy Bronx dry cleaner near Yankee Stadium, 40+ years established (12 under the current owner), with ~$400k revenue and ~$100k cash flow.',
+  null, null, null, null, null, 'Leased', '900 SF + 900 SF basement', null,
+  'Exact address disclosed after NDA', 'Established plant near Yankee Stadium with a long operating history.', 'A busy Bronx dry cleaner near Yankee Stadium, 40+ years established (12 under the current owner), with a steady local trade.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'dry-cleaners-bronx-yankee-stadium')
@@ -199,8 +199,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('laundromat-washington-heights-absentee', 'sold', false, 'Laundromat – Absentee, Long Lease', '14-year lease · expansion upside', 'Laundromat', 'Washington Heights', 'NY', 'Manhattan',
-  399000, 118000, 455000, 8539, null, 'Leased', '1,000 SF', '14-year lease',
-  'Exact address disclosed after NDA', 'Absentee-run with a long 14-year lease. Upside via wholesale, pickup/delivery, and dry cleaning.', 'An absentee-run Washington Heights laundromat with a 14-year lease, ~$455k revenue and ~$118k cash flow, and clear expansion paths into wholesale, pickup/delivery and dry cleaning.',
+  null, null, null, null, null, 'Leased', '1,000 SF', null,
+  'Exact address disclosed after NDA', 'Absentee-run with a long 14-year lease. Upside via wholesale, pickup/delivery, and dry cleaning.', 'An absentee-run Washington Heights laundromat with a long 14-year lease, and clear expansion paths into wholesale, pickup/delivery and dry cleaning.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-washington-heights-absentee')
@@ -218,8 +218,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('laundromat-harlem-low-rent', 'sold', false, 'Laundromat – Absentee, Low Rent, Long Lease', '15-year lease · coin and drop-off only', 'Laundromat', 'Harlem', 'NY', 'Manhattan',
-  450000, 102000, 367000, 4637, null, 'Leased', '1,400 SF', '15-year lease',
-  'Exact address disclosed after NDA', 'Absentee-run on a long 15-year lease with low rent. Currently coin and drop-off revenue only.', 'A Harlem laundromat with an exceptional 15-year lease and low rent, ~$367k revenue and ~$102k cash flow from coin and drop-off alone — room to add wholesale and delivery.',
+  null, null, null, null, null, 'Leased', '1,400 SF', null,
+  'Exact address disclosed after NDA', 'Absentee-run on a long 15-year lease with low rent. Currently coin and drop-off revenue only.', 'A Harlem laundromat with an exceptional 15-year lease and low rent, trading on coin and drop-off alone — room to add wholesale and delivery.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-harlem-low-rent')
@@ -237,8 +237,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('laundromat-harlem-absentee', 'sold', false, 'Laundromat – Absentee, Long Lease', '11-year lease · wholesale upside', 'Laundromat', 'Harlem', 'NY', 'Manhattan',
-  399000, 91000, 360000, 4819, null, 'Leased', '1,100 SF', '11-year lease',
-  'Exact address disclosed after NDA', 'Absentee-run with an 11-year lease. Opportunity to grow via wholesale accounts.', 'An absentee Harlem laundromat with an 11-year lease, ~$360k revenue and ~$91k cash flow, with upside from adding wholesale.',
+  null, null, null, null, null, 'Leased', '1,100 SF', null,
+  'Exact address disclosed after NDA', 'Absentee-run with an 11-year lease. Opportunity to grow via wholesale accounts.', 'An absentee Harlem laundromat with an 11-year lease and upside from adding wholesale accounts.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-harlem-absentee')
@@ -256,8 +256,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('barbershop-ues', 'sold', false, 'Barbershop – Long Lease, Low Rent', '5 chairs · established Upper East Side clientele', 'Barbershop', 'Upper East Side', 'NY', 'Manhattan',
-  95000, 84000, 119000, 2850, null, 'Leased', '500 SF', '8-year lease',
-  'Exact address disclosed after NDA', 'Five-chair barbershop with a loyal, established customer base and low rent.', 'A profitable Upper East Side barbershop with five chairs, a loyal clientele, an 8-year lease and low rent — ~$119k revenue on ~$84k cash flow.',
+  null, null, null, null, null, 'Leased', '500 SF', null,
+  'Exact address disclosed after NDA', 'Five-chair barbershop with a loyal, established customer base and low rent.', 'A profitable Upper East Side barbershop with five chairs, a loyal clientele, an 8-year lease and low rent.',
   (select id from public.brokers where slug = 'edward-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'barbershop-ues')
@@ -275,8 +275,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('dry-cleaners-uws', 'sold', false, 'Dry Cleaners – Great Location, Long Lease', '30+ years established · Upper West Side', 'Dry Cleaners', 'Upper West Side', 'NY', 'Manhattan',
-  79000, 70000, 270000, 6600, null, 'Leased', '500 SF + 500 SF basement', '10-year lease',
-  'Exact address disclosed after NDA', 'Well-located Upper West Side plant with a long operating history.', 'A 30+ year Upper West Side dry cleaner (17 under the current owner) in a prime location, with a 10-year lease, ~$270k revenue and ~$70k cash flow.',
+  null, null, null, null, null, 'Leased', '500 SF + 500 SF basement', null,
+  'Exact address disclosed after NDA', 'Well-located Upper West Side plant with a long operating history.', 'A 30+ year Upper West Side dry cleaner (17 under the current owner) in a prime location, with a 10-year lease.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'dry-cleaners-uws')
@@ -294,8 +294,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('wash-fold-drop-store-ues', 'sold', false, 'Wash & Fold Laundry / Drop Store', 'Upper East Side · simple drop-store model', 'Laundromat', 'Upper East Side', 'NY', 'Manhattan',
-  99000, 70000, 200000, 5600, null, 'Leased', '800 SF + 800 SF basement', '10-year lease',
-  'Exact address disclosed after NDA', '8 washers and 8 dryers. Straightforward wash & fold / drop-store with no wholesale accounts.', 'An Upper East Side wash & fold and drop store, 35 years established, with 8 washers/dryers, a 10-year lease, ~$200k revenue and ~$70k cash flow — untapped wholesale potential.',
+  null, null, null, null, null, 'Leased', '800 SF + 800 SF basement', null,
+  'Exact address disclosed after NDA', '8 washers and 8 dryers. Straightforward wash & fold / drop-store with no wholesale accounts.', 'An Upper East Side wash & fold and drop store, 35 years established, with eight washers and dryers and a 10-year lease — untapped wholesale potential.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'wash-fold-drop-store-ues')
@@ -313,8 +313,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('laundromat-washington-heights-absentee-run', 'sold', false, 'Laundromat – Absentee Run', '31 machines · no real-estate tax', 'Laundromat', 'Washington Heights', 'NY', 'Manhattan',
-  249000, 70000, 310000, 7000, null, 'Leased', '750 SF + 750 SF basement', '10-year lease',
-  'Exact address disclosed after NDA', '31 machines (17 washers, 14 dryers). Absentee-run; rent includes no separate real-estate tax.', 'An absentee-run Washington Heights laundromat with 31 machines, a 10-year lease and ~$310k revenue on ~$70k cash flow.',
+  null, null, null, null, null, 'Leased', '750 SF + 750 SF basement', null,
+  'Exact address disclosed after NDA', '31 machines (17 washers, 14 dryers). Absentee-run; rent includes no separate real-estate tax.', 'An absentee-run Washington Heights laundromat with 31 machines and a 10-year lease.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-washington-heights-absentee-run')
@@ -331,9 +331,9 @@ on conflict do nothing;
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
-values ('bagel-shop-cafe-bronx', 'sold', false, 'Bagel Shop / Café – Long Lease, Low Rent', 'Luxury residential building · ~$936k revenue', 'Restaurant / Café', 'Bronx', 'NY', 'Bronx',
-  399000, null, 936000, 4600, null, 'Leased', '1,500 SF', '10 years + 5-year option',
-  'Exact address disclosed after NDA', 'Located in a luxury residential building in an up-and-coming neighborhood. Low rent with no increase for two years and no real-estate tax.', 'A high-volume Bronx bagel shop and café in a luxury residential building, ~$936k in revenue, with a long lease and very favorable rent terms.',
+values ('bagel-shop-cafe-bronx', 'sold', false, 'Bagel Shop / Café – Long Lease, Low Rent', 'Luxury residential building · long lease, low rent', 'Restaurant / Café', 'Bronx', 'NY', 'Bronx',
+  null, null, null, null, null, 'Leased', '1,500 SF', null,
+  'Exact address disclosed after NDA', 'Located in a luxury residential building in an up-and-coming neighborhood. Low rent with no increase for two years and no real-estate tax.', 'A high-volume Bronx bagel shop and café in a luxury residential building, with a long lease and very favorable rent terms.',
   (select id from public.brokers where slug = 'edward-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'bagel-shop-cafe-bronx')
@@ -350,9 +350,9 @@ on conflict do nothing;
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
-values ('laundromat-harlem-great-location', 'sold', false, 'Laundromat – Great Location, Long Lease', 'All-new equipment · ~$135k cash flow', 'Laundromat', 'Harlem', 'NY', 'Manhattan',
-  749000, 135000, 445000, 14500, 2022, 'Leased', '1,800 SF + 1,800 SF basement', '10 years + 5-year option',
-  'Exact address disclosed after NDA', '35 washers and 36 dryers, all new. Walk-in and drop-off only — no commercial accounts yet.', 'A modern, high-performing Harlem laundromat built out about two years ago with all-new equipment, ~$445k revenue and ~$135k cash flow from walk-in/drop-off alone — commercial accounts are the obvious next step.',
+values ('laundromat-harlem-great-location', 'sold', false, 'Laundromat – Great Location, Long Lease', 'All-new equipment · walk-in and drop-off', 'Laundromat', 'Harlem', 'NY', 'Manhattan',
+  null, null, null, null, 2022, 'Leased', '1,800 SF + 1,800 SF basement', null,
+  'Exact address disclosed after NDA', '35 washers and 36 dryers, all new. Walk-in and drop-off only — no commercial accounts yet.', 'A modern, high-performing Harlem laundromat built out about two years ago with all-new equipment, trading on walk-in and drop-off alone — commercial accounts are the obvious next step.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-harlem-great-location')
@@ -370,8 +370,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('laundromat-astoria-large', 'sold', false, 'Laundromat – Astoria, Large Space, Long Lease', '52 newer machines · expansion potential', 'Laundromat', 'Astoria', 'NY', 'Queens',
-  399000, 120000, 315600, 5400, null, 'Leased', '1,800 SF + 1,000 SF basement', 'New 10-year lease',
-  'Exact address disclosed after NDA', '52 machines (26 washers, 26 dryers), about three years old. Upside via hotel, hospital and wholesale accounts.', 'A large Astoria laundromat with 52 newer machines, a fresh 10-year lease, ~$315k revenue and ~$120k cash flow, with strong commercial expansion potential.',
+  null, null, null, null, null, 'Leased', '1,800 SF + 1,000 SF basement', null,
+  'Exact address disclosed after NDA', '52 machines (26 washers, 26 dryers), about three years old. Upside via hotel, hospital and wholesale accounts.', 'A large Astoria laundromat with 52 newer machines and a fresh 10-year lease, with strong commercial expansion potential.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'laundromat-astoria-large')
@@ -389,8 +389,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('dry-cleaners-midtown-east', 'sold', false, 'Dry Cleaners – Great Location', 'Midtown East · pickup/delivery upside', 'Dry Cleaners', 'Midtown East', 'NY', 'Manhattan',
-  99000, 95000, 394000, 7400, null, 'Leased', '400 SF + 400 SF basement', '5 years + 5-year option',
-  'Exact address disclosed after NDA', 'Compact Midtown East plant. Growth opportunity through pickup/delivery and online ordering.', 'A well-located Midtown East dry cleaner, 21 years established (16 under the current owner), with ~$394k revenue and ~$95k cash flow — room to grow via pickup/delivery and online.',
+  null, null, null, null, null, 'Leased', '400 SF + 400 SF basement', null,
+  'Exact address disclosed after NDA', 'Compact Midtown East plant. Growth opportunity through pickup/delivery and online ordering.', 'A well-located Midtown East dry cleaner, 21 years established (16 under the current owner) — room to grow via pickup/delivery and online.',
   (select id from public.brokers where slug = 'mary-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'dry-cleaners-midtown-east')
@@ -408,8 +408,8 @@ insert into public.listings (slug, status, is_featured, title, headline, categor
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
 values ('greek-turkish-restaurant-tribeca', 'sold', false, 'Greek / Turkish Restaurant – Tribeca', '4.5-star rated · dine-in and delivery', 'Restaurant / Café', 'Tribeca', 'NY', 'Manhattan',
-  179000, null, 720000, 10000, null, 'Leased', '1,000 SF + 1,000 SF basement', '10-year lease',
-  'Exact address disclosed after NDA', 'Well-reviewed (4.5 stars) Mediterranean restaurant with dine-in and delivery. Marketing is the clear growth lever.', 'A well-reviewed Tribeca Greek/Turkish restaurant with ~$720k revenue, a 10-year lease and a 4.5-star reputation across dine-in and delivery.',
+  null, null, null, null, null, 'Leased', '1,000 SF + 1,000 SF basement', null,
+  'Exact address disclosed after NDA', 'Well-reviewed (4.5 stars) Mediterranean restaurant with dine-in and delivery. Marketing is the clear growth lever.', 'A well-reviewed Tribeca Greek/Turkish restaurant with a 10-year lease and a 4.5-star reputation across dine-in and delivery.',
   (select id from public.brokers where slug = 'edward-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'greek-turkish-restaurant-tribeca')
@@ -426,9 +426,9 @@ on conflict do nothing;
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
   location_note, facilities, description, broker_id)
-values ('cafe-pizzeria-ues-flagship', 'sold', false, 'Café / Restaurant / Pizzeria – Upper East Side', 'Established 2004 · ~$3MM revenue', 'Restaurant / Café', 'Upper East Side', 'NY', 'Manhattan',
-  999000, 280000, 3000000, 29200, 2004, 'Leased', '1,700 SF + 1,700 SF basement', '10-year lease',
-  'Exact address disclosed after NDA', 'Flagship UES café/restaurant/pizzeria. Upside via staffing efficiency and menu diversification.', 'A flagship Upper East Side café, restaurant and pizzeria established in 2004, with ~$3MM revenue and ~$280k cash flow on a 10-year lease.',
+values ('cafe-pizzeria-ues-flagship', 'sold', false, 'Café / Restaurant / Pizzeria – Upper East Side', 'Established 2004 · flagship location', 'Restaurant / Café', 'Upper East Side', 'NY', 'Manhattan',
+  null, null, null, null, 2004, 'Leased', '1,700 SF + 1,700 SF basement', null,
+  'Exact address disclosed after NDA', 'Flagship UES café/restaurant/pizzeria. Upside via staffing efficiency and menu diversification.', 'A flagship Upper East Side café, restaurant and pizzeria established in 2004, on a 10-year lease.',
   (select id from public.brokers where slug = 'edward-lee'))
 on conflict (slug) do nothing;
 with l as (select id from public.listings where slug = 'cafe-pizzeria-ues-flagship')
