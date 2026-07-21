@@ -2,7 +2,10 @@
 // no backend). Copy your real Supabase values in when you're ready to go live.
 // This file is gitignored; commit config.example.js instead.
 window.BROKERAGE_CONFIG = {
-  SUPABASE_URL: 'https://YOUR-PROJECT-ref.supabase.co',
+  SUPABASE_URL: 'https://xwzlmpppdgbkywmrpvqf.supabase.co',
+  // Paste the anon / public key here (Supabase → Settings → API → Project API keys).
+  // It's a long JWT starting with "eyJ". Safe in the browser — RLS is the boundary.
+  // Never the service_role key. Site stays in DEMO MODE until this is filled in.
   SUPABASE_ANON_KEY: 'YOUR-ANON-PUBLIC-KEY',
 
   BRAND_NAME: 'NGU Business Real Estate, LLC',

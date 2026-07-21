@@ -6,6 +6,27 @@ used by the other repos. Work through these in order.
 > **You create the accounts.** Signing up and entering passwords is yours to do —
 > the steps below pick up right after each account exists.
 
+> ## ⚠️ Read first: the CLIs default to the OLD account
+>
+> Verified on this machine — the installed CLIs are authenticated as
+> `edlee624`, **not** `nguedwardlee`:
+>
+> | Tool | Signed in as | Check with |
+> |---|---|---|
+> | Vercel | `edlee624-4296` | `vercel whoami` |
+> | Supabase | old org (gigcute, glowupbook…) | `supabase projects list` |
+> | git | global `edlee624@gmail.com` | `git config --global user.email` |
+>
+> Deploying without switching puts NGU on the wrong accounts. Switch first:
+>
+> ```bash
+> vercel logout   && vercel login      # sign in as nguedwardlee@gmail.com
+> supabase logout && supabase login    # sign in as nguedwardlee@gmail.com
+> ```
+>
+> Git is already handled — this repo has a **local** identity override
+> (`nguedwardlee@gmail.com`), so the global one doesn't apply here.
+
 ---
 
 ## 0. Local repo — DONE ✅
@@ -59,10 +80,19 @@ Windows Credential Manager may have `edlee624`'s GitHub token cached. Either:
 
 1. **Sign up / sign in** as `nguedwardlee@gmail.com` → **New project**
    (region: US East is closest to NYC). Save the DB password somewhere safe.
-2. **SQL Editor** → run these three files **in order** (paste the contents):
+2. **SQL Editor** → paste **`supabase/all_in_one.sql`** and hit Run. That single
+   file is the migrations + seed concatenated in the right order, so it's one
+   paste instead of three. Safe to re-run (all inserts are guarded).
+
+   <details><summary>Prefer to run them separately?</summary>
+
    1. `supabase/migrations/0001_init.sql`    — schema, RLS, public RPCs
    2. `supabase/migrations/0002_brokers.sql` — brokers + listing/lead attribution
    3. `supabase/seed.sql`                    — 2 brokers + the 22-listing catalogue
+   </details>
+
+   **Project ref for this install:** `xwzlmpppdgbkywmrpvqf`
+   (already wired into `public/config.js` as the `SUPABASE_URL`).
 3. **Settings → API** → copy the **Project URL** and the **anon / public** key
    into `public/config.js`:
    ```js
