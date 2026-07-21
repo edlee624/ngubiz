@@ -457,11 +457,20 @@
             ${l.created_at ? `<p class="form-note">Received ${esc(fmt.date(l.created_at))}${l.source ? ' · ' + esc(l.source) : ''}</p>` : ''}
             <button class="btn btn-primary" type="submit">${isNew ? 'Create Lead' : 'Save'}</button>
             ${l.email ? `<a class="btn btn-ghost" href="mailto:${esc(l.email)}" style="margin-left:8px">Email</a>` : ''}
+            ${isNew ? '' : `<button class="btn btn-danger" type="button" id="lead-delete" style="float:right">Delete</button>`}
           </form>
         </div>
       </div>`;
     document.body.appendChild(back);
     back.querySelector('.modal-x').addEventListener('click', () => back.remove());
+
+    const delBtn = back.querySelector('#lead-delete');
+    if (delBtn) delBtn.addEventListener('click', async () => {
+      if (!confirm(`Delete the lead from ${l.name}? This cannot be undone.`)) return;
+      try { await BK.deleteLead(l.id); toast('Lead deleted', 'ok'); back.remove(); renderLeads(); }
+      catch (err) { toast(err.message, 'err'); }
+    });
+
     back.querySelector('#lead-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(e.target).entries());

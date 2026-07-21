@@ -290,6 +290,13 @@
       }
       return wrap(sb.from('leads').insert(Object.assign({ source: 'manual' }, row)).select().single());
     },
+    async deleteLead(id) {
+      if (this.isDemo) {
+        const i = demoState.leads.findIndex((x) => x.id === id);
+        if (i !== -1) demoState.leads.splice(i, 1); return;
+      }
+      await wrap(sb.from('leads').delete().eq('id', id));
+    },
   };
 
   window.BK = BK;
