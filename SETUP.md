@@ -144,7 +144,8 @@ vercel --prod
 
 ## Notes
 
-- **Custom domain** (e.g. `ngurealty.com`): Vercel → Project → Settings → Domains.
+- **Custom domain**: Vercel → Project → Settings → Domains. Use a current-brand
+  domain; the firm's older domain is retired and should not be reused.
 - **Listing photos** are placeholders. Upload real ones to the `listing-photos`
   bucket and paste the public URLs into each listing in `/admin`.
 - **Broker photos**: also placeholders (initials tiles). Upload real headshots to

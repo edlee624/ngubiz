@@ -15,7 +15,8 @@ window.BROKERAGE_CONFIG = {
   CONTACT_EMAIL: 'ngumarylee@gmail.com',
   CONTACT_PHONE: '718-737-6899',
   CONTACT_ADDRESS: '3225 Johnson Ave 5F, Bronx, NY 10463',
-  WEBSITE: 'www.ngurealty.com',
+  // WEBSITE intentionally unset. Set it to the current domain when there is
+  // one and the footer will pick it up.
 
   // Firm description, from the existing NGU site.
   ABOUT: 'NGU Business Real Estate, LLC is a family-owned residential and commercial brokerage. ' +
