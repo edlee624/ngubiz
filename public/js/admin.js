@@ -168,6 +168,7 @@
     try {
       await loadBrokers();
       rows = await BK.adminListListings();
+      listingCache = rows;   // uniqueSlug() needs the existing slugs
     } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
     main.innerHTML = `
       <div class="toolbar">
@@ -206,31 +207,37 @@
     }));
   }
 
-  const TEXT_FIELDS = [
-    ['title', 'Business Title *', 'text'], ['slug', 'URL Slug *', 'text'],
-    ['headline', 'Headline / teaser', 'text'], ['category', 'Category / Industry', 'text'],
-    ['city', 'City', 'text'], ['state', 'State', 'text'], ['county', 'County', 'text'],
-    ['location_note', 'Location note (e.g. "disclosed after NDA")', 'text'],
-    ['established_year', 'Year established', 'number'], ['employees', 'Employees', 'text'],
-    ['real_estate', 'Real estate (Leased/Owned)', 'text'], ['building_sf', 'Building size', 'text'],
-    ['lease_expiration', 'Lease expiration', 'text'],
-  ];
+  // The form is deliberately small: title, five financial figures, description.
+  // Columns NOT listed here (category, city, headline, facilities, …) still
+  // exist and still render on the site — the save below simply never touches
+  // them, so editing a listing can't wipe data the form doesn't show.
   const MONEY_FIELDS = [
-    ['asking_price', 'Asking price'], ['cash_flow', 'Cash flow (SDE)'], ['gross_revenue', 'Gross revenue'],
-    ['ebitda', 'EBITDA'], ['ffe', 'FF&E value'], ['inventory', 'Inventory value'],
-    ['real_estate_value', 'Real estate value'], ['rent', 'Monthly rent'],
-  ];
-  const LONG_FIELDS = [
-    ['description', 'Business description'], ['reason_for_selling', 'Reason for selling'],
-    ['support_training', 'Support & training'], ['growth_expansion', 'Growth & expansion'],
-    ['competition', 'Competition'], ['facilities', 'Facilities'],
+    ['asking_price', 'Asking price'], ['cash_flow', 'Cash flow'],
+    ['gross_revenue', 'Gross revenue'], ['rent', 'Rent (monthly)'],
   ];
 
+  // Title -> URL slug, so there's no slug field to fill in by hand.
+  function slugify(s) {
+    return String(s || '')
+      // Fold accents first, so "Café" -> "cafe" rather than "caf".
+      .normalize('NFD').replace(/[̀-ͯ]/g, '')
+      .toLowerCase().trim()
+      .replace(/['’]/g, '')
+      .replace(/[^a-z0-9]+/g, '-')
+      .replace(/^-+|-+$/g, '')
+      .slice(0, 60).replace(/-+$/, '') || 'listing';
+  }
+  // Slugs are UNIQUE in the schema, so avoid colliding with an existing one.
+  function uniqueSlug(title, ownId) {
+    const base = slugify(title);
+    const taken = new Set(listingCache.filter((x) => x.id !== ownId).map((x) => x.slug));
+    if (!taken.has(base)) return base;
+    for (let i = 2; i < 500; i++) if (!taken.has(`${base}-${i}`)) return `${base}-${i}`;
+    return `${base}-${Date.now()}`;
+  }
+
   function openListingEditor(listing) {
-    const l = Object.assign({
-      status: 'draft', is_featured: false, is_ffe_included: true, is_inventory_included: true,
-      seller_financing: false, is_franchise: false,
-    }, listing || {});
+    const l = Object.assign({ status: 'draft' }, listing || {});
     const isNew = !l.id;
 
     const back = document.createElement('div');
@@ -263,23 +270,24 @@
                 </div>
               </div>
             </div>
-            <label style="display:flex;gap:8px;align-items:center;margin-bottom:14px"><input type="checkbox" name="is_featured" ${l.is_featured ? 'checked' : ''} style="width:auto"/> Feature on the homepage</label>
-
-            <h4 style="margin:6px 0">Overview</h4>
-            ${TEXT_FIELDS.map((f) => fieldHTML(f, l)).join('')}
-
-            <h4 style="margin:16px 0 6px">Financials</h4>
-            <div class="form-row">${MONEY_FIELDS.map((f) =>
-              `<div class="field"><label>${f[1]}</label><input name="${f[0]}" type="number" step="0.01" value="${val(l[f[0]])}"/></div>`).join('')}</div>
-            <div style="display:flex;gap:20px;flex-wrap:wrap;margin-bottom:10px">
-              <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="is_ffe_included" ${l.is_ffe_included ? 'checked' : ''} style="width:auto"/> FF&E included in price</label>
-              <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="is_inventory_included" ${l.is_inventory_included ? 'checked' : ''} style="width:auto"/> Inventory included</label>
-              <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="seller_financing" ${l.seller_financing ? 'checked' : ''} style="width:auto"/> Seller financing</label>
-              <label style="display:flex;gap:6px;align-items:center"><input type="checkbox" name="is_franchise" ${l.is_franchise ? 'checked' : ''} style="width:auto"/> Franchise</label>
+            <div class="field"><label>Business title *</label>
+              <input name="title" value="${esc(l.title)}" required placeholder="Laundromat – Large Space, Long Lease"/>
+              ${isNew ? '<span class="form-note">The web address is generated from this.</span>'
+                      : `<span class="form-note">Address: /listing/${esc(l.slug)}</span>`}
             </div>
 
-            <h4 style="margin:16px 0 6px">Description & Details</h4>
-            ${LONG_FIELDS.map((f) => `<div class="field"><label>${f[1]}</label><textarea name="${f[0]}">${esc(l[f[0]])}</textarea></div>`).join('')}
+            <h4 style="margin:18px 0 6px">Financials</h4>
+            <div class="form-row">${MONEY_FIELDS.map((f) =>
+              `<div class="field"><label>${f[1]}</label><input name="${f[0]}" type="number" step="1" value="${val(l[f[0]])}" placeholder="—"/></div>`).join('')}</div>
+            <div class="field"><label>Lease</label>
+              <input name="lease_expiration" value="${esc(l.lease_expiration)}" placeholder="10-year lease remaining"/>
+            </div>
+            <p class="form-note" style="margin:-4px 0 4px">Leave a figure blank and it is simply left off the listing.</p>
+
+            <h4 style="margin:18px 0 6px">Business description</h4>
+            <div class="field">
+              <textarea name="description" style="min-height:200px" placeholder="Describe the business…">${esc(l.description)}</textarea>
+            </div>
 
             <button class="btn btn-primary" type="submit">${isNew ? 'Create Listing' : 'Save Changes'}</button>
           </form>
@@ -323,14 +331,22 @@
     back.querySelector('#listing-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(e.target).entries());
-      if (!d.title || !d.slug) return toast('Title and slug are required', 'err');
-      const row = { id: l.id };
-      TEXT_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] === '' ? null : (f[2] === 'number' ? Number(d[f[0]]) : d[f[0]]); });
+      if (!d.title || !d.title.trim()) return toast('Business title is required', 'err');
+
+      // Only the fields this form actually shows. Anything else on the row
+      // (category, city, headline, facilities, …) is left untouched so an edit
+      // here can never blank out data the form doesn't display.
+      const row = {
+        id: l.id,
+        title: d.title.trim(),
+        status: d.status,
+        lease_expiration: d.lease_expiration.trim() || null,
+        description: d.description.trim() || null,
+      };
       MONEY_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] === '' ? null : Number(d[f[0]]); });
-      LONG_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] || null; });
-      row.status = d.status;
-      ['is_featured', 'is_ffe_included', 'is_inventory_included', 'seller_financing', 'is_franchise']
-        .forEach((k) => { row[k] = !!d[k]; });
+      // Slug is derived from the title, and only for new listings — changing it
+      // on an existing one would break any link already shared.
+      if (!l.id) row.slug = uniqueSlug(d.title, null);
 
       // Primary first — setListingAgents treats agentIds[0] as the primary.
       const checked = cbs.filter((c) => c.checked).map((c) => c.value);
@@ -349,10 +365,6 @@
     });
 
     if (!isNew) renderImages(back, l);
-  }
-
-  function fieldHTML(f, l) {
-    return `<div class="field"><label>${f[1]}</label><input name="${f[0]}" type="${f[2]}" ${f[2] === 'number' ? 'step="1"' : ''} value="${val(l[f[0]])}"/></div>`;
   }
 
   async function renderImages(back, l) {
