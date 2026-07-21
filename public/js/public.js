@@ -354,7 +354,8 @@
 
   function teamHTML() {
     if (!BROKERS.length) return '';
-    return `<div class="team-grid">${BROKERS.map((m) => `
+    return `<h3 class="team-heading">The Team</h3>
+      <div class="team-grid">${BROKERS.map((m) => `
       <div class="team-card">
         ${avatarHTML(m, 'team-avatar')}
         <div class="team-name"><a href="/broker/${esc(m.slug)}" data-link>${esc(m.name)}</a></div>

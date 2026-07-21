@@ -143,6 +143,48 @@
       return rows && rows[0] ? normalizeAgents(rows)[0] : null;
     },
 
+    // ===================== FILE UPLOADS ==================================
+    // Uploads to the public `media` bucket (see migration 0004) and returns the
+    // public URL. In demo mode there's no backend, so hand back a data: URL so
+    // the picker still previews.
+    async uploadImage(file, folder) {
+      if (!file) throw new Error('No file selected');
+      if (!/^image\//.test(file.type)) throw new Error('That file is not an image');
+      if (file.size > 8 * 1024 * 1024) throw new Error('Image is larger than 8 MB');
+
+      if (this.isDemo) {
+        return await new Promise((res, rej) => {
+          const fr = new FileReader();
+          fr.onload = () => res(fr.result);
+          fr.onerror = () => rej(new Error('Could not read the file'));
+          fr.readAsDataURL(file);
+        });
+      }
+      const ext = (file.name.split('.').pop() || 'jpg').toLowerCase().replace(/[^a-z0-9]/g, '');
+      const path = `${folder || 'uploads'}/${uid()}-${Math.floor(performance.now())}.${ext}`;
+      const { error } = await sb.storage.from('media').upload(path, file, {
+        cacheControl: '31536000', upsert: false, contentType: file.type,
+      });
+      if (error) {
+        if (/bucket/i.test(error.message)) {
+          throw new Error('Storage bucket "media" is missing — run supabase/migrations/0004_storage.sql');
+        }
+        throw new Error(error.message);
+      }
+      return sb.storage.from('media').getPublicUrl(path).data.publicUrl;
+    },
+
+    // Remove a previously uploaded file. Ignores images that live outside the
+    // bucket (e.g. the repo's /img/... files), which have nothing to delete.
+    async deleteUpload(url) {
+      if (this.isDemo || !url) return;
+      const marker = '/storage/v1/object/public/media/';
+      const i = String(url).indexOf(marker);
+      if (i === -1) return;
+      const path = decodeURIComponent(String(url).slice(i + marker.length));
+      await sb.storage.from('media').remove([path]);
+    },
+
     // ===================== BROKERS =======================================
     async listBrokers() {
       if (this.isDemo) return demoBrokers().filter((b) => b.is_active).sort((a, c) => a.sort_order - c.sort_order);

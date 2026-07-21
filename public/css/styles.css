@@ -164,6 +164,8 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
   justify-content: center; z-index: 50; padding: 20px; }
 .modal { background: #fff; border-radius: var(--radius); max-width: 520px; width: 100%; box-shadow: var(--shadow);
   max-height: 92vh; overflow-y: auto; }
+/* Wider editors: bios and descriptions are unreadable in a 520px column. */
+.modal-wide { max-width: 940px; }
 .modal-head { padding: 20px 24px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; }
 .modal-head h3 { margin: 0; font-size: 19px; }
 .modal-body { padding: 22px 24px; }
@@ -180,6 +182,7 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .site-footer a { color: #cfe0f0; }
 
 /* ---------- Team / About ---------- */
+.team-heading { font-size: 22px; color: var(--navy); margin: 30px 0 4px; }
 .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 18px; }
 .team-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: #fbfcfe; }
 /* Square (lightly rounded) headshots. object-fit keeps non-square source
@@ -288,8 +291,26 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .img-tile { position: relative; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }
-.img-tile img { aspect-ratio: 3/2; object-fit: cover; width: 100%; }
+.img-tile img { aspect-ratio: 3/2; object-fit: cover; width: 100%; display: block; }
 .img-tile button { position: absolute; top: 6px; right: 6px; }
+
+/* Two-column editor layout (photo beside the fields). */
+.editor-cols { display: grid; grid-template-columns: 220px 1fr; gap: 26px; align-items: start; }
+.photo-pick { display: flex; flex-direction: column; gap: 10px; }
+.photo-preview { width: 200px; height: 200px; border-radius: 10px; overflow: hidden; background: var(--navy);
+  color: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-size: 60px; font-weight: 700; }
+.photo-preview img { width: 100%; height: 100%; object-fit: cover; }
+.photo-actions { display: flex; gap: 8px; flex-wrap: wrap; }
+/* File inputs are hidden inside these labels, so make the label look clickable. */
+.photo-actions label.btn, .btn > input[type=file] + *, label.btn { cursor: pointer; }
+/* Needs to out-specify `.field textarea`, which sets min-height: 110px. */
+.field textarea.bio-box { min-height: 230px; line-height: 1.6; }
+
+@media (max-width: 760px) {
+  .editor-cols { grid-template-columns: 1fr; gap: 16px; }
+  .photo-preview { width: 150px; height: 150px; font-size: 44px; }
+}
 
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {

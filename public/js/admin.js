@@ -118,27 +118,47 @@
     const isNew = !b.id;
     const back = document.createElement('div');
     back.className = 'modal-back';
+    let photoUrl = b.photo_url || '';
     back.innerHTML = `
-      <div class="modal">
+      <div class="modal modal-wide">
         <div class="modal-head"><h3>${isNew ? 'New Broker' : 'Edit Broker'}</h3><button class="modal-x">×</button></div>
         <div class="modal-body">
           <form id="broker-form">
-            <div class="form-row">
-              <div class="field"><label>Name *</label><input name="name" value="${esc(b.name)}" required/></div>
-              <div class="field"><label>URL slug *</label><input name="slug" value="${esc(b.slug)}" placeholder="mary-lee" required/></div>
+            <div class="editor-cols">
+              <div>
+                <h4 style="margin:0 0 10px">Photo</h4>
+                <div class="photo-pick">
+                  <div id="broker-photo-preview" class="photo-preview"></div>
+                  <div class="photo-actions">
+                    <label class="btn btn-ghost btn-sm">Upload photo
+                      <input type="file" id="broker-photo-file" accept="image/*" hidden/>
+                    </label>
+                    <button type="button" class="btn btn-danger btn-sm" id="broker-photo-remove">Remove</button>
+                  </div>
+                  <span class="form-note">JPG or PNG, up to 8 MB. Shown square, so a head-and-shoulders crop works best. With no photo, initials are shown instead.</span>
+                </div>
+              </div>
+              <div>
+                <div class="field"><label>Name *</label><input name="name" id="broker-name" value="${esc(b.name)}" required/></div>
+                <div class="field"><label>URL slug</label>
+                  <input name="slug" id="broker-slug" value="${esc(b.slug)}" placeholder="generated from the name"/>
+                  <span class="form-note" id="slug-note">${isNew ? 'Filled in automatically as you type the name.' : `Profile: /broker/${esc(b.slug)}`}</span>
+                </div>
+                <div class="field"><label>Title</label><input name="title" value="${esc(b.title)}" placeholder="Licensed NYS Commercial &amp; Residential Broker"/></div>
+                <div class="form-row">
+                  <div class="field"><label>Phone</label><input name="phone" value="${esc(b.phone)}"/></div>
+                  <div class="field"><label>Email</label><input name="email" value="${esc(b.email)}"/></div>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>License #</label><input name="license_no" value="${esc(b.license_no)}"/></div>
+                  <div class="field"><label>Sort order</label><input name="sort_order" type="number" value="${val(b.sort_order)}"/></div>
+                </div>
+              </div>
             </div>
-            <div class="field"><label>Title</label><input name="title" value="${esc(b.title)}" placeholder="Licensed NYS Commercial &amp; Residential Broker"/></div>
-            <div class="form-row">
-              <div class="field"><label>Phone</label><input name="phone" value="${esc(b.phone)}"/></div>
-              <div class="field"><label>Email</label><input name="email" value="${esc(b.email)}"/></div>
+
+            <div class="field" style="margin-top:6px"><label>Bio</label>
+              <textarea name="bio" class="bio-box">${esc(b.bio)}</textarea>
             </div>
-            <div class="form-row">
-              <div class="field"><label>License #</label><input name="license_no" value="${esc(b.license_no)}"/></div>
-              <div class="field"><label>Sort order</label><input name="sort_order" type="number" value="${val(b.sort_order)}"/></div>
-            </div>
-            <div class="field"><label>Photo URL</label><input name="photo_url" value="${esc(b.photo_url)}" placeholder="https://… (Supabase Storage public URL)"/>
-              <span class="form-note">Leave blank to show initials instead.</span></div>
-            <div class="field"><label>Bio</label><textarea name="bio">${esc(b.bio)}</textarea></div>
             <label style="display:flex;gap:8px;align-items:center;margin-bottom:14px"><input type="checkbox" name="is_active" ${b.is_active ? 'checked' : ''} style="width:auto"/> Show on the public site</label>
             <button class="btn btn-primary" type="submit">${isNew ? 'Create Broker' : 'Save Changes'}</button>
           </form>
@@ -146,13 +166,56 @@
       </div>`;
     document.body.appendChild(back);
     back.querySelector('.modal-x').addEventListener('click', () => back.remove());
+
+    // ---- photo: preview, upload, remove ----
+    const preview = back.querySelector('#broker-photo-preview');
+    const fileInput = back.querySelector('#broker-photo-file');
+    function paintPhoto() {
+      preview.innerHTML = photoUrl
+        ? `<img src="${esc(photoUrl)}" alt=""/>`
+        : `<span>${esc((back.querySelector('#broker-name').value || '?').split(' ').map((w) => w[0]).slice(0, 2).join(''))}</span>`;
+      back.querySelector('#broker-photo-remove').disabled = !photoUrl;
+    }
+    paintPhoto();
+
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files && fileInput.files[0];
+      if (!file) return;
+      const label = fileInput.parentElement;
+      const old = label.textContent; label.style.opacity = .6; label.firstChild.nodeValue = 'Uploading… ';
+      try {
+        const url = await BK.uploadImage(file, 'brokers');
+        photoUrl = url; paintPhoto(); toast('Photo uploaded — remember to save', 'ok');
+      } catch (err) { toast(err.message, 'err'); }
+      finally { label.style.opacity = 1; label.firstChild.nodeValue = 'Upload photo '; fileInput.value = ''; }
+    });
+
+    back.querySelector('#broker-photo-remove').addEventListener('click', async () => {
+      if (!photoUrl) return;
+      if (!confirm('Remove this photo? Initials will be shown instead.')) return;
+      try { await BK.deleteUpload(photoUrl); } catch (e) { /* file may not be ours */ }
+      photoUrl = ''; paintPhoto(); toast('Photo removed — remember to save', 'ok');
+    });
+
+    // ---- slug generated from the name ----
+    const nameInput = back.querySelector('#broker-name');
+    const slugInput = back.querySelector('#broker-slug');
+    // Only auto-fill while the slug is untouched, so a hand-picked one sticks.
+    let slugTouched = !isNew && !!b.slug;
+    slugInput.addEventListener('input', () => { slugTouched = true; });
+    nameInput.addEventListener('input', () => {
+      if (!slugTouched) slugInput.value = slugify(nameInput.value);
+      if (!photoUrl) paintPhoto();
+    });
+
     back.querySelector('#broker-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(e.target).entries());
-      if (!d.name || !d.slug) return toast('Name and slug are required', 'err');
+      if (!d.name || !d.name.trim()) return toast('Name is required', 'err');
+      const slug = (d.slug || '').trim() || slugify(d.name);
       const row = {
-        id: b.id, name: d.name, slug: d.slug, title: d.title || null, phone: d.phone || null,
-        email: d.email || null, license_no: d.license_no || null, photo_url: d.photo_url || null,
+        id: b.id, name: d.name.trim(), slug, title: d.title || null, phone: d.phone || null,
+        email: d.email || null, license_no: d.license_no || null, photo_url: photoUrl || null,
         bio: d.bio || null, is_active: !!d.is_active, sort_order: Number(d.sort_order || 0),
       };
       if (!row.id) delete row.id;
@@ -243,7 +306,7 @@
     const back = document.createElement('div');
     back.className = 'modal-back';
     back.innerHTML = `
-      <div class="modal" style="max-width:820px">
+      <div class="modal modal-wide">
         <div class="modal-head"><h3>${isNew ? 'New Listing' : 'Edit Listing'}</h3><button class="modal-x">×</button></div>
         <div class="modal-body">
           <form id="listing-form">
@@ -371,24 +434,76 @@
     const area = back.querySelector('#img-area');
     const list = l.listing_images || [];
     area.innerHTML = `
-      <div class="admin-grid" style="margin-bottom:12px">
-        ${list.map((im, i) => `<div class="img-tile"><img src="${esc(im.url)}" alt=""/><button class="btn btn-danger btn-sm" data-img="${i}">✕</button></div>`).join('') || '<p class="muted">No photos yet.</p>'}
+      <div class="admin-grid" style="margin-bottom:14px">
+        ${list.map((im, i) => `<div class="img-tile">
+            <img src="${esc(im.url)}" alt=""/>
+            <button class="btn btn-danger btn-sm" data-img="${i}" title="Delete photo">✕</button>
+          </div>`).join('') || '<p class="muted">No photos yet.</p>'}
       </div>
-      <div class="form-row">
-        <div class="field"><label>Image URL</label><input id="img-url" placeholder="https://…  (or a Supabase Storage public URL)"/></div>
+      <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap">
+        <label class="btn btn-ghost btn-sm">Upload photo
+          <input type="file" id="img-file" accept="image/*" hidden multiple/>
+        </label>
+        <button type="button" class="btn btn-ghost btn-sm" id="img-by-url">Add by URL</button>
+      </div>
+      <div id="img-url-row" class="form-row hidden" style="margin-top:10px">
+        <div class="field"><label>Image URL</label><input id="img-url" placeholder="https://…"/></div>
         <div class="field"><label>Caption</label><input id="img-cap"/></div>
       </div>
-      <button class="btn btn-ghost btn-sm" id="add-img">+ Add photo</button>
-      <p class="form-note" style="margin-top:8px">Tip: upload files to a public Supabase Storage bucket and paste the public URL here.</p>`;
+      <div id="img-url-add" class="hidden" style="margin-top:4px">
+        <button type="button" class="btn btn-ghost btn-sm" id="add-img">Add</button>
+      </div>
+      <p class="form-note" style="margin-top:8px">JPG or PNG, up to 8 MB each. You can select several at once. The first photo is the one shown on listing cards.</p>`;
+
+    // upload one or more files
+    const fileInput = back.querySelector('#img-file');
+    fileInput.addEventListener('change', async () => {
+      const files = [...(fileInput.files || [])];
+      if (!files.length) return;
+      const label = fileInput.parentElement;
+      label.style.opacity = .6; label.firstChild.nodeValue = `Uploading 0/${files.length} `;
+      let done = 0;
+      try {
+        for (const f of files) {
+          const url = await BK.uploadImage(f, 'listings');
+          await BK.addImage(l.id, url, null);
+          label.firstChild.nodeValue = `Uploading ${++done}/${files.length} `;
+        }
+        l.listing_images = await refreshImages(l.id);
+        renderImages(back, l);
+        toast(done === 1 ? 'Photo uploaded' : `${done} photos uploaded`, 'ok');
+      } catch (e) {
+        toast(e.message, 'err');
+        l.listing_images = await refreshImages(l.id);
+        renderImages(back, l);
+      }
+    });
+
+    // optional add-by-URL, hidden until asked for
+    back.querySelector('#img-by-url').addEventListener('click', () => {
+      back.querySelector('#img-url-row').classList.toggle('hidden');
+      back.querySelector('#img-url-add').classList.toggle('hidden');
+    });
     back.querySelector('#add-img').addEventListener('click', async () => {
       const url = back.querySelector('#img-url').value.trim();
       if (!url) return toast('Enter an image URL', 'err');
-      try { await BK.addImage(l.id, url, back.querySelector('#img-cap').value.trim()); l.listing_images = await refreshImages(l.id); renderImages(back, l); toast('Photo added', 'ok'); }
-      catch (e) { toast(e.message, 'err'); }
+      try {
+        await BK.addImage(l.id, url, back.querySelector('#img-cap').value.trim());
+        l.listing_images = await refreshImages(l.id);
+        renderImages(back, l); toast('Photo added', 'ok');
+      } catch (e) { toast(e.message, 'err'); }
     });
-    area.querySelectorAll('[data-img]').forEach((b) => b.addEventListener('click', async () => {
-      try { await BK.deleteImage(list[Number(b.dataset.img)]); l.listing_images = await refreshImages(l.id); renderImages(back, l); }
-      catch (e) { toast(e.message, 'err'); }
+
+    // delete
+    area.querySelectorAll('[data-img]').forEach((btn) => btn.addEventListener('click', async () => {
+      const im = list[Number(btn.dataset.img)];
+      if (!confirm('Delete this photo?')) return;
+      try {
+        await BK.deleteImage(im);
+        await BK.deleteUpload(im.url);          // also drop the file if we uploaded it
+        l.listing_images = await refreshImages(l.id);
+        renderImages(back, l); toast('Photo deleted', 'ok');
+      } catch (e) { toast(e.message, 'err'); }
     }));
   }
   async function refreshImages(id) {
