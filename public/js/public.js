@@ -5,7 +5,6 @@
   const cfg = BK.config;
   let ALL = [];            // cached live listings
   let BROKERS = [];        // cached active brokers
-  let filters = { q: '', category: '', state: '' };
 
   // ---------- utilities ----------
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
@@ -84,45 +83,34 @@
 
   // ---------- HOME ----------
   function renderHome() {
-    const cats = [...new Set(ALL.map((l) => l.category).filter(Boolean))].sort();
-    const states = [...new Set(ALL.map((l) => l.state).filter(Boolean))].sort();
-
-    const filtered = ALL.filter((l) => {
-      const hay = (l.title + ' ' + (l.headline || '') + ' ' + (l.category || '') + ' ' + fmt.location(l)).toLowerCase();
-      if (filters.q && hay.indexOf(filters.q.toLowerCase()) === -1) return false;
-      if (filters.category && l.category !== filters.category) return false;
-      if (filters.state && l.state !== filters.state) return false;
-      return true;
-    });
+    // With one active listing and many closed ones, a flat list buries what's
+    // actually for sale — so split them the way the firm's own site does.
+    const current = ALL.filter((l) => l.status !== 'sold');
+    const sold = ALL.filter((l) => l.status === 'sold');
 
     app.innerHTML = `
       <section class="hero">
         <div class="wrap">
           <h1>Established businesses for sale</h1>
           <p>${esc(cfg.BRAND_TAGLINE || 'Confidential opportunities, matched to serious buyers.')}</p>
-          <div class="searchbar">
-            <input id="f-q" type="search" placeholder="Search by name, industry, or location…" value="${esc(filters.q)}" />
-            <select id="f-cat">
-              <option value="">All industries</option>
-              ${cats.map((c) => `<option value="${esc(c)}" ${c === filters.category ? 'selected' : ''}>${esc(c)}</option>`).join('')}
-            </select>
-            <select id="f-state">
-              <option value="">All locations</option>
-              ${states.map((s) => `<option value="${esc(s)}" ${s === filters.state ? 'selected' : ''}>${esc(s)}</option>`).join('')}
-            </select>
-            <button class="btn btn-gold" id="f-clear">Reset</button>
-          </div>
         </div>
       </section>
 
       <div class="wrap">
         <div class="section-head">
           <h2>Current Listings</h2>
-          <span class="results-count">${filtered.length} ${filtered.length === 1 ? 'business' : 'businesses'}</span>
+          <span class="results-count">${current.length} ${current.length === 1 ? 'business' : 'businesses'}</span>
         </div>
-        <div class="grid" id="grid">
-          ${filtered.length ? filtered.map(cardHTML).join('') : '<div class="empty">No listings match your search.</div>'}
+        <div class="listing-list">
+          ${current.length ? current.map(cardHTML).join('') : '<div class="empty">No listings available right now — check back soon.</div>'}
         </div>
+
+        ${sold.length ? `
+          <div class="section-head">
+            <h2>Closed Listings</h2>
+            <span class="results-count">${sold.length} sold</span>
+          </div>
+          <div class="listing-list">${sold.map(cardHTML).join('')}</div>` : ''}
 
         <div class="block" id="about">
           <h2>About Us</h2>
@@ -145,50 +133,36 @@
         </div>
       </div>`;
 
-    // wire search
-    const q = document.getElementById('f-q');
-    q.addEventListener('input', debounce((e) => { filters.q = e.target.value; rerenderGrid(); }, 180));
-    document.getElementById('f-cat').addEventListener('change', (e) => { filters.category = e.target.value; rerenderGrid(); });
-    document.getElementById('f-state').addEventListener('change', (e) => { filters.state = e.target.value; rerenderGrid(); });
-    document.getElementById('f-clear').addEventListener('click', () => { filters = { q: '', category: '', state: '' }; renderHome(); });
-
     wireForm('form-sell', 'seller');
     wireForm('form-inquiry', 'inquiry');
   }
 
-  function rerenderGrid() {
-    // lightweight re-filter without rebuilding the whole page
-    const grid = document.getElementById('grid');
-    const count = document.querySelector('.results-count');
-    if (!grid) return renderHome();
-    const filtered = ALL.filter((l) => {
-      const hay = (l.title + ' ' + (l.headline || '') + ' ' + (l.category || '') + ' ' + fmt.location(l)).toLowerCase();
-      if (filters.q && hay.indexOf(filters.q.toLowerCase()) === -1) return false;
-      if (filters.category && l.category !== filters.category) return false;
-      if (filters.state && l.state !== filters.state) return false;
-      return true;
-    });
-    grid.innerHTML = filtered.length ? filtered.map(cardHTML).join('') : '<div class="empty">No listings match your search.</div>';
-    if (count) count.textContent = `${filtered.length} ${filtered.length === 1 ? 'business' : 'businesses'}`;
-  }
-
+  // Single-column row: image left, details right. Only shows the financial
+  // figures a listing actually discloses.
   function cardHTML(l) {
     const img = primaryImage(l);
+    const fin = [
+      ['Asking Price', fmt.money(l.asking_price)],
+      ['Cash Flow', fmt.money(l.cash_flow)],
+      ['Gross Revenue', fmt.money(l.gross_revenue)],
+    ].filter((r) => r[1]);
+
     return `
-      <a class="card" href="/listing/${esc(l.slug)}" data-link>
-        <div class="thumb">
+      <a class="listing-row" href="/listing/${esc(l.slug)}" data-link>
+        <div class="row-thumb">
           ${img ? `<img src="${esc(img)}" alt="${esc(l.title)}" loading="lazy" />` : ''}
           <span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span>
-          ${l.is_featured ? '<span class="badge badge-featured right">Featured</span>' : ''}
         </div>
-        <div class="body">
-          <span class="cat">${esc(l.category || 'Business')}</span>
+        <div class="row-body">
+          <div class="row-top">
+            <span class="cat">${esc(l.category || 'Business')}</span>
+            ${l.is_featured ? '<span class="badge badge-featured">Featured</span>' : ''}
+          </div>
           <h3 class="title">${esc(l.title)}</h3>
           <div class="loc">${esc(fmt.location(l))}</div>
-          <div class="fin">
-            <div><div class="lbl">Asking Price</div><div class="val">${esc(fmt.moneyOr(l.asking_price))}</div></div>
-            <div><div class="lbl">Cash Flow</div><div class="val">${esc(fmt.moneyOr(l.cash_flow, '—'))}</div></div>
-          </div>
+          ${l.headline ? `<p class="row-headline">${esc(l.headline)}</p>` : ''}
+          ${fin.length ? `<div class="fin">${fin.map((r) =>
+            `<div><div class="lbl">${esc(r[0])}</div><div class="val">${esc(r[1])}</div></div>`).join('')}</div>` : ''}
         </div>
       </a>`;
   }
@@ -416,11 +390,11 @@
         </div>
 
         <div class="section-head"><h2>Current Listings</h2><span class="results-count">${active.length}</span></div>
-        <div class="grid">${active.length ? active.map(cardHTML).join('') : `<div class="empty">No active listings right now.</div>`}</div>
+        <div class="listing-list">${active.length ? active.map(cardHTML).join('') : `<div class="empty">No active listings right now.</div>`}</div>
 
         ${sold.length ? `
-          <div class="section-head"><h2>Recently Sold</h2><span class="results-count">${sold.length}</span></div>
-          <div class="grid">${sold.map(cardHTML).join('')}</div>` : ''}
+          <div class="section-head"><h2>Closed Listings</h2><span class="results-count">${sold.length} sold</span></div>
+          <div class="listing-list">${sold.map(cardHTML).join('')}</div>` : ''}
 
         <div class="block">
           <h2>Contact ${esc(b.name.split(' ')[0])}</h2>
@@ -576,8 +550,6 @@
     }
   });
   window.addEventListener('popstate', render);
-
-  function debounce(fn, ms) { let t; return function () { clearTimeout(t); const a = arguments, c = this; t = setTimeout(() => fn.apply(c, a), ms); }; }
 
   applyBranding();
   render();
