@@ -86,17 +86,10 @@ window.DEMO_LISTINGS = [
     ],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EBronx%2C%20Bronx%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-bronx-long-lease.jpg",
+        "caption": "Bronx, Bronx",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -142,17 +135,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEast%20Harlem%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-east-harlem-60-machines.jpg",
+        "caption": "East Harlem, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -198,17 +184,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEast%20Harlem%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-east-harlem-new-machines.jpg",
+        "caption": "East Harlem, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -254,17 +233,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(20%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(60%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EUpper%20East%20Side%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/cafe-pizzeria-ues.jpg",
+        "caption": "Upper East Side, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(35%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(75%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(50%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(90%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -310,17 +282,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(175%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(215%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3ELower%20East%20Side%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/dry-cleaners-lower-east-side.jpg",
+        "caption": "Lower East Side, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(190%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(230%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -366,17 +331,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(175%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(215%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EBronx%2C%20Bronx%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/dry-cleaners-bronx-large.jpg",
+        "caption": "Bronx, Bronx",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(190%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(230%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -422,17 +380,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EFlushing%2C%20Queens%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-flushing-full-service.jpg",
+        "caption": "Flushing, Queens",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -478,17 +429,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EQueens%2C%20Queens%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-queens-low-rent.jpg",
+        "caption": "Queens, Queens",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -534,17 +478,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(175%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(215%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EBronx%2C%20Bronx%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/dry-cleaners-bronx-yankee-stadium.jpg",
+        "caption": "Bronx, Bronx",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(190%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(230%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -590,17 +527,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EWashington%20Heights%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-washington-heights-absentee.jpg",
+        "caption": "Washington Heights, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -646,17 +576,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EHarlem%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-harlem-low-rent.jpg",
+        "caption": "Harlem, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -702,17 +625,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EHarlem%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-harlem-absentee.jpg",
+        "caption": "Harlem, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -758,17 +674,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(265%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(305%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EBarbershop%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EUpper%20East%20Side%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/barbershop-ues.jpg",
+        "caption": "Upper East Side, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(280%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(320%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EBarbershop%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(295%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(335%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EBarbershop%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -814,17 +723,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(175%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(215%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EUpper%20West%20Side%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/dry-cleaners-uws.jpg",
+        "caption": "Upper West Side, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(190%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(230%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -870,17 +772,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EUpper%20East%20Side%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/wash-fold-drop-store-ues.jpg",
+        "caption": "Upper East Side, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -926,17 +821,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EWashington%20Heights%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-washington-heights-absentee-run.jpg",
+        "caption": "Washington Heights, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -982,17 +870,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(20%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(60%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EBronx%2C%20Bronx%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/bagel-shop-cafe-bronx.jpg",
+        "caption": "Bronx, Bronx",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(35%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(75%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(50%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(90%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -1038,17 +919,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EHarlem%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-harlem-great-location.jpg",
+        "caption": "Harlem, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -1094,17 +968,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EAstoria%2C%20Queens%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/laundromat-astoria-large.jpg",
+        "caption": "Astoria, Queens",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(220%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(260%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(235%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(275%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ELaundromat%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -1150,17 +1017,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(175%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(215%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EMidtown%20East%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/dry-cleaners-midtown-east.jpg",
+        "caption": "Midtown East, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(190%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(230%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(205%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(245%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3EDry%20Cleaners%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -1206,17 +1066,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(20%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(60%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3ETribeca%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/greek-turkish-restaurant-tribeca.jpg",
+        "caption": "Tribeca, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(35%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(75%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(50%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(90%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   },
@@ -1262,17 +1115,10 @@ window.DEMO_LISTINGS = [
     "documents": [],
     "listing_images": [
       {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(20%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(60%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EUpper%20East%20Side%2C%20Manhattan%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "url": "/img/listings/cafe-pizzeria-ues-flagship.jpg",
+        "caption": "Upper East Side, Manhattan",
         "is_primary": true,
         "sort_order": 0
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(35%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(75%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EInterior%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 1
-      },
-      {
-        "url": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'1200'%20height%3D'800'%3E%3Cdefs%3E%3ClinearGradient%20id%3D'g'%20x1%3D'0'%20y1%3D'0'%20x2%3D'1'%20y2%3D'1'%3E%3Cstop%20offset%3D'0'%20stop-color%3D'hsl(50%2C45%25%2C40%25)'%2F%3E%3Cstop%20offset%3D'1'%20stop-color%3D'hsl(90%2C50%25%2C26%25)'%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D'1200'%20height%3D'800'%20fill%3D'url(%23g)'%2F%3E%3Ctext%20x%3D'50%25'%20y%3D'47%25'%20fill%3D'rgba(255%2C255%2C255%2C.95)'%20font-family%3D'Georgia%2Cserif'%20font-size%3D'60'%20font-weight%3D'700'%20text-anchor%3D'middle'%3ERestaurant%20%2F%20Caf%C3%A9%3C%2Ftext%3E%3Ctext%20x%3D'50%25'%20y%3D'58%25'%20fill%3D'rgba(255%2C255%2C255%2C.7)'%20font-family%3D'Arial%2Csans-serif'%20font-size%3D'28'%20text-anchor%3D'middle'%3EEquipment%3C%2Ftext%3E%3C%2Fsvg%3E",
-        "sort_order": 2
       }
     ]
   }
