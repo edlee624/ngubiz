@@ -47,7 +47,12 @@
 
   // `broker` is the PRIMARY agent (owns enquiries); `agents` is everyone the
   // listing is assigned to, primary first.
-  const LISTING_SELECT = '*, listing_images(*), broker:brokers(*), listing_brokers(broker:brokers(*))';
+  //
+  // The !listings_broker_id_fkey hint is required: once listing_brokers exists
+  // there are two paths from listings to brokers (the direct broker_id column
+  // and the join table), and PostgREST refuses an ambiguous embed (PGRST201).
+  const LISTING_SELECT =
+    '*, listing_images(*), broker:brokers!listings_broker_id_fkey(*), listing_brokers(broker:brokers(*))';
 
   function normalizeAgents(rows) {
     (rows || []).forEach((l) => {
