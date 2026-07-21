@@ -10,12 +10,18 @@ window.BROKERAGE_CONFIG = {
   SUPABASE_ANON_KEY: 'YOUR-ANON-PUBLIC-KEY',
 
   // Branding shown across the public site + admin
-  BRAND_NAME: 'NGU Business Real Estate, LLC',
-  BRAND_TAGLINE: 'A family-owned brokerage specializing in small to mid-sized businesses in and around NYC',
+  BRAND_NAME: 'Your Brokerage, LLC',
+  BRAND_TAGLINE: 'Short tagline',
+  LOGO_URL: '/img/your-logo.jpg',   // omit to fall back to the brand name as text
+
   CONTACT_EMAIL: 'broker@example.com',
   CONTACT_PHONE: '(555) 123-4567',
   CONTACT_ADDRESS: '123 Main St, City, ST 00000',
   WEBSITE: 'www.example.com',
+
+  ABOUT: 'A paragraph describing the firm — shown in the About section.',
+  DISCLAIMER: 'All figures shown are expressed by the seller. All commissions are paid by the seller.',
+  SELL_CTA: 'Contact us to list your business',
 
   // NOTE: brokers are NOT configured here. They're real CMS data — manage them
   // in /admin → Brokers. They appear at /brokers, each with a profile page.

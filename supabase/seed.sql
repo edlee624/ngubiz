@@ -4,13 +4,17 @@
 -- Photos use placeholder URLs (placehold.co); replace them from the admin console.
 
 insert into public.brokers (slug, name, title, phone, email, bio, photo_url, is_active, sort_order)
-values ('mary-lee', 'Mary Lee', 'Licensed NYS Commercial & Residential Broker', '718-737-6899', 'ngumarylee@gmail.com', 'Mary brings backgrounds in finance, international relations, and small business management. She previously spent 10+ years with Korea’s Ministry of Foreign Affairs and three years at the United Nations, and remains active in the financial markets. She leads NGU’s business brokerage practice across the NYC area, guiding owners through valuation, confidential marketing, and closing.',
-  'https://placehold.co/400x400/10243e/ffffff?text=ML', true, 0)
+values ('mary-lee', 'Mary Lee', 'Licensed NYS Commercial & Residential Broker · Business Sales Consultant', '718-737-6899', 'ngumarylee@gmail.com', 'Mary’s background spans finance, international relations, and small business management. She holds a degree in International Trade from a university in Korea, spent more than ten years with Korea’s Ministry of Foreign Affairs, and served three years at the United Nations as Attaché to the Korean Mission. She has also owned and operated small businesses herself.
+
+A lifelong student of economics and finance, Mary has traded options and equities independently for over a decade. Outside of work she is an avid tennis player and daily jogger, and enjoys fishing and camping. She approaches every client relationship with integrity and persistence.',
+  '/img/mary-lee.jpg', true, 0)
 on conflict (slug) do nothing;
 
 insert into public.brokers (slug, name, title, phone, email, bio, photo_url, is_active, sort_order)
-values ('edward-lee', 'Edward Lee', 'Licensed NYS Salesperson', '347-614-0624', 'nguedwardlee@gmail.com', 'Edward holds a finance degree from Carnegie Mellon and was formerly a management consultant serving major investment banks. He builds AI analytics platforms and operates a professional job board and salon CRM software, bringing a data-driven approach to valuing and marketing businesses.',
-  'https://placehold.co/400x400/10243e/ffffff?text=EL', true, 1)
+values ('edward-lee', 'Edward Lee', 'Licensed NYS Salesperson · Business Sales Consultant', '347-614-0624', 'nguedwardlee@gmail.com', 'Edward holds a finance degree from Carnegie Mellon University. He previously worked in investment banking and Fortune 500 management consulting, where he focused on improving business operations and modernizing technology.
+
+He began trading stocks in high school — his first purchase was Google — and now follows macroeconomic trends and quantitative strategies. He has built and owns three ventures: an AI customer analytics platform that analyzes complaints, surveys, and call transcripts to surface organizational pain points; a professional job board that lets candidates present themselves beyond a resume; and a CRM platform for beauty salon booking and discovery. A tennis enthusiast and singer, Edward values long client relationships and learning how each business really works.',
+  '/img/edward-lee.jpg', true, 1)
 on conflict (slug) do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,

@@ -55,6 +55,24 @@
       document.title = 'Businesses for Sale — ' + cfg.BRAND_NAME;
     }
     if (cfg.BRAND_TAGLINE) document.getElementById('brand-tag').textContent = cfg.BRAND_TAGLINE;
+
+    // Logo replaces the wordmark when one is configured.
+    const logo = document.getElementById('brand-logo');
+    if (logo && cfg.LOGO_URL) {
+      logo.src = cfg.LOGO_URL;
+      logo.alt = cfg.BRAND_NAME || 'Home';
+      logo.classList.remove('hidden');
+      // If the file is missing, fall back to the text wordmark rather than a broken image.
+      logo.addEventListener('error', () => {
+        logo.classList.add('hidden');
+        document.getElementById('brand-name').classList.remove('hidden');
+      });
+      document.getElementById('brand-name').classList.add('hidden');
+    }
+
+    const fd = document.getElementById('footer-disclaimer');
+    if (fd && cfg.DISCLAIMER) fd.textContent = cfg.DISCLAIMER;
+
     const fc = document.getElementById('footer-contact');
     if (fc) {
       const bits = [cfg.CONTACT_ADDRESS, cfg.CONTACT_PHONE, cfg.CONTACT_EMAIL, cfg.WEBSITE].filter(Boolean);
@@ -107,13 +125,14 @@
         </div>
 
         <div class="block" id="about">
-          <h2>About ${esc(cfg.BRAND_NAME || 'our firm')}</h2>
-          <p class="muted">${esc(cfg.BRAND_TAGLINE || '')} We facilitate business sales and acquisitions, working confidentially with buyers and sellers from first conversation to close.</p>
+          <h2>About Us</h2>
+          <p class="about-text">${esc(cfg.ABOUT || cfg.BRAND_TAGLINE || '')}</p>
+          <h3 style="margin:26px 0 0">Our Brokers</h3>
           ${teamHTML()}
         </div>
 
         <div class="block" id="sell">
-          <h2>Thinking of selling your business?</h2>
+          <h2>${esc(cfg.SELL_CTA || 'Contact us to list your business')}</h2>
           <p class="muted">We work confidentially to value, package, and sell established businesses. Tell us about yours and we'll be in touch — no obligation.</p>
           <div style="max-width:560px">${sellFormHTML()}</div>
         </div>
@@ -282,7 +301,7 @@
                   ${l.broker.email ? `<a href="mailto:${esc(l.broker.email)}">✉️ ${esc(l.broker.email)}</a>` : ''}
                 </div>
               </div>` : ''}
-            <p class="form-note" style="margin-top:12px">Listing ID: ${esc(l.slug)}. All information deemed reliable but not guaranteed.</p>
+            <p class="form-note" style="margin-top:12px">Listing ID: ${esc(l.slug)}<br/>${esc(cfg.DISCLAIMER || '')}</p>
           </aside>
         </div>
       </div>`;
@@ -317,12 +336,26 @@
   const tel = (p) => esc(String(p || '').replace(/[^0-9+]/g, ''));
   const initials = (name) => esc((name || '?').split(' ').map((w) => w[0]).slice(0, 2).join(''));
 
-  // Broker avatar: real photo if set, else initials tile.
+  // Broker avatar: real photo if set, else initials tile. A photo that fails to
+  // load (missing file, dead URL) degrades to the initials tile — see the
+  // capture-phase 'error' listener below.
   function avatarHTML(b, cls) {
     return b.photo_url
-      ? `<img class="${cls} photo" src="${esc(b.photo_url)}" alt="${esc(b.name)}" />`
+      ? `<img class="${cls} photo" src="${esc(b.photo_url)}" alt="${esc(b.name)}" data-initials="${initials(b.name)}" />`
       : `<div class="${cls}">${initials(b.name)}</div>`;
   }
+
+  // 'error' doesn't bubble, so listen in the capture phase to catch every avatar
+  // regardless of which view rendered it.
+  document.addEventListener('error', (e) => {
+    const img = e.target;
+    if (img && img.tagName === 'IMG' && img.dataset && img.dataset.initials) {
+      const tile = document.createElement('div');
+      tile.className = img.className.replace(/\bphoto\b/, '').trim();
+      tile.textContent = img.dataset.initials;
+      img.replaceWith(tile);
+    }
+  }, true);
 
   function teamHTML() {
     if (!BROKERS.length) return '';

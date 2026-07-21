@@ -64,6 +64,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .brand { display: flex; flex-direction: column; }
 .brand a { color: #fff; }
 .brand .name { font-family: var(--serif); font-size: 21px; font-weight: 700; letter-spacing: .01em; }
+.brand-link { display: inline-flex; align-items: center; }
+/* Logo art is dark-on-white, so give it a light plate to sit on in the navy bar. */
+.brand-logo { height: 42px; width: auto; background: #fff; padding: 4px 8px; border-radius: 6px; }
 .brand .tag { font-size: 12px; color: #9db4cf; }
 .site-header nav a { color: #cfe0f0; margin-left: 22px; font-weight: 500; font-size: 15px; }
 .site-header nav a:hover { color: #fff; }
@@ -168,7 +171,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
   align-items: center; justify-content: center; font-weight: 700; font-size: 20px; font-family: var(--serif); margin-bottom: 12px; }
 .team-name { font-size: 18px; font-weight: 700; color: var(--navy); }
 .team-title { font-size: 13px; color: var(--blue); font-weight: 600; margin-bottom: 10px; }
-.team-bio { font-size: 14px; color: #35485c; margin: 0 0 12px; }
+.team-bio { font-size: 14px; color: #35485c; margin: 0 0 12px; white-space: pre-wrap; }
+.about-text { font-size: 17px; color: #2b3644; max-width: 780px; }
+.broker-bio { white-space: pre-wrap; }
 .team-contact { display: flex; flex-direction: column; gap: 3px; font-size: 14px; font-weight: 600; }
 .contact-details { display: flex; flex-direction: column; gap: 6px; font-size: 15px; color: #35485c; }
 .team-avatar.photo { object-fit: cover; }
