@@ -45,11 +45,37 @@
 
   const LIVE_STATUSES = ['active', 'under_offer', 'sold'];
 
+  // `broker` is the PRIMARY agent (owns enquiries); `agents` is everyone the
+  // listing is assigned to, primary first.
+  const LISTING_SELECT = '*, listing_images(*), broker:brokers(*), listing_brokers(broker:brokers(*))';
+
+  function normalizeAgents(rows) {
+    (rows || []).forEach((l) => {
+      const joined = (l.listing_brokers || []).map((j) => j.broker).filter(Boolean);
+      // Primary first, then the rest, de-duplicated.
+      const seen = new Set();
+      l.agents = [l.broker, ...joined].filter((b) => {
+        if (!b || seen.has(b.id)) return false;
+        seen.add(b.id); return true;
+      });
+      delete l.listing_brokers;
+    });
+    return rows;
+  }
+
   // ---- DEMO helpers -------------------------------------------------------
   function demoBrokers() { return (window.DEMO_BROKERS || []).map((b) => Object.assign({}, b)); }
   // Mirror the `broker:brokers(*)` join Supabase returns, so render code is identical.
   function attachBroker(l) {
-    l.broker = (window.DEMO_BROKERS || []).find((b) => b.id === l.broker_id) || null;
+    const all = window.DEMO_BROKERS || [];
+    l.broker = all.find((b) => b.id === l.broker_id) || null;
+    // Mirror the live shape: assigned agents, primary first.
+    const ids = l.broker_ids && l.broker_ids.length ? l.broker_ids : (l.broker_id ? [l.broker_id] : []);
+    const seen = new Set();
+    l.agents = [l.broker_id, ...ids]
+      .filter((id) => id && !seen.has(id) && seen.add(id))
+      .map((id) => all.find((b) => b.id === id))
+      .filter(Boolean);
     return l;
   }
   function demoAll() { return (window.DEMO_LISTINGS || []).map((l) => attachBroker(Object.assign({}, l))); }
@@ -100,18 +126,16 @@
       if (this.isDemo) return demoLive();
       return wrap(
         sb.from('listings')
-          .select('*, listing_images(*), broker:brokers(*)')
+          .select(LISTING_SELECT)
           .in('status', LIVE_STATUSES)
           .order('is_featured', { ascending: false })
           .order('updated_at', { ascending: false })
-      );
+      ).then(normalizeAgents);
     },
     async getListingBySlug(slug) {
       if (this.isDemo) return demoLive().find((l) => l.slug === slug) || null;
-      const rows = await wrap(
-        sb.from('listings').select('*, listing_images(*), broker:brokers(*)').eq('slug', slug).limit(1)
-      );
-      return rows && rows[0] ? rows[0] : null;
+      const rows = await wrap(sb.from('listings').select(LISTING_SELECT).eq('slug', slug).limit(1));
+      return rows && rows[0] ? normalizeAgents(rows)[0] : null;
     },
 
     // ===================== BROKERS =======================================
@@ -124,13 +148,17 @@
       const rows = await wrap(sb.from('brokers').select('*').eq('slug', slug).limit(1));
       return rows && rows[0] ? rows[0] : null;
     },
+    // Every listing this agent is assigned to — not just the ones they own.
     async listListingsByBroker(brokerId) {
-      if (this.isDemo) return demoLive().filter((l) => l.broker_id === brokerId);
+      if (this.isDemo) return demoLive().filter((l) => (l.agents || []).some((a) => a.id === brokerId));
+      const joins = await wrap(sb.from('listing_brokers').select('listing_id').eq('broker_id', brokerId));
+      const ids = (joins || []).map((j) => j.listing_id);
+      if (!ids.length) return [];
       return wrap(
-        sb.from('listings').select('*, listing_images(*)')
-          .eq('broker_id', brokerId).in('status', LIVE_STATUSES)
+        sb.from('listings').select(LISTING_SELECT)
+          .in('id', ids).in('status', LIVE_STATUSES)
           .order('is_featured', { ascending: false })
-      );
+      ).then(normalizeAgents);
     },
     async adminListBrokers() {
       if (this.isDemo) return demoBrokers().sort((a, c) => a.sort_order - c.sort_order);
@@ -196,7 +224,26 @@
     // ===================== ADMIN: LISTINGS ===============================
     async adminListListings() {
       if (this.isDemo) return demoAll();
-      return wrap(sb.from('listings').select('*, listing_images(*), broker:brokers(*)').order('updated_at', { ascending: false }));
+      return wrap(sb.from('listings').select(LISTING_SELECT).order('updated_at', { ascending: false }))
+        .then(normalizeAgents);
+    },
+
+    // Replace a listing's assigned agents. brokerIds[0] becomes the primary
+    // (the agent who receives enquiries for it).
+    async setListingAgents(listingId, brokerIds) {
+      const ids = [...new Set((brokerIds || []).filter(Boolean))];
+      if (this.isDemo) {
+        const l = window.DEMO_LISTINGS.find((x) => x.id === listingId);
+        if (l) { l.broker_ids = ids; l.broker_id = ids[0] || null; }
+        return;
+      }
+      // Primary first so the sync trigger can't re-add a broker we just removed.
+      await wrap(sb.from('listings').update({ broker_id: ids[0] || null }).eq('id', listingId).select());
+      await wrap(sb.from('listing_brokers').delete().eq('listing_id', listingId).not('broker_id', 'in', `(${ids.join(',') || '00000000-0000-0000-0000-000000000000'})`));
+      if (ids.length) {
+        await wrap(sb.from('listing_brokers')
+          .upsert(ids.map((broker_id) => ({ listing_id: listingId, broker_id })), { onConflict: 'listing_id,broker_id' }));
+      }
     },
     async saveListing(row) {
       if (this.isDemo) {
@@ -213,6 +260,7 @@
       const payload = Object.assign({}, row);
       // Strip joined/child relations — these aren't columns on `listings`.
       delete payload.listing_images; delete payload.documents; delete payload.broker;
+      delete payload.agents; delete payload.listing_brokers; delete payload.broker_ids;
       if (row.id) return wrap(sb.from('listings').update(payload).eq('id', row.id).select().single());
       return wrap(sb.from('listings').insert(payload).select().single());
     },

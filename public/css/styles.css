@@ -199,6 +199,15 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .listed-by-title { font-size: 12px; color: var(--muted); }
 .listed-by-contact { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; padding-top: 12px;
   border-top: 1px solid var(--line); font-size: 14px; font-weight: 600; }
+/* Co-listing agents beyond the first */
+.listed-by-agent.extra { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--line); }
+
+/* Admin: assigned-agents multi-select */
+.agent-picker { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; background: #fbfcfe; }
+.agent-picker label { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 500;
+  padding: 5px 0; cursor: pointer; margin: 0; }
+.agent-picker input[type=checkbox] { width: auto; margin: 0; }
+.agent-all { border-bottom: 1px solid var(--line); margin-bottom: 4px !important; padding-bottom: 8px !important; }
 
 @media (max-width: 620px) {
   .broker-hero { flex-direction: column; }

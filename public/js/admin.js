@@ -184,7 +184,9 @@
               <td><span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span></td>
               <td>${esc(l.category || '—')}</td>
               <td>${esc(fmt.location(l))}</td>
-              <td>${brokerName(l.broker_id) ? esc(brokerName(l.broker_id)) : '<span class="muted">Unassigned</span>'}</td>
+              <td>${(l.agents && l.agents.length)
+                    ? l.agents.map((a, i) => `${esc(a.name)}${i === 0 && l.agents.length > 1 ? ' <span class="muted">(primary)</span>' : ''}`).join('<br/>')
+                    : '<span class="muted">Unassigned</span>'}</td>
               <td>${esc(fmt.moneyOr(l.asking_price, '—'))}</td>
               <td>${esc(fmt.moneyOr(l.cash_flow, '—'))}</td>
               <td><div class="row-actions">
@@ -244,12 +246,22 @@
                 <select name="status">${STATUSES.map((s) => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${fmt.statusLabel(s)}</option>`).join('')}</select>
                 <span class="form-note">Active / Under Offer / Sold are publicly visible. Draft & Withdrawn are hidden.</span>
               </div>
-              <div class="field"><label>Listed by</label>
-                <select name="broker_id">
-                  <option value="">— Unassigned —</option>
-                  ${brokerCache.map((b) => `<option value="${b.id}" ${l.broker_id === b.id ? 'selected' : ''}>${esc(b.name)}</option>`).join('')}
-                </select>
-                <span class="form-note">Shown on the listing and routes its inquiries to that broker.</span>
+              <div class="field"><label>Assigned agents</label>
+                <div class="agent-picker" id="agent-picker">
+                  <label class="agent-all"><input type="checkbox" id="agent-all"/> <strong>All agents</strong></label>
+                  ${brokerCache.map((b) => {
+                    const on = (l.agents || []).some((a) => a.id === b.id) || l.broker_id === b.id;
+                    return `<label class="agent-opt">
+                      <input type="checkbox" class="agent-cb" value="${b.id}" ${on ? 'checked' : ''}/>
+                      <span>${esc(b.name)}</span>
+                    </label>`;
+                  }).join('') || '<p class="muted">No agents yet — add one on the Brokers tab.</p>'}
+                </div>
+                <div class="field" style="margin:10px 0 0">
+                  <label>Primary contact</label>
+                  <select name="primary_broker" id="primary-broker"></select>
+                  <span class="form-note">Receives enquiries for this listing. All assigned agents are shown on it.</span>
+                </div>
               </div>
             </div>
             <label style="display:flex;gap:8px;align-items:center;margin-bottom:14px"><input type="checkbox" name="is_featured" ${l.is_featured ? 'checked' : ''} style="width:auto"/> Feature on the homepage</label>
@@ -286,6 +298,32 @@
     const close = () => back.remove();
     back.querySelector('.modal-x').addEventListener('click', close);
 
+    // ---- agent multi-select ----
+    const cbs = [...back.querySelectorAll('.agent-cb')];
+    const allCb = back.querySelector('#agent-all');
+    const primarySel = back.querySelector('#primary-broker');
+
+    // Keep "All agents" and the primary dropdown in step with the checkboxes.
+    function syncAgents() {
+      const chosen = cbs.filter((c) => c.checked);
+      if (allCb) allCb.checked = cbs.length > 0 && chosen.length === cbs.length;
+      const prev = primarySel.value || l.broker_id || '';
+      primarySel.innerHTML = chosen.length
+        ? chosen.map((c) => {
+            const b = brokerCache.find((x) => x.id === c.value);
+            return `<option value="${c.value}">${esc(b ? b.name : c.value)}</option>`;
+          }).join('')
+        : '<option value="">— Unassigned —</option>';
+      // Preserve the current primary if it is still assigned.
+      if (chosen.some((c) => c.value === prev)) primarySel.value = prev;
+    }
+    cbs.forEach((c) => c.addEventListener('change', syncAgents));
+    if (allCb) allCb.addEventListener('change', () => {
+      cbs.forEach((c) => { c.checked = allCb.checked; });
+      syncAgents();
+    });
+    syncAgents();
+
     back.querySelector('#listing-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const d = Object.fromEntries(new FormData(e.target).entries());
@@ -295,11 +333,19 @@
       MONEY_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] === '' ? null : Number(d[f[0]]); });
       LONG_FIELDS.forEach((f) => { row[f[0]] = d[f[0]] || null; });
       row.status = d.status;
-      row.broker_id = d.broker_id || null;
       ['is_featured', 'is_ffe_included', 'is_inventory_included', 'seller_financing', 'is_franchise']
         .forEach((k) => { row[k] = !!d[k]; });
+
+      // Primary first — setListingAgents treats agentIds[0] as the primary.
+      const checked = cbs.filter((c) => c.checked).map((c) => c.value);
+      const primary = primarySel.value || checked[0] || null;
+      const agentIds = primary ? [primary, ...checked.filter((id) => id !== primary)] : checked;
+      row.broker_id = primary;
+
       try {
         const saved = await BK.saveListing(row);
+        const id = (saved && saved.id) || row.id;
+        if (id) await BK.setListingAgents(id, agentIds);
         toast('Listing saved', 'ok');
         close(); renderListings();
         if (isNew && saved && saved.id) openListingEditor(saved); // reopen to add media

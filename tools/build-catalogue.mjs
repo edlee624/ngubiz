@@ -220,6 +220,9 @@ const demoListings = L.map((x) => {
   return {
     id: 'ngu-' + x.slug, slug: x.slug, status: x.status, is_featured: !!x.featured,
     broker_id: 'ngu-broker-' + brokerFor(x.category),
+    // Assigned agents (primary first). Seeded with just the primary; use the
+    // admin's multi-select to co-list.
+    broker_ids: ['ngu-broker-' + brokerFor(x.category)],
     title: x.title, headline: x.headline || null, category: x.category,
     city: x.city, state: 'NY', county: x.county || null,
     asking_price: x.price, cash_flow: x.cf, gross_revenue: x.rev, ebitda: null,
@@ -287,6 +290,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/${HEX[x.category] || '1d6fb8'}/ffffff?text=${encodeURIComponent(x.category)}', ${q(x.city + ', ' + x.county)}, true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = ${q(x.slug)} and b.slug = ${q(brokerFor(x.category))}
+on conflict do nothing;
 `;
   if (x.status === 'active') {
     sql += `with l as (select id from public.listings where slug = ${q(x.slug)})

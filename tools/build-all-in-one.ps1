@@ -31,6 +31,7 @@ $header = @"
 $parts = @(
   @{ label = '0001_init.sql';    file = Join-Path $p 'migrations\0001_init.sql' },
   @{ label = '0002_brokers.sql'; file = Join-Path $p 'migrations\0002_brokers.sql' },
+  @{ label = '0003_listing_brokers.sql'; file = Join-Path $p 'migrations\0003_listing_brokers.sql' },
   @{ label = 'seed.sql';         file = Join-Path $p 'seed.sql' }
 )
 

@@ -31,6 +31,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Bronx, Bronx', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-bronx-long-lease' and b.slug = 'mary-lee'
+on conflict do nothing;
 with l as (select id from public.listings where slug = 'laundromat-bronx-long-lease')
 insert into public.documents (listing_id, name, file_url, requires_nda, is_available, sort_order)
 select l.id, v.name, v.url, true, true, v.so from l, (values
@@ -53,6 +57,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'East Harlem, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-east-harlem-60-machines' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -68,6 +76,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'East Harlem, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-east-harlem-new-machines' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -83,6 +95,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/b7791f/ffffff?text=Restaurant%20%2F%20Caf%C3%A9', 'Upper East Side, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'cafe-pizzeria-ues' and b.slug = 'edward-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -98,6 +114,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/188f8f/ffffff?text=Dry%20Cleaners', 'Lower East Side, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'dry-cleaners-lower-east-side' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -113,6 +133,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/188f8f/ffffff?text=Dry%20Cleaners', 'Bronx, Bronx', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'dry-cleaners-bronx-large' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -128,6 +152,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Flushing, Queens', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-flushing-full-service' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -143,6 +171,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Queens, Queens', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-queens-low-rent' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -158,6 +190,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/188f8f/ffffff?text=Dry%20Cleaners', 'Bronx, Bronx', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'dry-cleaners-bronx-yankee-stadium' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -173,6 +209,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Washington Heights, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-washington-heights-absentee' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -188,6 +228,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Harlem, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-harlem-low-rent' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -203,6 +247,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Harlem, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-harlem-absentee' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -218,6 +266,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/5b4b9f/ffffff?text=Barbershop', 'Upper East Side, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'barbershop-ues' and b.slug = 'edward-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -233,6 +285,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/188f8f/ffffff?text=Dry%20Cleaners', 'Upper West Side, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'dry-cleaners-uws' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -248,6 +304,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Upper East Side, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'wash-fold-drop-store-ues' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -263,6 +323,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Washington Heights, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-washington-heights-absentee-run' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -278,6 +342,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/b7791f/ffffff?text=Restaurant%20%2F%20Caf%C3%A9', 'Bronx, Bronx', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'bagel-shop-cafe-bronx' and b.slug = 'edward-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -293,6 +361,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Harlem, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-harlem-great-location' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -308,6 +380,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/1d6fb8/ffffff?text=Laundromat', 'Astoria, Queens', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'laundromat-astoria-large' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -323,6 +399,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/188f8f/ffffff?text=Dry%20Cleaners', 'Midtown East, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'dry-cleaners-midtown-east' and b.slug = 'mary-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -338,6 +418,10 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/b7791f/ffffff?text=Restaurant%20%2F%20Caf%C3%A9', 'Tribeca, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'greek-turkish-restaurant-tribeca' and b.slug = 'edward-lee'
+on conflict do nothing;
 
 insert into public.listings (slug, status, is_featured, title, headline, category, city, state, county,
   asking_price, cash_flow, gross_revenue, rent, established_year, real_estate, building_sf, lease_expiration,
@@ -353,4 +437,8 @@ select l.id, v.url, v.caption, v.is_primary, v.sort_order from l, (values
   ('https://placehold.co/1200x800/b7791f/ffffff?text=Restaurant%20%2F%20Caf%C3%A9', 'Upper East Side, Manhattan', true, 0)
 ) as v(url, caption, is_primary, sort_order)
 where not exists (select 1 from public.listing_images i where i.listing_id = l.id);
+insert into public.listing_brokers (listing_id, broker_id)
+select l.id, b.id from public.listings l, public.brokers b
+where l.slug = 'cafe-pizzeria-ues-flagship' and b.slug = 'edward-lee'
+on conflict do nothing;
 

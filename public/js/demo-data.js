@@ -35,6 +35,9 @@ window.DEMO_LISTINGS = [
     "status": "active",
     "is_featured": true,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Large Space, Long Lease",
     "headline": "Established 20+ years · primarily wholesale · 10-year lease remaining",
     "category": "Laundromat",
@@ -103,6 +106,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Large Laundromat – East Harlem",
     "headline": "60 machines · 2,000 SF plus full basement",
     "category": "Laundromat",
@@ -156,6 +162,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – New Machines, Large Space",
     "headline": "Absentee-run · employee profit sharing",
     "category": "Laundromat",
@@ -209,6 +218,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-edward-lee",
+    "broker_ids": [
+      "ngu-broker-edward-lee"
+    ],
     "title": "Café / Restaurant / Pizzeria – Upper East Side",
     "headline": "Established 2004 · pre-pandemic revenue ~$3MM",
     "category": "Restaurant / Café",
@@ -262,6 +274,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Dry Cleaners – Lower East Side",
     "headline": "Partial absentee · finance-district clientele",
     "category": "Dry Cleaners",
@@ -315,6 +330,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Dry Cleaners – Large Space",
     "headline": "35+ years · the only cleaner in the area",
     "category": "Dry Cleaners",
@@ -368,6 +386,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Full Service, New Machines",
     "headline": "37 years established · commuter boulevard location",
     "category": "Laundromat",
@@ -421,6 +442,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Long Lease, Low Rent",
     "headline": "50+ years · great starter business",
     "category": "Laundromat",
@@ -474,6 +498,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Dry Cleaners – Close to Yankee Stadium",
     "headline": "40+ years established · busy Bronx corridor",
     "category": "Dry Cleaners",
@@ -527,6 +554,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Absentee, Long Lease",
     "headline": "14-year lease · expansion upside",
     "category": "Laundromat",
@@ -580,6 +610,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Absentee, Low Rent, Long Lease",
     "headline": "15-year lease · coin and drop-off only",
     "category": "Laundromat",
@@ -633,6 +666,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Absentee, Long Lease",
     "headline": "11-year lease · wholesale upside",
     "category": "Laundromat",
@@ -686,6 +722,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-edward-lee",
+    "broker_ids": [
+      "ngu-broker-edward-lee"
+    ],
     "title": "Barbershop – Long Lease, Low Rent",
     "headline": "5 chairs · established Upper East Side clientele",
     "category": "Barbershop",
@@ -739,6 +778,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Dry Cleaners – Great Location, Long Lease",
     "headline": "30+ years established · Upper West Side",
     "category": "Dry Cleaners",
@@ -792,6 +834,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Wash & Fold Laundry / Drop Store",
     "headline": "Upper East Side · simple drop-store model",
     "category": "Laundromat",
@@ -845,6 +890,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Absentee Run",
     "headline": "31 machines · no real-estate tax",
     "category": "Laundromat",
@@ -898,6 +946,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-edward-lee",
+    "broker_ids": [
+      "ngu-broker-edward-lee"
+    ],
     "title": "Bagel Shop / Café – Long Lease, Low Rent",
     "headline": "Luxury residential building · ~$936k revenue",
     "category": "Restaurant / Café",
@@ -951,6 +1002,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Great Location, Long Lease",
     "headline": "All-new equipment · ~$135k cash flow",
     "category": "Laundromat",
@@ -1004,6 +1058,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Laundromat – Astoria, Large Space, Long Lease",
     "headline": "52 newer machines · expansion potential",
     "category": "Laundromat",
@@ -1057,6 +1114,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-mary-lee",
+    "broker_ids": [
+      "ngu-broker-mary-lee"
+    ],
     "title": "Dry Cleaners – Great Location",
     "headline": "Midtown East · pickup/delivery upside",
     "category": "Dry Cleaners",
@@ -1110,6 +1170,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-edward-lee",
+    "broker_ids": [
+      "ngu-broker-edward-lee"
+    ],
     "title": "Greek / Turkish Restaurant – Tribeca",
     "headline": "4.5-star rated · dine-in and delivery",
     "category": "Restaurant / Café",
@@ -1163,6 +1226,9 @@ window.DEMO_LISTINGS = [
     "status": "sold",
     "is_featured": false,
     "broker_id": "ngu-broker-edward-lee",
+    "broker_ids": [
+      "ngu-broker-edward-lee"
+    ],
     "title": "Café / Restaurant / Pizzeria – Upper East Side",
     "headline": "Established 2004 · ~$3MM revenue",
     "category": "Restaurant / Café",

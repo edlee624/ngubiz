@@ -22,12 +22,17 @@
   // setup, so name it explicitly instead of a generic "couldn't load".
   function dataErrorHTML(e) {
     const msg = String((e && e.message) || e || '');
+    // PGRST205 = missing table; PGRST200 = missing relationship (a migration
+    // added since the schema was last applied).
     const noSchema = /Could not find the table|PGRST205|schema cache/i.test(msg);
-    if (noSchema) {
+    const noRelation = /Could not find a relationship|PGRST200/i.test(msg);
+    if (noSchema || noRelation) {
       return `<div class="wrap"><div class="empty">
-        <h2>Database not set up yet</h2>
-        <p>Connected to Supabase, but the tables don't exist.</p>
-        <p class="muted">Run <code>supabase/all_in_one.sql</code> in the Supabase SQL Editor, then reload.</p>
+        <h2>Database needs updating</h2>
+        <p>${noSchema ? "Connected to Supabase, but the tables don't exist."
+                      : 'Connected to Supabase, but the schema is behind the app.'}</p>
+        <p class="muted">Run the migrations in <code>supabase/migrations/</code> that you haven't applied yet
+        (or <code>supabase/all_in_one.sql</code> on an empty project), then reload.</p>
       </div></div>`;
     }
     return `<div class="wrap"><div class="empty">
@@ -163,7 +168,7 @@
     app.innerHTML = '<div class="wrap"><div class="empty">Loading listing…</div></div>';
     let l;
     try { l = await BK.getListingBySlug(slug); }
-    catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load this listing.</div></div>`; return; }
+    catch (e) { app.innerHTML = dataErrorHTML(e); return; }
     if (!l) {
       app.innerHTML = `<div class="wrap"><div class="empty">Listing not found. <a href="/" data-link>Back to all listings</a></div></div>`;
       return;
@@ -251,20 +256,23 @@
                 ${hasDocs ? '<button class="btn btn-gold btn-block" id="nda-btn">🔒 Unlock Confidential Documents</button>' : ''}
               </div>
             </div>
-            ${l.broker ? `
+            ${(l.agents && l.agents.length) ? `
               <div class="listed-by">
                 <div class="listed-by-label">Listed by</div>
-                <a class="listed-by-row" href="/broker/${esc(l.broker.slug)}" data-link>
-                  ${avatarHTML(l.broker, 'listed-by-avatar')}
-                  <div>
-                    <div class="listed-by-name">${esc(l.broker.name)}</div>
-                    <div class="listed-by-title">${esc(l.broker.title || '')}</div>
-                  </div>
-                </a>
-                <div class="listed-by-contact">
-                  ${l.broker.phone ? `<a href="tel:${tel(l.broker.phone)}">📞 ${esc(l.broker.phone)}</a>` : ''}
-                  ${l.broker.email ? `<a href="mailto:${esc(l.broker.email)}">✉️ ${esc(l.broker.email)}</a>` : ''}
-                </div>
+                ${l.agents.map((b, i) => `
+                  <div class="listed-by-agent${i ? ' extra' : ''}">
+                    <a class="listed-by-row" href="/broker/${esc(b.slug)}" data-link>
+                      ${avatarHTML(b, 'listed-by-avatar')}
+                      <div>
+                        <div class="listed-by-name">${esc(b.name)}</div>
+                        <div class="listed-by-title">${esc(b.title || '')}</div>
+                      </div>
+                    </a>
+                    <div class="listed-by-contact">
+                      ${b.phone ? `<a href="tel:${tel(b.phone)}">📞 ${esc(b.phone)}</a>` : ''}
+                      ${b.email ? `<a href="mailto:${esc(b.email)}">✉️ ${esc(b.email)}</a>` : ''}
+                    </div>
+                  </div>`).join('')}
               </div>` : ''}
             <p class="form-note" style="margin-top:12px">Listing ID: ${esc(l.slug)}<br/>${esc(cfg.DISCLAIMER || '')}</p>
           </aside>
@@ -353,7 +361,7 @@
     app.innerHTML = '<div class="wrap"><div class="empty">Loading…</div></div>';
     let b;
     try { b = await BK.getBrokerBySlug(slug); }
-    catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load this profile.</div></div>`; return; }
+    catch (e) { app.innerHTML = dataErrorHTML(e); return; }
     if (!b) {
       app.innerHTML = `<div class="wrap"><div class="empty">Broker not found. <a href="/" data-link>Back to listings</a></div></div>`;
       return;
