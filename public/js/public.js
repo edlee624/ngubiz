@@ -19,6 +19,24 @@
     setTimeout(() => t.remove(), 3400);
   }
 
+  // A configured-but-not-yet-migrated project is the most likely failure during
+  // setup, so name it explicitly instead of a generic "couldn't load".
+  function dataErrorHTML(e) {
+    const msg = String((e && e.message) || e || '');
+    const noSchema = /Could not find the table|PGRST205|schema cache/i.test(msg);
+    if (noSchema) {
+      return `<div class="wrap"><div class="empty">
+        <h2>Database not set up yet</h2>
+        <p>Connected to Supabase, but the tables don't exist.</p>
+        <p class="muted">Run <code>supabase/all_in_one.sql</code> in the Supabase SQL Editor, then reload.</p>
+      </div></div>`;
+    }
+    return `<div class="wrap"><div class="empty">
+      <h2>Couldn't load listings</h2>
+      <p class="muted">${esc(msg)}</p>
+    </div></div>`;
+  }
+
   function primaryImage(l) {
     const imgs = l.listing_images || [];
     const p = imgs.find((i) => i.is_primary) || imgs[0];
@@ -507,7 +525,7 @@
     // home — ensure data loaded
     if (!ALL.length) {
       try { ALL = await BK.listPublicListings(); }
-      catch (e) { app.innerHTML = `<div class="wrap"><div class="empty">Couldn't load listings. ${BK.isDemo ? '' : 'Check your Supabase configuration.'}</div></div>`; return; }
+      catch (e) { app.innerHTML = dataErrorHTML(e); return; }
     }
     if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
     renderHome();
