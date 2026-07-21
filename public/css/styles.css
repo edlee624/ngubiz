@@ -71,12 +71,11 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .site-header nav a { color: #cfe0f0; margin-left: 22px; font-weight: 500; font-size: 15px; }
 .site-header nav a:hover { color: #fff; }
 
-/* ---------- Hero + search ---------- */
-.hero { background: linear-gradient(160deg, var(--navy) 0%, var(--navy-600) 100%); color: #fff; padding: 48px 0 40px; }
-.hero h1 { color: #fff; font-family: var(--serif); font-size: 34px; margin: 0 0 8px; }
-.hero p { color: #b9cbe0; margin: 0 0 24px; font-size: 17px; }
 /* ---------- Listing list (single column) ---------- */
+/* No hero band: the page opens straight into the listings, so give the first
+   section a little more breathing room below the header. */
 .section-head { display: flex; align-items: baseline; justify-content: space-between; margin: 28px 0 16px; }
+.section-head:first-child { margin-top: 34px; }
 .section-head h2 { font-size: 22px; margin: 0; }
 .results-count { color: var(--muted); font-size: 14px; }
 

@@ -89,13 +89,6 @@
     const sold = ALL.filter((l) => l.status === 'sold');
 
     app.innerHTML = `
-      <section class="hero">
-        <div class="wrap">
-          <h1>Established businesses for sale</h1>
-          <p>${esc(cfg.BRAND_TAGLINE || 'Confidential opportunities, matched to serious buyers.')}</p>
-        </div>
-      </section>
-
       <div class="wrap">
         <div class="section-head">
           <h2>Current Listings</h2>
