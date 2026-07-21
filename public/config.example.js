@@ -19,6 +19,16 @@ window.BROKERAGE_CONFIG = {
   CONTACT_ADDRESS: '123 Main St, City, ST 00000',
   WEBSITE: 'www.example.com',
 
+  // Home page: intro paragraphs, then one card per service.
+  HOME_INTRO: [
+    'Opening paragraph for the home page.',
+    'A second paragraph. Add as many as you like.',
+  ],
+  HOME_SERVICES: [
+    { title: 'Selling a business', body: ['What you do for sellers.', 'A second paragraph if useful.'] },
+    { title: 'Buying a business', body: ['What you do for buyers.'] },
+  ],
+
   ABOUT_HEADING: 'About Your Brokerage, LLC',
   ABOUT: [
     'First paragraph describing the firm — shown in the About Us panel.',

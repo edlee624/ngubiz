@@ -84,7 +84,31 @@
     if (BK.isDemo) document.getElementById('demo-banner').classList.remove('hidden');
   }
 
-  // ---------- LISTINGS (home) ----------
+  // ---------- HOME (/) ----------
+  function renderHomePage() {
+    const intro = Array.isArray(cfg.HOME_INTRO) ? cfg.HOME_INTRO : (cfg.HOME_INTRO ? [cfg.HOME_INTRO] : []);
+    const services = cfg.HOME_SERVICES || [];
+
+    app.innerHTML = `
+      <div class="wrap">
+        <section class="home-intro">
+          <h1>${esc(cfg.BRAND_NAME || 'Business Brokerage')}</h1>
+          ${intro.map((p) => `<p>${esc(p)}</p>`).join('')}
+          <div class="home-cta">
+            <a class="btn btn-primary" href="/listings" data-link>Browse Listings</a>
+            <a class="btn btn-gold" href="/sell" data-link>Sell Your Business</a>
+          </div>
+        </section>
+
+        ${services.length ? `<div class="service-grid">${services.map((s) => `
+          <section class="service-card">
+            <h2>${esc(s.title)}</h2>
+            ${(Array.isArray(s.body) ? s.body : [s.body]).map((p) => `<p>${esc(p)}</p>`).join('')}
+          </section>`).join('')}</div>` : ''}
+      </div>`;
+  }
+
+  // ---------- LISTINGS (/listings) ----------
   function renderHome() {
     // With one active listing and many closed ones, a flat list buries what's
     // actually for sale — so split them the way the firm's own site does.
@@ -161,7 +185,7 @@
     try { l = await BK.getListingBySlug(slug); }
     catch (e) { app.innerHTML = dataErrorHTML(e); return; }
     if (!l) {
-      app.innerHTML = `<div class="wrap"><div class="empty">Listing not found. <a href="/" data-link>Back to all listings</a></div></div>`;
+      app.innerHTML = `<div class="wrap"><div class="empty">Listing not found. <a href="/listings" data-link>Back to all listings</a></div></div>`;
       return;
     }
 
@@ -198,7 +222,7 @@
 
     app.innerHTML = `
       <div class="wrap">
-        <div class="breadcrumb"><a href="/" data-link>Listings</a> › ${esc(l.category || 'Business')} › ${esc(l.title)}</div>
+        <div class="breadcrumb"><a href="/listings" data-link>Listings</a> › ${esc(l.category || 'Business')} › ${esc(l.title)}</div>
         <div class="detail">
           <div class="detail-main">
             <div style="display:flex;gap:10px;align-items:center;flex-wrap:wrap;">
@@ -361,7 +385,7 @@
     try { b = await BK.getBrokerBySlug(slug); }
     catch (e) { app.innerHTML = dataErrorHTML(e); return; }
     if (!b) {
-      app.innerHTML = `<div class="wrap"><div class="empty">Broker not found. <a href="/" data-link>Back to listings</a></div></div>`;
+      app.innerHTML = `<div class="wrap"><div class="empty">Broker not found. <a href="/brokers" data-link>Back to About Us</a></div></div>`;
       return;
     }
     let mine = [];
@@ -470,12 +494,14 @@
     const m = path.match(/^\/listing\/([^\/?#]+)/);
     if (m) return renderDetail(decodeURIComponent(m[1]));
 
-    // home — ensure data loaded
+    // Home is static copy — render it without waiting on a listings fetch.
+    if (/^\/?$/.test(path)) return renderHomePage();
+
+    // Everything else falls through to the listings index.
     if (!ALL.length) {
       try { ALL = await BK.listPublicListings(); }
       catch (e) { app.innerHTML = dataErrorHTML(e); return; }
     }
-    if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
     renderHome();
   }
 

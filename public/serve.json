@@ -5,6 +5,7 @@
     { "source": "/broker/**", "destination": "/index.html" },
     { "source": "/brokers", "destination": "/index.html" },
     { "source": "/sell", "destination": "/index.html" },
+    { "source": "/listings", "destination": "/index.html" },
     { "source": "/", "destination": "/index.html" }
   ]
 }
