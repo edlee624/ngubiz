@@ -84,7 +84,7 @@
     if (BK.isDemo) document.getElementById('demo-banner').classList.remove('hidden');
   }
 
-  // ---------- HOME ----------
+  // ---------- LISTINGS (home) ----------
   function renderHome() {
     // With one active listing and many closed ones, a flat list buries what's
     // actually for sale — so split them the way the firm's own site does.
@@ -107,29 +107,21 @@
             <span class="results-count">${sold.length} sold</span>
           </div>
           <div class="listing-list">${sold.map(cardHTML).join('')}</div>` : ''}
+      </div>`;
+  }
 
-        <div class="block" id="about">
-          <h2>About Us</h2>
-          ${aboutPanelHTML()}
-          ${teamHTML()}
-        </div>
-
-        <div class="block" id="sell">
+  // ---------- SELL A BUSINESS (/sell) ----------
+  function renderSell() {
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › Sell a Business</div>
+        <div class="block">
           <h2>${esc(cfg.SELL_CTA || 'Contact us to list your business')}</h2>
           <p class="muted">We work confidentially to value, package, and sell established businesses. Tell us about yours and we'll be in touch — no obligation.</p>
           <div style="max-width:560px">${sellFormHTML()}</div>
         </div>
-
-        <div class="block" id="contact">
-          <h2>Contact us</h2>
-          <p class="muted">Questions about a listing or the buying process? Send a note and we'll follow up.</p>
-          ${contactDetailsHTML()}
-          <div style="max-width:560px;margin-top:16px">${contactFormHTML('inquiry', null)}</div>
-        </div>
       </div>`;
-
     wireForm('form-sell', 'seller');
-    wireForm('form-inquiry', 'inquiry');
   }
 
   // Single-column row: image left, details right. Only shows the financial
@@ -420,6 +412,8 @@
           <h2>About Us</h2>
           ${aboutPanelHTML()}
           ${teamHTML()}
+          <h3 style="margin:28px 0 10px">Get in touch</h3>
+          ${contactDetailsHTML()}
         </div>
       </div>`;
   }
@@ -471,6 +465,7 @@
     const mb = path.match(/^\/broker\/([^\/?#]+)/);
     if (mb) return renderBroker(decodeURIComponent(mb[1]));
     if (/^\/brokers\/?$/.test(path)) return renderBrokers();
+    if (/^\/sell\/?$/.test(path)) return renderSell();
 
     const m = path.match(/^\/listing\/([^\/?#]+)/);
     if (m) return renderDetail(decodeURIComponent(m[1]));
@@ -482,8 +477,6 @@
     }
     if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
     renderHome();
-    // scroll to hash section if present
-    if (location.hash) { const el = document.querySelector(location.hash); if (el) el.scrollIntoView(); }
   }
 
   // intercept internal links

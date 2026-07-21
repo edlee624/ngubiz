@@ -1,6 +1,5 @@
 {
   "version": 2,
-  "name": "biz-brokerage",
   "builds": [
     { "src": "public/**", "use": "@vercel/static" }
   ],
