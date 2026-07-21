@@ -162,8 +162,10 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 /* ---------- Team / About ---------- */
 .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 18px; }
 .team-card { border: 1px solid var(--line); border-radius: var(--radius); padding: 22px; background: #fbfcfe; }
-.team-avatar { width: 56px; height: 56px; border-radius: 50%; background: var(--navy); color: #fff; display: flex;
-  align-items: center; justify-content: center; font-weight: 700; font-size: 20px; font-family: var(--serif); margin-bottom: 12px; }
+/* Square (lightly rounded) headshots. object-fit keeps non-square source
+   photos from stretching — they crop to the box instead. */
+.team-avatar { width: 132px; height: 132px; border-radius: 10px; background: var(--navy); color: #fff; display: flex;
+  align-items: center; justify-content: center; font-weight: 700; font-size: 44px; font-family: var(--serif); margin-bottom: 14px; }
 .team-name { font-size: 18px; font-weight: 700; color: var(--navy); }
 .team-title { font-size: 13px; color: var(--blue); font-weight: 600; margin-bottom: 10px; }
 .team-bio { font-size: 14px; color: #35485c; margin: 0 0 12px; white-space: pre-wrap; }
@@ -185,9 +187,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 
 /* Broker profile page */
 .broker-hero { display: flex; gap: 26px; align-items: flex-start; }
-.broker-photo { width: 132px; height: 132px; border-radius: 50%; flex: 0 0 132px; background: var(--navy);
+.broker-photo { width: 200px; height: 200px; border-radius: 10px; flex: 0 0 200px; background: var(--navy);
   color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif);
-  font-size: 44px; font-weight: 700; object-fit: cover; }
+  font-size: 64px; font-weight: 700; object-fit: cover; }
 .broker-info h1 { font-family: var(--serif); font-size: 28px; margin: 0 0 2px; }
 .broker-title { color: var(--blue); font-weight: 600; font-size: 15px; }
 .broker-bio { color: #35485c; font-size: 15px; margin: 12px 0 16px; }
@@ -199,9 +201,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .listed-by-row { display: flex; gap: 12px; align-items: center; text-decoration: none; }
 .listed-by-row:hover { text-decoration: none; }
 .listed-by-row:hover .listed-by-name { color: var(--blue); }
-.listed-by-avatar { width: 46px; height: 46px; border-radius: 50%; flex: 0 0 46px; background: var(--navy);
+.listed-by-avatar { width: 58px; height: 58px; border-radius: 8px; flex: 0 0 58px; background: var(--navy);
   color: #fff; display: flex; align-items: center; justify-content: center; font-family: var(--serif);
-  font-weight: 700; font-size: 17px; object-fit: cover; }
+  font-weight: 700; font-size: 20px; object-fit: cover; }
 .listed-by-name { font-weight: 700; color: var(--navy); font-size: 15px; }
 .listed-by-title { font-size: 12px; color: var(--muted); }
 .listed-by-contact { display: flex; flex-direction: column; gap: 4px; margin-top: 12px; padding-top: 12px;
