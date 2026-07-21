@@ -111,7 +111,6 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .row-body .cat { font-size: 12px; font-weight: 600; color: var(--blue); text-transform: uppercase; letter-spacing: .03em; }
 .row-body .title { font-size: 21px; font-weight: 700; color: var(--navy); margin: 0; }
 .row-body .loc { font-size: 15px; color: var(--muted); }
-.row-headline { font-size: 15px; color: #35485c; margin: 4px 0 0; }
 .row-body .fin { margin-top: auto; display: flex; gap: 32px; padding-top: 14px; border-top: 1px solid var(--line); flex-wrap: wrap; }
 .row-body .fin div { line-height: 1.25; }
 .row-body .fin .lbl { font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .03em; }
@@ -121,7 +120,6 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .detail { display: grid; grid-template-columns: 1fr 340px; gap: 30px; margin: 26px 0 60px; align-items: start; }
 .breadcrumb { font-size: 14px; color: var(--muted); margin: 18px 0 6px; }
 .detail h1 { font-family: var(--serif); font-size: 30px; margin: 4px 0 6px; }
-.detail .sub { color: var(--muted); font-size: 16px; margin-bottom: 16px; }
 .gallery { border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow); background: #000; }
 .gallery .main { aspect-ratio: 16 / 10; background: #10243e; }
 .gallery .main img { width: 100%; height: 100%; object-fit: cover; }

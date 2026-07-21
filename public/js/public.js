@@ -171,7 +171,6 @@
           </div>
           <h3 class="title">${esc(l.title)}</h3>
           <div class="loc">${esc(fmt.location(l))}</div>
-          ${l.headline ? `<p class="row-headline">${esc(l.headline)}</p>` : ''}
           ${fin.length ? `<div class="fin">${fin.map((r) =>
             `<div><div class="lbl">${esc(r[0])}</div><div class="val">${esc(r[1])}</div></div>`).join('')}</div>` : ''}
         </div>
@@ -230,7 +229,6 @@
               ${l.is_featured ? '<span class="badge badge-featured">Featured</span>' : ''}
             </div>
             <h1>${esc(l.title)}</h1>
-            <div class="sub">${esc(l.headline || '')}</div>
 
             <div class="gallery">
               <div class="main"><img id="gimg" src="${esc(main || '')}" alt="${esc(l.title)}" /></div>
