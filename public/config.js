@@ -2,11 +2,11 @@
 // no backend). Copy your real Supabase values in when you're ready to go live.
 // This file is gitignored; commit config.example.js instead.
 window.BROKERAGE_CONFIG = {
-  SUPABASE_URL: 'https://xwzlmpppdgbkywmrpvqf.supabase.co',
+  SUPABASE_URL: 'https://zufqnaxouwlfjpainvsi.supabase.co',
   // Supabase's new-style PUBLISHABLE key (replaces the old "anon" JWT).
   // Safe to ship in the browser and to commit — RLS is the real boundary.
   // Never put the sb_secret_... / service_role key here.
-  SUPABASE_ANON_KEY: 'sb_publishable_htM7IYeQkyaGWUXY_CujsA_x4f2q2fh',
+  SUPABASE_ANON_KEY: 'sb_publishable_RI7yqJDNJ1XwXMNhcsO6Ww_IbQMbo-r',
 
   BRAND_NAME: 'NGU Business Real Estate, LLC',
   BRAND_TAGLINE: 'A family-owned residential and commercial brokerage',
