@@ -182,6 +182,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 /* ---------- Footer ---------- */
 .site-footer { background: var(--navy); color: #9db4cf; padding: 30px 0; margin-top: 40px; font-size: 14px; }
 .site-footer a { color: #cfe0f0; }
+.footer-sep { margin: 0 6px; color: #4a6a8c; }
+.footer-admin { color: #7f97b4 !important; }
+.footer-admin:hover { color: #cfe0f0 !important; }
 
 /* ---------- Team / About ---------- */
 .team-heading { font-size: 22px; color: var(--navy); margin: 30px 0 4px; }
