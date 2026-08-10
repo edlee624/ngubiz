@@ -1,0 +1,30 @@
+name: Supabase keep-alive
+
+# Free-tier Supabase projects pause after ~7 days with no activity, which would
+# take the live site down. This makes a small read against the project on a
+# schedule so it never goes idle. The key below is the PUBLISHABLE (anon) key —
+# the same public value already shipped in public/config.js, gated by RLS — so
+# there is nothing secret here.
+
+on:
+  schedule:
+    - cron: '17 9 * * *'   # every day at 09:17 UTC
+  workflow_dispatch:        # allow manual runs from the Actions tab
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping the database
+        run: |
+          set -euo pipefail
+          URL="https://zufqnaxouwlfjpainvsi.supabase.co/rest/v1/listings?select=slug&limit=1"
+          KEY="sb_publishable_RI7yqJDNJ1XwXMNhcsO6Ww_IbQMbo-r"
+          code=$(curl -s -o /tmp/resp.json -w '%{http_code}' \
+            -H "apikey: $KEY" -H "Authorization: Bearer $KEY" "$URL")
+          echo "HTTP $code"
+          cat /tmp/resp.json
+          if [ "$code" != "200" ]; then
+            echo "::error::Supabase keep-alive failed with HTTP $code"
+            exit 1
+          fi
