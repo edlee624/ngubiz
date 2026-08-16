@@ -1,0 +1,46 @@
+name: Repo heartbeat
+
+# GitHub disables SCHEDULED workflows after ~60 days with no repository commits.
+# That would silently switch off the Supabase keep-alive, and the project would
+# eventually pause. This makes an automated commit roughly every 50 days so the
+# repo never goes quiet long enough for that to happen — no human action needed.
+#
+# It runs weekly but only commits when 50+ days have passed since the last
+# heartbeat (tracked in .github/last-heartbeat.txt), so it stays at a ~50-day
+# cadence regardless of the weekly trigger.
+
+on:
+  schedule:
+    - cron: '23 7 * * 1'   # Mondays 07:23 UTC (gate below limits it to ~50 days)
+  workflow_dispatch:        # run on demand from the Actions tab
+
+permissions:
+  contents: write
+
+jobs:
+  heartbeat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Commit a heartbeat if 50+ days have elapsed
+        run: |
+          set -euo pipefail
+          f=.github/last-heartbeat.txt
+          today=$(date -u +%Y-%m-%d)
+          last=$( [ -f "$f" ] && cat "$f" || echo 1970-01-01 )
+          days=$(( ( $(date -u -d "$today" +%s) - $(date -u -d "$last" +%s) ) / 86400 ))
+          echo "last heartbeat: $last  |  today: $today  |  days since: $days"
+
+          if [ "$days" -lt 50 ]; then
+            echo "Under 50 days — nothing to do."
+            exit 0
+          fi
+
+          echo "$today" > "$f"
+          git config user.name  "ngu-heartbeat[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add "$f"
+          git commit -m "chore: repo heartbeat ($today) — keeps scheduled workflows + Supabase active"
+          git push
+          echo "Heartbeat committed."

@@ -47,12 +47,27 @@ window.BROKERAGE_CONFIG = {
   ABOUT: [
     'NGU Business Real Estate, LLC is a family-owned residential and commercial brokerage. ' +
     'Our primary focus is small to mid-sized businesses in and around the NYC area. ' +
-    'We help existing business owners sell their business and prospective buyers find a ' +
+    'We help existing business owners sell their businesses and prospective buyers find a ' +
     'business that fits their needs.',
 
-    'Over the past 15 years, we’ve worked with hundreds of businesses, helping owners find ' +
-    'the right buyers. We’ve listed dry cleaners, laundromats, commercial laundries and ' +
-    'hospitality linen servicers, as well as beauty salons, restaurants, delis, and grocers.',
+    'In 2010, Mary started out as a real estate salesperson for ReMax. She realized very ' +
+    'quickly that her clients came to her for help selling not only their homes, but their ' +
+    'small businesses. Many successful small business owners are great operators but need ' +
+    'assistance finding able and willing buyers for their businesses. Mary had owned and ' +
+    'operated three small businesses herself, so she knew how to help. In 2013, Mary earned ' +
+    'her broker license and NGU was formed, with Edward assisting from time to time behind ' +
+    'the scenes with operations, administration and marketing.',
+
+    'Since then, NGU has worked with hundreds of small businesses, helping owners find the ' +
+    'right buyers to successfully take over their operations. We’ve listed dry cleaners, ' +
+    'laundromats, commercial laundries, and hospitality linen services, as well as beauty ' +
+    'salons, restaurants, delis, and grocers.',
+
+    'Edward has now joined Mary so they can work together, bringing their combined experience ' +
+    'in finance, international relations, consulting, and real estate to help business owners ' +
+    'sell to the right buyer. NGU stands for “Never Give Up” — and that’s the motto we live ' +
+    'by. We work with integrity, transparency, persistence, and try to give our best to our ' +
+    'clients.',
   ],
 
   // Shown on listings and in the footer.
