@@ -24,6 +24,9 @@
   ];
   const STATUSES = ['draft', 'active', 'under_offer', 'sold', 'withdrawn'];
   const LEAD_TYPES = ['inquiry', 'buyer', 'seller'];
+  const BUSINESS_TYPES = (cfg.LEAD_BUSINESS_TYPES && cfg.LEAD_BUSINESS_TYPES.length)
+    ? cfg.LEAD_BUSINESS_TYPES
+    : ['Laundromat', 'Dry Cleaners', 'Restaurant / Café', 'Beauty Salon', 'Barbershop', 'Other'];
 
   // ---------------- AUTH ----------------
   async function init() {
@@ -515,6 +518,8 @@
 
   // ---------------- LEADS ----------------
   let leadCache = [];
+  const leadFilters = { q: '', category: '', minInvest: '' };
+
   async function renderLeads() {
     main.innerHTML = '<div class="empty">Loading…</div>';
     try {
@@ -522,29 +527,75 @@
       listingCache = await BK.adminListListings();
       leadCache = await BK.listLeads();
     } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
-    const byStage = {}; STAGES.forEach((s) => (byStage[s[0]] = []));
-    leadCache.forEach((l) => { (byStage[l.stage] || (byStage[l.stage] = [])).push(l); });
 
     main.innerHTML = `
       <div class="toolbar">
-        <h2>Leads <span class="muted" style="font-size:15px;font-weight:400">(${leadCache.length})</span></h2>
+        <h2>Leads <span class="muted" style="font-size:15px;font-weight:400" id="lead-count">(${leadCache.length})</span></h2>
         <button class="btn btn-primary" id="new-lead">+ New Lead</button>
       </div>
-      <div class="board">
-        ${STAGES.map((s) => `
-          <div class="col">
-            <h4>${s[1]} <span>${(byStage[s[0]] || []).length}</span></h4>
-            ${(byStage[s[0]] || []).map(leadCardHTML).join('')}
-          </div>`).join('')}
-      </div>`;
+      <div class="lead-filters">
+        <input id="lead-q" type="search" placeholder="Search name, email, company…" value="${esc(leadFilters.q)}"/>
+        <select id="lead-cat">
+          <option value="">Any business type</option>
+          ${BUSINESS_TYPES.map((t) => `<option value="${esc(t)}" ${leadFilters.category === t ? 'selected' : ''}>${esc(t)}</option>`).join('')}
+        </select>
+        <input id="lead-invest" type="number" step="1000" min="0" placeholder="Min investment $" value="${esc(leadFilters.minInvest)}"/>
+        <button class="btn btn-ghost btn-sm" id="lead-clear">Clear</button>
+      </div>
+      <div class="board" id="lead-board"></div>`;
+
     document.getElementById('new-lead').addEventListener('click', () => openLeadEditor(null));
-    main.querySelectorAll('[data-lead]').forEach((c) => c.addEventListener('click', () =>
+    const q = document.getElementById('lead-q');
+    const cat = document.getElementById('lead-cat');
+    const inv = document.getElementById('lead-invest');
+    q.addEventListener('input', () => { leadFilters.q = q.value; applyLeadFilters(); });
+    cat.addEventListener('change', () => { leadFilters.category = cat.value; applyLeadFilters(); });
+    inv.addEventListener('input', () => { leadFilters.minInvest = inv.value; applyLeadFilters(); });
+    document.getElementById('lead-clear').addEventListener('click', () => {
+      leadFilters.q = ''; leadFilters.category = ''; leadFilters.minInvest = '';
+      q.value = ''; cat.value = ''; inv.value = ''; applyLeadFilters();
+    });
+    applyLeadFilters();
+  }
+
+  function leadMatches(l) {
+    const f = leadFilters;
+    if (f.q) {
+      const hay = [l.name, l.email, l.company, l.phone, l.message].filter(Boolean).join(' ').toLowerCase();
+      if (hay.indexOf(f.q.toLowerCase()) === -1) return false;
+    }
+    if (f.category && (l.interested_categories || []).indexOf(f.category) === -1) return false;
+    if (f.minInvest !== '' && !isNaN(Number(f.minInvest))) {
+      if (l.investment_amount == null || Number(l.investment_amount) < Number(f.minInvest)) return false;
+    }
+    return true;
+  }
+
+  function applyLeadFilters() {
+    const board = document.getElementById('lead-board');
+    if (!board) return;
+    const shown = leadCache.filter(leadMatches);
+    const byStage = {}; STAGES.forEach((s) => (byStage[s[0]] = []));
+    shown.forEach((l) => { (byStage[l.stage] || (byStage[l.stage] = [])).push(l); });
+
+    board.innerHTML = STAGES.map((s) => `
+      <div class="col">
+        <h4>${s[1]} <span>${(byStage[s[0]] || []).length}</span></h4>
+        ${(byStage[s[0]] || []).map(leadCardHTML).join('')}
+      </div>`).join('');
+
+    const active = leadFilters.q || leadFilters.category || leadFilters.minInvest !== '';
+    const cnt = document.getElementById('lead-count');
+    if (cnt) cnt.textContent = active ? `(${shown.length} of ${leadCache.length})` : `(${leadCache.length})`;
+
+    board.querySelectorAll('[data-lead]').forEach((c) => c.addEventListener('click', () =>
       openLeadEditor(leadCache.find((l) => l.id === c.dataset.lead))));
   }
 
   function leadCardHTML(l) {
     const listing = findListingTitle(l.listing_id);
     const broker = brokerName(l.broker_id);
+    const cats = (l.interested_categories || []);
     return `<div class="lead-card ${l.type}" data-lead="${l.id}">
       <div style="display:flex;justify-content:space-between;align-items:center;gap:6px">
         <span class="ln">${esc(l.name)}</span>
@@ -553,7 +604,9 @@
       <div class="lm">${esc(l.email || l.phone || '')}</div>
       ${listing ? `<div class="lm" style="color:var(--blue)">${esc(listing)}</div>` : ''}
       ${broker ? `<div class="lm">→ ${esc(broker)}</div>` : ''}
-      <div class="lm">${esc((l.message || '').slice(0, 60))}</div>
+      ${l.investment_amount != null ? `<div class="lm" style="color:var(--green);font-weight:600">${esc(fmt.moneyOr(l.investment_amount))} to invest</div>` : ''}
+      ${cats.length ? `<div class="lead-cats">${cats.slice(0, 3).map((c) => `<span class="lead-cat-chip">${esc(c)}</span>`).join('')}${cats.length > 3 ? ` +${cats.length - 3}` : ''}</div>` : ''}
+      ${!l.investment_amount && !cats.length ? `<div class="lm">${esc((l.message || '').slice(0, 60))}</div>` : ''}
     </div>`;
   }
 
@@ -588,9 +641,22 @@
               <div class="field"><label>Company / Business</label><input name="company" value="${esc(l.company)}"/></div>
             </div>
             <div class="form-row">
-              <div class="field"><label>Budget</label><input name="budget" value="${esc(l.budget)}"/></div>
+              <div class="field"><label>Investment amount (USD)</label>
+                <input name="investment_amount" type="number" step="1000" min="0"
+                  value="${val(l.investment_amount)}" placeholder="e.g. 300000"/>
+                <span class="form-note">What they're prepared to invest. Searchable.</span>
+              </div>
               <div class="field"><label>Timeframe</label><input name="timeframe" value="${esc(l.timeframe)}"/></div>
             </div>
+            <div class="field"><label>Business types of interest</label>
+              <div class="type-picker">
+                ${BUSINESS_TYPES.map((t) => `<label class="type-opt">
+                  <input type="checkbox" name="interested_categories" value="${esc(t)}" ${(l.interested_categories || []).indexOf(t) !== -1 ? 'checked' : ''}/>
+                  <span>${esc(t)}</span>
+                </label>`).join('')}
+              </div>
+            </div>
+            <div class="field"><label>Budget / other notes</label><input name="budget" value="${esc(l.budget)}"/></div>
             <div class="field"><label>Message</label><textarea name="message">${esc(l.message)}</textarea></div>
             <div class="field"><label>Private notes</label><textarea name="notes" placeholder="Internal notes — never shown publicly">${esc(l.notes)}</textarea></div>
             ${l.listing_id ? `<p class="form-note">Interested in: <strong>${esc(findListingTitle(l.listing_id) || l.listing_id)}</strong></p>` : ''}
@@ -613,8 +679,12 @@
 
     back.querySelector('#lead-form').addEventListener('submit', async (e) => {
       e.preventDefault();
-      const d = Object.fromEntries(new FormData(e.target).entries());
+      const fd = new FormData(e.target);
+      const d = Object.fromEntries(fd.entries());
       if (!d.name) return toast('Name is required', 'err');
+      // Checkboxes: fromEntries keeps only the last, so pull all of them.
+      d.interested_categories = fd.getAll('interested_categories');
+      d.investment_amount = d.investment_amount === '' ? null : Number(d.investment_amount);
       try {
         if (isNew) await BK.createLead(d);
         else await BK.updateLead(l.id, d);

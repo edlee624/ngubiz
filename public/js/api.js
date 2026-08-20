@@ -90,10 +90,10 @@
   const demoState = { signedIn: false, leads: seedDemoLeads() };
   function seedDemoLeads() {
     return [
-      { id: 'l1', type: 'buyer', stage: 'qualified', name: 'Jordan Ellis', email: 'jordan@example.com', phone: '(555) 200-1010', listing_id: 'demo-1', message: 'Interested in the salon — have funds ready.', budget: '$300k–$450k', timeframe: '60 days', source: 'website', created_at: '2026-06-28T15:00:00Z' },
-      { id: 'l2', type: 'seller', stage: 'new', name: 'Pat Morgan', email: 'pat@example.com', phone: '(555) 200-2020', listing_id: null, message: 'I own a landscaping company and may want to sell next year.', budget: '', timeframe: '6–12 months', source: 'website', created_at: '2026-07-01T18:30:00Z' },
-      { id: 'l3', type: 'inquiry', stage: 'contacted', name: 'Sam Rivera', email: 'sam@example.com', phone: '', listing_id: 'demo-3', message: 'Is seller financing negotiable on the HVAC business?', budget: '', timeframe: '', source: 'website', created_at: '2026-07-03T12:10:00Z' },
-      { id: 'l4', type: 'buyer', stage: 'nda_signed', name: 'Alex Chen', email: 'alex@example.com', phone: '(555) 200-4040', listing_id: 'demo-2', message: 'NDA signed offline; sent the CIM by email.', budget: '', timeframe: '', source: 'website', created_at: '2026-07-04T09:45:00Z' },
+      { id: 'l1', type: 'buyer', stage: 'qualified', name: 'Jordan Ellis', email: 'jordan@example.com', phone: '(555) 200-1010', listing_id: 'demo-1', message: 'Interested in the salon — have funds ready.', budget: '$300k–$450k', timeframe: '60 days', investment_amount: 400000, interested_categories: ['Beauty Salon', 'Barbershop'], source: 'website', created_at: '2026-06-28T15:00:00Z' },
+      { id: 'l2', type: 'seller', stage: 'new', name: 'Pat Morgan', email: 'pat@example.com', phone: '(555) 200-2020', listing_id: null, message: 'I own a landscaping company and may want to sell next year.', budget: '', timeframe: '6–12 months', investment_amount: null, interested_categories: [], source: 'website', created_at: '2026-07-01T18:30:00Z' },
+      { id: 'l3', type: 'inquiry', stage: 'contacted', name: 'Sam Rivera', email: 'sam@example.com', phone: '', listing_id: 'demo-3', message: 'Is seller financing negotiable?', budget: '', timeframe: '', investment_amount: 250000, interested_categories: ['Laundromat', 'Dry Cleaners'], source: 'website', created_at: '2026-07-03T12:10:00Z' },
+      { id: 'l4', type: 'buyer', stage: 'nda_signed', name: 'Alex Chen', email: 'alex@example.com', phone: '(555) 200-4040', listing_id: 'demo-2', message: 'NDA signed offline; sent the CIM by email.', budget: '', timeframe: '', investment_amount: 700000, interested_categories: ['Restaurant / Café'], source: 'website', created_at: '2026-07-04T09:45:00Z' },
     ];
   }
   function uid() { return 'x' + Math.abs(Date.now() ^ (Math.floor(performance.now() * 1000))).toString(36); }

@@ -70,6 +70,14 @@ window.BROKERAGE_CONFIG = {
     'clients.',
   ],
 
+  // Business types offered in the admin lead editor + lead search. Drawn from
+  // the kinds of businesses NGU handles; edit freely.
+  LEAD_BUSINESS_TYPES: [
+    'Laundromat', 'Dry Cleaners', 'Commercial Laundry', 'Hospitality / Linen Service',
+    'Beauty Salon', 'Barbershop', 'Restaurant / Café', 'Deli', 'Grocery',
+    'Bagel Shop', 'Retail', 'Other',
+  ],
+
   // Shown on listings and in the footer.
   DISCLAIMER: 'All figures shown are expressed by the seller. All commissions are paid by the seller.',
   SELL_CTA: 'Contact us to list your business',

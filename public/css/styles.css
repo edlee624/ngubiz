@@ -293,6 +293,20 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .lead-type-tag.buyer { background: #e4f3ea; color: var(--green); }
 .lead-type-tag.seller { background: #fdf0d9; color: var(--amber); }
 .lead-type-tag.inquiry { background: #e7f0f8; color: var(--blue); }
+.lead-cats { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.lead-cat-chip { font-size: 10px; background: #eef2f7; color: var(--ink); padding: 1px 6px; border-radius: 4px; white-space: nowrap; }
+
+/* Lead search bar */
+.lead-filters { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin: 4px 0 16px; }
+.lead-filters input, .lead-filters select { padding: 8px 11px; border: 1px solid var(--line); border-radius: 8px; font: inherit; color: var(--ink); background: #fff; }
+.lead-filters #lead-q { min-width: 240px; flex: 1; max-width: 360px; }
+.lead-filters #lead-invest { width: 170px; }
+
+/* Business-type checkbox grid in the lead editor */
+.type-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px 14px;
+  border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
+.type-opt { display: flex; gap: 7px; align-items: center; font-size: 14px; cursor: pointer; }
+.type-opt input { width: auto; }
 
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .img-tile { position: relative; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }
