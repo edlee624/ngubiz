@@ -64,6 +64,7 @@
     if (tab === 'listings') return renderListings();
     if (tab === 'brokers') return renderBrokers();
     if (tab === 'leads') return renderLeads();
+    if (tab === 'stats') return renderStats();
   }
 
   // Cached so the listing editor can offer a broker dropdown.
@@ -691,6 +692,90 @@
         toast('Lead saved', 'ok'); back.remove(); renderLeads();
       } catch (err) { toast(err.message, 'err'); }
     });
+  }
+
+  // ---------------- STATS ----------------
+  let statsDays = 30;
+
+  // Turn a raw path into something readable in the top-pages table.
+  function pathLabel(p) {
+    if (p === '/' ) return 'Home';
+    if (p === '/listings') return 'Listings';
+    if (p === '/brokers') return 'About Us';
+    if (p === '/sell') return 'Sell a Business';
+    let m = p.match(/^\/listing\/(.+)$/);
+    if (m) { const l = listingCache.find((x) => x.slug === m[1]); return (l ? l.title : m[1]) + ' (listing)'; }
+    m = p.match(/^\/broker\/(.+)$/);
+    if (m) { const b = brokerCache.find((x) => x.slug === m[1]); return (b ? b.name : m[1]) + ' (broker)'; }
+    return p;
+  }
+
+  async function renderStats() {
+    main.innerHTML = '<div class="empty">Loading…</div>';
+    let s;
+    try {
+      // Labels need listings + brokers resolved.
+      await loadBrokers();
+      listingCache = await BK.adminListListings();
+      s = await BK.getViewStats(statsDays);
+    } catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+
+    // Fill day gaps so the chart shows a continuous run of days (zeros included).
+    const counts = {};
+    (s.by_day || []).forEach((d) => { counts[d.day] = d.views; });
+    const days = [];
+    const today = new Date();
+    for (let i = statsDays - 1; i >= 0; i--) {
+      const dt = new Date(today.getTime() - i * 86400000);
+      const key = dt.toISOString().slice(0, 10);
+      days.push({ key, label: dt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }), views: counts[key] || 0 });
+    }
+    const peak = Math.max(1, ...days.map((d) => d.views));
+    const empty = (s.total_all_time || 0) === 0;
+
+    main.innerHTML = `
+      <div class="toolbar">
+        <h2>Visit stats</h2>
+        <div class="stat-range">
+          ${[7, 30, 90].map((n) => `<button class="btn btn-sm ${statsDays === n ? 'btn-primary' : 'btn-ghost'}" data-range="${n}">${n}d</button>`).join('')}
+        </div>
+      </div>
+
+      ${empty ? '<p class="muted" style="margin:0 0 16px">No visits recorded yet. Numbers will appear here as people browse the public site.</p>' : ''}
+
+      <div class="stat-cards">
+        <div class="stat-card"><div class="stat-num">${(s.total || 0).toLocaleString()}</div><div class="stat-lbl">Page views · last ${statsDays} days</div></div>
+        <div class="stat-card"><div class="stat-num">${(s.visitors || 0).toLocaleString()}</div><div class="stat-lbl">Unique visitors · last ${statsDays} days</div></div>
+        <div class="stat-card"><div class="stat-num">${(s.total_all_time || 0).toLocaleString()}</div><div class="stat-lbl">All-time page views</div></div>
+      </div>
+
+      <div class="stat-panel">
+        <h3>Views per day</h3>
+        <div class="stat-chart" style="--peak:${peak}">
+          ${days.map((d) => `<div class="stat-bar" title="${esc(d.label)}: ${d.views}">
+            <div class="stat-bar-fill" style="height:${Math.round((d.views / peak) * 100)}%"></div>
+          </div>`).join('')}
+        </div>
+        <div class="stat-axis"><span>${esc(days[0].label)}</span><span>${esc(days[days.length - 1].label)}</span></div>
+      </div>
+
+      <div class="stat-panel">
+        <h3>Most viewed pages · last ${statsDays} days</h3>
+        <table class="table">
+          <thead><tr><th>Page</th><th style="text-align:right">Views</th></tr></thead>
+          <tbody>
+            ${(s.top_paths || []).length
+              ? s.top_paths.map((r) => `<tr><td>${esc(pathLabel(r.path))}<div class="muted" style="font-size:12px">${esc(r.path)}</div></td><td style="text-align:right;font-weight:700">${(r.views || 0).toLocaleString()}</td></tr>`).join('')
+              : '<tr><td colspan="2" class="muted" style="text-align:center;padding:24px">No page views in this window.</td></tr>'}
+          </tbody>
+        </table>
+      </div>
+
+      <p class="form-note" style="margin-top:12px">Counts every page the public site loads. Visitors are de-duplicated by a random, cookie-free id kept in each browser. The admin isn't tracked.</p>`;
+
+    main.querySelectorAll('[data-range]').forEach((b) => b.addEventListener('click', () => {
+      statsDays = Number(b.dataset.range); renderStats();
+    }));
   }
 
   init();

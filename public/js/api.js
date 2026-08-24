@@ -98,6 +98,33 @@
   }
   function uid() { return 'x' + Math.abs(Date.now() ^ (Math.floor(performance.now() * 1000))).toString(36); }
 
+  // Fabricated stats for demo mode so the admin Stats tab renders.
+  function demoViewStats(days) {
+    const d = Math.min(Math.max(days || 30, 1), 365);
+    const by_day = [];
+    let total = 0;
+    const now = new Date();
+    for (let i = d - 1; i >= 0; i--) {
+      const dt = new Date(now.getTime() - i * 86400000);
+      const views = Math.round(6 + 10 * Math.abs(Math.sin(i / 3)) + (i % 7 === 0 ? 12 : 0));
+      total += views;
+      by_day.push({ day: dt.toISOString().slice(0, 10), views });
+    }
+    return {
+      days: d, total, total_all_time: total + 240,
+      visitors: Math.round(total * 0.62),
+      by_day,
+      top_paths: [
+        { path: '/listing/laundromat-bronx-long-lease', views: Math.round(total * 0.22) },
+        { path: '/listings', views: Math.round(total * 0.18) },
+        { path: '/', views: Math.round(total * 0.16) },
+        { path: '/broker/mary-lee', views: Math.round(total * 0.08) },
+        { path: '/brokers', views: Math.round(total * 0.06) },
+        { path: '/sell', views: Math.round(total * 0.05) },
+      ],
+    };
+  }
+
   async function wrap(promise) {
     const { data, error } = await promise;
     if (error) throw new Error(error.message || 'Request failed');
@@ -183,6 +210,35 @@
       if (i === -1) return;
       const path = decodeURIComponent(String(url).slice(i + marker.length));
       await sb.storage.from('media').remove([path]);
+    },
+
+    // ===================== VISIT STATS ===================================
+    // Anonymous, cookie-free visitor id kept in localStorage — enough to
+    // separate unique visitors from raw views, with no personal data.
+    visitorId() {
+      try {
+        let v = localStorage.getItem('ngu_vid');
+        if (!v) {
+          v = (window.crypto && crypto.randomUUID) ? crypto.randomUUID()
+              : String(Date.now()) + Math.random().toString(36).slice(2);
+          localStorage.setItem('ngu_vid', v);
+        }
+        return v;
+      } catch (e) { return null; }
+    },
+    // Fire-and-forget: analytics must never break or slow the page.
+    recordView(path) {
+      if (this.isDemo || !sb) return;
+      let ref = '';
+      try { ref = document.referrer ? new URL(document.referrer).host : ''; } catch (e) {}
+      // Don't count internal navigation as a referrer.
+      if (ref === location.host) ref = '';
+      sb.rpc('record_view', { p_path: path, p_visitor: this.visitorId(), p_ref: ref })
+        .then(() => {}, () => {});
+    },
+    async getViewStats(days) {
+      if (this.isDemo) return demoViewStats(days);
+      return wrap(sb.rpc('get_view_stats', { p_days: days }));
     },
 
     // ===================== BROKERS =======================================

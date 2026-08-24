@@ -302,6 +302,20 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .lead-filters #lead-q { min-width: 240px; flex: 1; max-width: 360px; }
 .lead-filters #lead-invest { width: 170px; }
 
+/* ---------- Stats ---------- */
+.stat-range { display: flex; gap: 6px; }
+.stat-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 22px; }
+.stat-card { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px 22px; }
+.stat-num { font-size: 32px; font-weight: 800; color: var(--navy); font-family: var(--serif); line-height: 1; }
+.stat-lbl { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.stat-panel { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow-sm); padding: 20px 22px; margin-bottom: 18px; }
+.stat-panel h3 { margin: 0 0 16px; font-size: 16px; }
+.stat-chart { display: flex; align-items: flex-end; gap: 2px; height: 160px; }
+.stat-bar { flex: 1; display: flex; align-items: flex-end; height: 100%; min-width: 3px; }
+.stat-bar-fill { width: 100%; background: var(--blue); border-radius: 2px 2px 0 0; min-height: 2px; transition: height .2s; }
+.stat-bar:hover .stat-bar-fill { background: var(--navy); }
+.stat-axis { display: flex; justify-content: space-between; font-size: 12px; color: var(--muted); margin-top: 6px; }
+
 /* Business-type checkbox grid in the lead editor */
 .type-picker { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 6px 14px;
   border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }

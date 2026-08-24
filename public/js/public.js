@@ -484,6 +484,7 @@
   // ---------- router ----------
   async function render() {
     const path = location.pathname;
+    BK.recordView(path);   // fire-and-forget page-view tracking
 
     const mb = path.match(/^\/broker\/([^\/?#]+)/);
     if (mb) return renderBroker(decodeURIComponent(mb[1]));
