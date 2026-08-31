@@ -247,7 +247,7 @@
         <tbody>
           ${rows.map((l) => `
             <tr>
-              <td><strong>${esc(l.title)}</strong><div class="muted" style="font-size:12px">/${esc(l.slug)}</div></td>
+              <td><strong>${esc(l.title)}</strong>${l.is_featured ? ' <span class="badge badge-featured" style="font-size:10px">Featured</span>' : ''}<div class="muted" style="font-size:12px">/${esc(l.slug)}</div></td>
               <td><span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span></td>
               <td>${esc(l.category || '—')}</td>
               <td>${esc(fmt.location(l))}</td>
@@ -318,6 +318,11 @@
               <div class="field"><label>Status</label>
                 <select name="status">${STATUSES.map((s) => `<option value="${s}" ${l.status === s ? 'selected' : ''}>${fmt.statusLabel(s)}</option>`).join('')}</select>
                 <span class="form-note">Active / Under Offer / Sold are publicly visible. Draft & Withdrawn are hidden.</span>
+                <label style="display:flex;gap:8px;align-items:center;margin-top:12px;font-weight:500">
+                  <input type="checkbox" name="is_featured" ${l.is_featured ? 'checked' : ''} style="width:auto"/>
+                  Feature on the homepage
+                </label>
+                <span class="form-note">Shows this listing in the “Featured Listings” section on the home page.</span>
               </div>
               <div class="field"><label>Assigned agents</label>
                 <div class="agent-picker" id="agent-picker">
@@ -407,6 +412,7 @@
         id: l.id,
         title: d.title.trim(),
         status: d.status,
+        is_featured: !!d.is_featured,
         lease_expiration: d.lease_expiration.trim() || null,
         description: d.description.trim() || null,
       };
