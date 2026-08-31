@@ -299,15 +299,30 @@
         demoState.leads.unshift({
           id: uid(), type: p.type || 'inquiry', stage: 'new', name: p.name, email: p.email,
           phone: p.phone || '', listing_id: p.listing_id || null, broker_id: broker,
-          message: p.message || '', source: 'website', created_at: new Date().toISOString(),
+          company: p.company || '', message: p.message || '', timeframe: p.timeframe || '',
+          investment_amount: p.investment_amount != null ? Number(p.investment_amount) : null,
+          interested_categories: p.categories || [],
+          source: 'website', created_at: new Date().toISOString(),
         });
         return;
       }
-      await wrap(sb.rpc('submit_inquiry', {
+      // Base args match the original RPC signature, so the contact/sell forms
+      // keep working even before the 0007 migration adds the extra params.
+      const args = {
         p_name: p.name, p_email: p.email, p_message: p.message || '',
         p_phone: p.phone || null, p_listing_id: p.listing_id || null, p_type: p.type || 'inquiry',
         p_broker_id: p.broker_id || null,
-      }));
+      };
+      // Only the buyers form sends these; adding them requires the 0007 function.
+      const hasExtra = p.company || p.timeframe || (p.investment_amount != null && p.investment_amount !== '') ||
+        (p.categories && p.categories.length);
+      if (hasExtra) {
+        args.p_company = p.company || null;
+        args.p_timeframe = p.timeframe || null;
+        args.p_investment_amount = (p.investment_amount === '' || p.investment_amount == null) ? null : Number(p.investment_amount);
+        args.p_categories = p.categories && p.categories.length ? p.categories : null;
+      }
+      await wrap(sb.rpc('submit_inquiry', args));
     },
     // ===================== ADMIN: LISTINGS ===============================
     async adminListListings() {

@@ -85,9 +85,14 @@
   }
 
   // ---------- HOME (/) ----------
-  function renderHomePage() {
+  async function renderHomePage() {
     const intro = Array.isArray(cfg.HOME_INTRO) ? cfg.HOME_INTRO : (cfg.HOME_INTRO ? [cfg.HOME_INTRO] : []);
     const services = cfg.HOME_SERVICES || [];
+
+    // Featured listings for the top of the page. Load if we don't have them yet;
+    // failure here just means no featured section — never block the page.
+    if (!ALL.length) { try { ALL = await BK.listPublicListings(); } catch (e) {} }
+    const featured = ALL.filter((l) => l.is_featured);
 
     app.innerHTML = `
       <div class="wrap">
@@ -100,12 +105,109 @@
           </div>
         </section>
 
+        ${featured.length ? `
+          <section class="home-section">
+            <div class="section-head">
+              <h2>Featured Listings</h2>
+              <a href="/listings" data-link class="results-count">View all listings →</a>
+            </div>
+            <div class="feature-grid">${featured.map(featureCardHTML).join('')}</div>
+          </section>` : ''}
+
         ${services.length ? `<div class="service-grid">${services.map((s) => `
           <section class="service-card">
             <h2>${esc(s.title)}</h2>
             ${(Array.isArray(s.body) ? s.body : [s.body]).map((p) => `<p>${esc(p)}</p>`).join('')}
           </section>`).join('')}</div>` : ''}
+
+        <section class="service-card buyers-card" id="buyers">
+          <h2>For prospective buyers</h2>
+          <p>Looking to buy a business? We match qualified buyers with the right opportunity. Tell us what you're looking for and your budget, and we'll reach out when a fitting business comes to market — often before it's publicly listed.</p>
+          <p>Joining our buyers list is free and confidential.</p>
+          <div class="buyers-form-wrap">${buyersFormHTML()}</div>
+        </section>
       </div>`;
+
+    wireBuyersForm();
+  }
+
+  // Featured listing card — photo on top, clickable through to the detail page.
+  function featureCardHTML(l) {
+    const img = primaryImage(l);
+    const fin = [
+      ['Asking', fmt.money(l.asking_price)],
+      ['Cash Flow', fmt.money(l.cash_flow)],
+    ].filter((r) => r[1]);
+    return `
+      <a class="feature-card" href="/listing/${esc(l.slug)}" data-link>
+        <div class="feature-thumb">
+          ${img ? `<img src="${esc(img)}" alt="${esc(l.title)}" loading="lazy" />` : ''}
+          <span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span>
+          <span class="badge badge-featured feat-right">Featured</span>
+        </div>
+        <div class="feature-body">
+          <span class="cat">${esc(l.category || 'Business')}</span>
+          <h3 class="feature-title">${esc(l.title)}</h3>
+          <div class="loc">${esc(fmt.location(l))}</div>
+          ${fin.length
+            ? `<div class="fin">${fin.map((r) => `<div><div class="lbl">${esc(r[0])}</div><div class="val">${esc(r[1])}</div></div>`).join('')}</div>`
+            : `<div class="fin"><div><div class="lbl">Status</div><div class="val">${esc(fmt.statusLabel(l.status))}</div></div></div>`}
+        </div>
+      </a>`;
+  }
+
+  // Prospective-buyers sign-up form — mirrors the CRM lead fields.
+  function buyersFormHTML() {
+    const types = cfg.LEAD_BUSINESS_TYPES || [];
+    return `
+      <form id="form-buyer">
+        <div class="form-row">
+          <div class="field"><label>Full name *</label><input name="name" required /></div>
+          <div class="field"><label>Email *</label><input name="email" type="email" required /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Phone</label><input name="phone" /></div>
+          <div class="field"><label>Company / current business</label><input name="company" /></div>
+        </div>
+        <div class="form-row">
+          <div class="field"><label>Amount to invest (USD)</label><input name="investment_amount" type="number" step="1000" min="0" placeholder="e.g. 300000" /></div>
+          <div class="field"><label>Timeframe</label><input name="timeframe" placeholder="e.g. 3–6 months" /></div>
+        </div>
+        ${types.length ? `
+        <div class="field">
+          <label>Business types you're interested in</label>
+          <div class="type-picker">
+            ${types.map((t) => `<label class="type-opt"><input type="checkbox" name="categories" value="${esc(t)}" /> <span>${esc(t)}</span></label>`).join('')}
+          </div>
+        </div>` : ''}
+        <div class="field"><label>What are you looking for?</label><textarea name="message" placeholder="Location preferences, experience, financing, anything else that helps us match you…"></textarea></div>
+        <button class="btn btn-gold" type="submit">Add me to the buyers list</button>
+        <span class="form-note" style="margin-left:10px">Free and confidential. We only contact you about matching businesses.</span>
+      </form>`;
+  }
+
+  function wireBuyersForm() {
+    const form = document.getElementById('form-buyer');
+    if (!form) return;
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const fd = new FormData(form);
+      const d = Object.fromEntries(fd.entries());
+      if (!d.name || !d.email) return toast('Name and email are required', 'err');
+      const btn = form.querySelector('button[type=submit]');
+      const label = btn.textContent; btn.disabled = true; btn.textContent = 'Sending…';
+      try {
+        await BK.submitInquiry({
+          type: 'buyer', name: d.name, email: d.email, phone: d.phone, company: d.company,
+          investment_amount: d.investment_amount, timeframe: d.timeframe, message: d.message,
+          categories: fd.getAll('categories'),
+        });
+        form.reset();
+        toast('Thanks — you’re on our buyers list. We’ll be in touch.', 'ok');
+      } catch (err) {
+        toast(err.message || 'Something went wrong.', 'err');
+      } finally { btn.disabled = false; btn.textContent = label; }
+    });
   }
 
   // ---------- LISTINGS (/listings) ----------
