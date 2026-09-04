@@ -89,10 +89,13 @@
     const intro = Array.isArray(cfg.HOME_INTRO) ? cfg.HOME_INTRO : (cfg.HOME_INTRO ? [cfg.HOME_INTRO] : []);
     const services = cfg.HOME_SERVICES || [];
 
-    // Featured listings for the top of the page. Load if we don't have them yet;
-    // failure here just means no featured section — never block the page.
+    // The home page lists everything (like the firm's blog): all listings in the
+    // main column, broker bios in the sidebar. Load both; a failure just leaves
+    // that part empty rather than blocking the page.
     if (!ALL.length) { try { ALL = await BK.listPublicListings(); } catch (e) {} }
-    const featured = ALL.filter((l) => l.is_featured);
+    if (!BROKERS.length) { try { BROKERS = await BK.listBrokers(); } catch (e) {} }
+    const current = ALL.filter((l) => l.status !== 'sold');   // featured sort first (query order)
+    const sold = ALL.filter((l) => l.status === 'sold');
 
     app.innerHTML = `
       <div class="wrap">
@@ -100,19 +103,33 @@
           <h1>${esc(cfg.BRAND_NAME || 'Business Brokerage')}</h1>
           ${intro.map((p) => `<p>${esc(p)}</p>`).join('')}
           <div class="home-cta">
-            <a class="btn btn-primary" href="/listings" data-link>Browse Listings</a>
             <a class="btn btn-gold" href="/sell" data-link>Sell Your Business</a>
           </div>
         </section>
 
-        ${featured.length ? `
-          <section class="home-section">
+        <div class="home-cols">
+          <div class="home-main" id="listings">
             <div class="section-head">
-              <h2>Featured Listings</h2>
-              <a href="/listings" data-link class="results-count">View all listings →</a>
+              <h2>Current Listings</h2>
+              <span class="results-count">${current.length} ${current.length === 1 ? 'business' : 'businesses'}</span>
             </div>
-            <div class="feature-grid">${featured.map(featureCardHTML).join('')}</div>
-          </section>` : ''}
+            <div class="listing-list">
+              ${current.length ? current.map(cardHTML).join('') : '<div class="empty">No listings available right now — check back soon.</div>'}
+            </div>
+            ${sold.length ? `
+              <div class="section-head"><h2>Closed Listings</h2><span class="results-count">${sold.length} sold</span></div>
+              <div class="listing-list">${sold.map(cardHTML).join('')}</div>` : ''}
+          </div>
+
+          <aside class="home-side">
+            <h3 class="side-heading">Our Brokers</h3>
+            ${sidebarBrokersHTML()}
+            <div class="side-contact">
+              <h3 class="side-heading">Get in touch</h3>
+              ${contactDetailsHTML()}
+            </div>
+          </aside>
+        </div>
 
         ${services.length ? `<div class="service-grid">${services.map((s) => `
           <section class="service-card">
@@ -129,6 +146,27 @@
       </div>`;
 
     wireBuyersForm();
+  }
+
+  // Compact broker card for the home-page sidebar.
+  function sidebarBrokersHTML() {
+    if (!BROKERS.length) return '';
+    return BROKERS.map((b) => `
+      <div class="side-broker">
+        <div class="side-broker-head">
+          ${avatarHTML(b, 'side-broker-photo')}
+          <div>
+            <div class="side-broker-name"><a href="/broker/${esc(b.slug)}" data-link>${esc(b.name)}</a></div>
+            <div class="side-broker-title">${esc(b.title || '')}</div>
+          </div>
+        </div>
+        <p class="side-broker-bio">${esc(b.bio || '')}</p>
+        <div class="side-broker-contact">
+          ${b.phone ? `<a href="tel:${tel(b.phone)}">${esc(b.phone)}</a>` : ''}
+          ${b.email ? `<a href="mailto:${esc(b.email)}">${esc(b.email)}</a>` : ''}
+          <a href="/broker/${esc(b.slug)}" data-link>View profile →</a>
+        </div>
+      </div>`).join('');
   }
 
   // Featured listing card — photo on top, clickable through to the detail page.

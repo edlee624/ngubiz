@@ -92,6 +92,30 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 
 .home-section { margin: 30px 0 8px; }
 
+/* Home: listings in the main column, broker bios in the sidebar (blog-style). */
+.home-cols { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 30px; align-items: start; margin-top: 10px; }
+.home-side { position: sticky; top: 112px; display: flex; flex-direction: column; gap: 18px; }
+.side-heading { font-size: 15px; text-transform: uppercase; letter-spacing: .05em; color: var(--muted);
+  margin: 0 0 12px; padding-bottom: 8px; border-bottom: 1px solid var(--line); }
+.side-broker { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: 16px 18px; margin-bottom: 14px; }
+.side-broker-head { display: flex; gap: 12px; align-items: center; margin-bottom: 10px; }
+.side-broker-photo { width: 56px; height: 56px; border-radius: 8px; flex: 0 0 56px; object-fit: cover;
+  background: var(--navy); color: #fff; display: flex; align-items: center; justify-content: center;
+  font-family: var(--serif); font-weight: 700; font-size: 20px; }
+.side-broker-name { font-weight: 700; color: var(--navy); font-size: 16px; }
+.side-broker-name a { color: var(--navy); }
+.side-broker-title { font-size: 12px; color: var(--blue); font-weight: 600; }
+.side-broker-bio { font-size: 13px; line-height: 1.6; color: #35485c; margin: 0 0 12px; white-space: pre-wrap; }
+.side-broker-contact { display: flex; flex-direction: column; gap: 3px; font-size: 13px; font-weight: 600; }
+.side-contact { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow-sm); padding: 16px 18px; }
+
+@media (max-width: 860px) {
+  .home-cols { grid-template-columns: 1fr; gap: 8px; }
+  .home-side { position: static; }
+}
+
 /* Featured listings — photo-on-top card grid on the home page */
 .feature-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
 .feature-card { background: var(--card); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
