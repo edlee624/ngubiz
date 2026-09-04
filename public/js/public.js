@@ -113,12 +113,12 @@
               <h2>Current Listings</h2>
               <span class="results-count">${current.length} ${current.length === 1 ? 'business' : 'businesses'}</span>
             </div>
-            <div class="listing-list">
-              ${current.length ? current.map(cardHTML).join('') : '<div class="empty">No listings available right now — check back soon.</div>'}
+            <div class="listing-full-list">
+              ${current.length ? current.map(fullCardHTML).join('') : '<div class="empty">No listings available right now — check back soon.</div>'}
             </div>
             ${sold.length ? `
               <div class="section-head"><h2>Closed Listings</h2><span class="results-count">${sold.length} sold</span></div>
-              <div class="listing-list">${sold.map(cardHTML).join('')}</div>` : ''}
+              <div class="listing-full-list">${sold.map(fullCardHTML).join('')}</div>` : ''}
           </div>
 
           <aside class="home-side">
@@ -192,6 +192,51 @@
             : `<div class="fin"><div><div class="lbl">Status</div><div class="val">${esc(fmt.statusLabel(l.status))}</div></div></div>`}
         </div>
       </a>`;
+  }
+
+  // Full listing entry for the home page — shows everything inline, so there's
+  // nothing to click through to (blog-style). Not a link.
+  function fullCardHTML(l) {
+    const img = primaryImage(l);
+    const fin = [
+      ['Asking Price', fmt.moneyOr(l.asking_price, null)],
+      ['Cash Flow', fmt.money(l.cash_flow)],
+      ['Gross Revenue', fmt.money(l.gross_revenue)],
+      ['Rent', l.rent != null ? fmt.money(l.rent) + '/mo' : null],
+    ].filter((r) => r[1]);
+    const details = [
+      ['Category', l.category],
+      ['Location', fmt.location(l) + (l.county ? ` (${l.county})` : '')],
+      ['Year Established', l.established_year],
+      ['Employees', l.employees],
+      ['Real Estate', l.real_estate],
+      ['Building Size', l.building_sf],
+      ['Lease', l.lease_expiration],
+      ['Seller Financing', l.seller_financing ? 'Available' : null],
+      ['Facilities', l.facilities],
+    ].filter((r) => r[1]);
+    const b = l.broker;
+    return `
+      <article class="listing-full" id="listing-${esc(l.slug)}">
+        <div class="lf-media">
+          ${img ? `<img src="${esc(img)}" alt="${esc(l.title)}" loading="lazy" />` : ''}
+          <span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span>
+          ${l.is_featured ? '<span class="badge badge-featured lf-feat">Featured</span>' : ''}
+        </div>
+        <div class="lf-body">
+          <span class="cat">${esc(l.category || 'Business')}</span>
+          <h3 class="lf-title">${esc(l.title)}</h3>
+          <div class="loc">${esc(fmt.location(l))}</div>
+          ${fin.length ? `<div class="lf-fin">${fin.map((r) =>
+            `<div><div class="lbl">${esc(r[0])}</div><div class="val">${esc(r[1])}</div></div>`).join('')}</div>` : ''}
+          ${l.description ? `<div class="lf-desc">${esc(l.description)}</div>` : ''}
+          ${details.length ? `<table class="lf-details">${details.map((r) =>
+            `<tr><td>${esc(r[0])}</td><td>${esc(r[1])}</td></tr>`).join('')}</table>` : ''}
+          ${b ? `<div class="lf-broker">Listed by <strong>${esc(b.name)}</strong>${
+            b.phone ? ` · <a href="tel:${tel(b.phone)}">${esc(b.phone)}</a>` : ''}${
+            b.email ? ` · <a href="mailto:${esc(b.email)}">${esc(b.email)}</a>` : ''}</div>` : ''}
+        </div>
+      </article>`;
   }
 
   // Prospective-buyers sign-up form — mirrors the CRM lead fields.
