@@ -242,11 +242,16 @@
         <h2>Listings <span class="muted" style="font-size:15px;font-weight:400">(${rows.length})</span></h2>
         <button class="btn btn-primary" id="new-listing">+ New Listing</button>
       </div>
+      <p class="form-note" style="margin:-6px 0 12px">Use ▲▼ to set the order listings appear on the site.</p>
       <table class="table">
-        <thead><tr><th>Business</th><th>Status</th><th>Category</th><th>Location</th><th>Broker</th><th>Asking</th><th>Cash Flow</th><th></th></tr></thead>
+        <thead><tr><th>Order</th><th>Business</th><th>Status</th><th>Category</th><th>Location</th><th>Broker</th><th>Asking</th><th>Cash Flow</th><th></th></tr></thead>
         <tbody>
-          ${rows.map((l) => `
+          ${rows.map((l, idx) => `
             <tr>
+              <td class="reorder-cell">
+                <button class="reorder-btn" data-up="${l.id}" ${idx === 0 ? 'disabled' : ''} title="Move up" aria-label="Move up">▲</button>
+                <button class="reorder-btn" data-down="${l.id}" ${idx === rows.length - 1 ? 'disabled' : ''} title="Move down" aria-label="Move down">▼</button>
+              </td>
               <td><strong>${esc(l.title)}</strong>${l.is_featured ? ' <span class="badge badge-featured" style="font-size:10px">Featured</span>' : ''}<div class="muted" style="font-size:12px">/${esc(l.slug)}</div></td>
               <td><span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span></td>
               <td>${esc(l.category || '—')}</td>
@@ -260,7 +265,7 @@
                 <button class="btn btn-ghost btn-sm" data-edit="${l.id}">Edit</button>
                 <button class="btn btn-danger btn-sm" data-del="${l.id}">Delete</button>
               </div></td>
-            </tr>`).join('') || '<tr><td colspan="8" class="muted" style="text-align:center;padding:30px">No listings yet. Create your first one.</td></tr>'}
+            </tr>`).join('') || '<tr><td colspan="9" class="muted" style="text-align:center;padding:30px">No listings yet. Create your first one.</td></tr>'}
         </tbody>
       </table>`;
     document.getElementById('new-listing').addEventListener('click', () => openListingEditor(null));
@@ -272,6 +277,23 @@
       try { await BK.deleteListing(l.id); toast('Listing deleted', 'ok'); renderListings(); }
       catch (e) { toast(e.message, 'err'); }
     }));
+    main.querySelectorAll('[data-up]').forEach((b) => b.addEventListener('click', () => moveListing(rows, b.dataset.up, -1)));
+    main.querySelectorAll('[data-down]').forEach((b) => b.addEventListener('click', () => moveListing(rows, b.dataset.down, 1)));
+  }
+
+  // Reorder listings: swap with the neighbour, renumber, persist the ones that
+  // changed, then re-render from the (now reordered) source of truth.
+  async function moveListing(rows, id, delta) {
+    const i = rows.findIndex((r) => r.id === id);
+    const j = i + delta;
+    if (i < 0 || j < 0 || j >= rows.length) return;
+    const tmp = rows[i]; rows[i] = rows[j]; rows[j] = tmp;
+    const changed = [];
+    rows.forEach((r, idx) => { if (r.sort_order !== idx) { r.sort_order = idx; changed.push(r); } });
+    try {
+      await Promise.all(changed.map((r) => BK.setListingSort(r.id, r.sort_order)));
+      renderListings();
+    } catch (e) { toast(e.message || 'Could not reorder', 'err'); renderListings(); }
   }
 
   // The form is deliberately small: title, five financial figures, description.

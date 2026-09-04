@@ -131,6 +131,12 @@
     return data;
   }
 
+  // Stable sort by sort_order (lower first). Done client-side so it works even
+  // before the sort_order column exists (missing => 0 => original order kept).
+  function bySortOrder(rows) {
+    return (rows || []).sort((a, b) => ((a && a.sort_order) || 0) - ((b && b.sort_order) || 0));
+  }
+
   const BK = {
     isDemo: !configured,
     configured,
@@ -162,7 +168,7 @@
           .in('status', LIVE_STATUSES)
           .order('is_featured', { ascending: false })
           .order('updated_at', { ascending: false })
-      ).then(normalizeAgents);
+      ).then(normalizeAgents).then(bySortOrder);
     },
     async getListingBySlug(slug) {
       if (this.isDemo) return demoLive().find((l) => l.slug === slug) || null;
@@ -261,7 +267,7 @@
         sb.from('listings').select(LISTING_SELECT)
           .in('id', ids).in('status', LIVE_STATUSES)
           .order('is_featured', { ascending: false })
-      ).then(normalizeAgents);
+      ).then(normalizeAgents).then(bySortOrder);
     },
     async adminListBrokers() {
       if (this.isDemo) return demoBrokers().sort((a, c) => a.sort_order - c.sort_order);
@@ -326,9 +332,18 @@
     },
     // ===================== ADMIN: LISTINGS ===============================
     async adminListListings() {
-      if (this.isDemo) return demoAll();
+      if (this.isDemo) return bySortOrder(demoAll());
       return wrap(sb.from('listings').select(LISTING_SELECT).order('updated_at', { ascending: false }))
-        .then(normalizeAgents);
+        .then(normalizeAgents).then(bySortOrder);
+    },
+    // Set one listing's manual display position.
+    async setListingSort(id, sortOrder) {
+      if (this.isDemo) {
+        const l = window.DEMO_LISTINGS.find((x) => x.id === id);
+        if (l) l.sort_order = sortOrder;
+        return;
+      }
+      await wrap(sb.from('listings').update({ sort_order: sortOrder }).eq('id', id));
     },
 
     // Replace a listing's assigned agents. brokerIds[0] becomes the primary

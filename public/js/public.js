@@ -104,6 +104,7 @@
           ${intro.map((p) => `<p>${esc(p)}</p>`).join('')}
           <div class="home-cta">
             <a class="btn btn-gold" href="/sell" data-link>Sell Your Business</a>
+            <a class="btn btn-primary" href="/buy" data-link>Looking for a Business</a>
           </div>
         </section>
 
@@ -135,17 +136,13 @@
           <section class="service-card">
             <h2>${esc(s.title)}</h2>
             ${(Array.isArray(s.body) ? s.body : [s.body]).map((p) => `<p>${esc(p)}</p>`).join('')}
-          </section>`).join('')}</div>` : ''}
-
-        <section class="service-card buyers-card" id="buyers">
-          <h2>For prospective buyers</h2>
-          <p>Looking to buy a business? We match qualified buyers with the right opportunity. Tell us what you're looking for and your budget, and we'll reach out when a fitting business comes to market — often before it's publicly listed.</p>
-          <p>Joining our buyers list is free and confidential.</p>
-          <div class="buyers-form-wrap">${buyersFormHTML()}</div>
-        </section>
+          </section>`).join('')}
+          <section class="service-card buyers-card">
+            <h2>Looking to buy a business?</h2>
+            <p>We match qualified buyers with the right opportunity — often before it's publicly listed. Join our buyers list and tell us what you're looking for.</p>
+            <a class="btn btn-primary" href="/buy" data-link style="margin-top:6px">Looking for a Business</a>
+          </section></div>` : ''}
       </div>`;
-
-    wireBuyersForm();
   }
 
   // Compact broker card for the home-page sidebar.
@@ -331,6 +328,20 @@
         </div>
       </div>`;
     wireForm('form-sell', 'seller');
+  }
+
+  // ---------- LOOKING FOR A BUSINESS (/buy) ----------
+  function renderBuy() {
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › Looking for a Business</div>
+        <div class="block">
+          <h2>Looking for a business?</h2>
+          <p class="muted">We match qualified buyers with the right opportunity. Tell us what you're looking for and your budget, and we'll reach out when a fitting business comes to market — often before it's publicly listed. Joining our buyers list is free and confidential.</p>
+          <div style="max-width:640px">${buyersFormHTML()}</div>
+        </div>
+      </div>`;
+    wireBuyersForm();
   }
 
   // Single-column row: image left, details right. Only shows the financial
@@ -675,6 +686,7 @@
     if (mb) return renderBroker(decodeURIComponent(mb[1]));
     if (/^\/brokers\/?$/.test(path)) return renderBrokers();
     if (/^\/sell\/?$/.test(path)) return renderSell();
+    if (/^\/buy\/?$/.test(path)) return renderBuy();
 
     const m = path.match(/^\/listing\/([^\/?#]+)/);
     if (m) return renderDetail(decodeURIComponent(m[1]));
