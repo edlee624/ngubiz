@@ -18,10 +18,16 @@
   }
 
   const STAGES = [
-    ['new', 'New'], ['contacted', 'Contacted'], ['nda_signed', 'NDA Signed'],
-    ['qualified', 'Qualified'], ['negotiating', 'Negotiating'],
-    ['closed_won', 'Closed — Won'], ['closed_lost', 'Closed — Lost'],
+    ['new', 'New'], ['contacted', 'Contacted'],
+    ['negotiating', 'Negotiations'], ['closed_won', 'Closed — Won'],
   ];
+  // Pretty label for any legacy stage still stored on older leads, so a lead
+  // saved before the pipeline was trimmed never silently disappears.
+  function stageLabel(key) {
+    const s = STAGES.find((x) => x[0] === key);
+    if (s) return s[1];
+    return String(key || 'Unknown').replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+  }
   const STATUSES = ['draft', 'active', 'under_offer', 'sold', 'withdrawn'];
   const LEAD_TYPES = ['inquiry', 'buyer', 'seller'];
   const BUSINESS_TYPES = (cfg.LEAD_BUSINESS_TYPES && cfg.LEAD_BUSINESS_TYPES.length)
@@ -560,7 +566,10 @@
     main.innerHTML = `
       <div class="toolbar">
         <h2>Leads <span class="muted" style="font-size:15px;font-weight:400" id="lead-count">(${leadCache.length})</span></h2>
-        <button class="btn btn-primary" id="new-lead">+ New Lead</button>
+        <div style="display:flex;gap:8px">
+          <button class="btn btn-ghost" id="export-leads">Export CSV</button>
+          <button class="btn btn-primary" id="new-lead">+ New Lead</button>
+        </div>
       </div>
       <div class="lead-filters">
         <input id="lead-q" type="search" placeholder="Search name, email, company…" value="${esc(leadFilters.q)}"/>
@@ -574,6 +583,7 @@
       <div class="board" id="lead-board"></div>`;
 
     document.getElementById('new-lead').addEventListener('click', () => openLeadEditor(null));
+    document.getElementById('export-leads').addEventListener('click', exportLeadsCSV);
     const q = document.getElementById('lead-q');
     const cat = document.getElementById('lead-cat');
     const inv = document.getElementById('lead-invest');
@@ -607,10 +617,16 @@
     const byStage = {}; STAGES.forEach((s) => (byStage[s[0]] = []));
     shown.forEach((l) => { (byStage[l.stage] || (byStage[l.stage] = [])).push(l); });
 
-    board.innerHTML = STAGES.map((s) => `
-      <div class="col">
-        <h4>${s[1]} <span>${(byStage[s[0]] || []).length}</span></h4>
-        ${(byStage[s[0]] || []).map(leadCardHTML).join('')}
+    // Show the 4 pipeline columns, then any legacy stage that still has leads
+    // (e.g. an old "Qualified" or "Closed — Lost") so nothing is hidden.
+    const keys = STAGES.map((s) => s[0]);
+    const extras = Object.keys(byStage).filter((k) => keys.indexOf(k) === -1 && byStage[k].length);
+    const cols = keys.concat(extras);
+
+    board.innerHTML = cols.map((k) => `
+      <div class="col${keys.indexOf(k) === -1 ? ' col-legacy' : ''}">
+        <h4>${stageLabel(k)} <span>${(byStage[k] || []).length}</span></h4>
+        ${(byStage[k] || []).map(leadCardHTML).join('')}
       </div>`).join('');
 
     const active = leadFilters.q || leadFilters.category || leadFilters.minInvest !== '';
@@ -619,6 +635,43 @@
 
     board.querySelectorAll('[data-lead]').forEach((c) => c.addEventListener('click', () =>
       openLeadEditor(leadCache.find((l) => l.id === c.dataset.lead))));
+  }
+
+  // Export the currently shown (filtered) leads to a CSV the user downloads.
+  function exportLeadsCSV() {
+    const rows = leadCache.filter(leadMatches);
+    if (!rows.length) { toast('No leads to export', 'err'); return; }
+    const cols = [
+      ['name', 'Name'], ['type', 'Type'], ['stage', 'Stage'],
+      ['email', 'Email'], ['phone', 'Phone'], ['company', 'Company'],
+      ['investment_amount', 'Investment Amount'], ['timeframe', 'Timeframe'],
+      ['interested_categories', 'Business Types'], ['budget', 'Budget / Notes'],
+      ['listing', 'Listing'], ['broker', 'Assigned Broker'],
+      ['message', 'Message'], ['notes', 'Private Notes'],
+      ['source', 'Source'], ['created_at', 'Received'],
+    ];
+    const cell = (v) => {
+      if (v == null) return '';
+      const s = Array.isArray(v) ? v.join('; ') : String(v);
+      return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
+    };
+    const lines = [cols.map((c) => cell(c[1])).join(',')];
+    rows.forEach((l) => {
+      const rec = Object.assign({}, l, {
+        listing: findListingTitle(l.listing_id) || '',
+        broker: brokerName(l.broker_id) || '',
+      });
+      lines.push(cols.map((c) => cell(rec[c[0]])).join(','));
+    });
+    // Prepend a BOM so Excel opens the UTF-8 accents/dashes correctly.
+    const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `ngu-leads-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast(`Exported ${rows.length} lead${rows.length === 1 ? '' : 's'}`, 'ok');
   }
 
   function leadCardHTML(l) {

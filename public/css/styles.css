@@ -351,8 +351,10 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .reorder-btn:disabled { opacity: .3; cursor: default; }
 
 /* Pipeline board */
-.board { display: grid; grid-template-columns: repeat(7, minmax(180px, 1fr)); gap: 12px; overflow-x: auto; padding-bottom: 16px; }
+.board { display: grid; grid-auto-flow: column; grid-auto-columns: minmax(200px, 1fr); gap: 12px; overflow-x: auto; padding-bottom: 16px; }
 .col { background: #eef2f7; border-radius: 10px; padding: 10px; min-height: 120px; }
+.col-legacy { background: #fbf3e6; }
+.col-legacy h4 { color: #a5751f; }
 .col h4 { margin: 2px 4px 10px; font-size: 12px; text-transform: uppercase; letter-spacing: .03em; color: var(--muted); display: flex; justify-content: space-between; }
 .lead-card { background: #fff; border-radius: 8px; box-shadow: var(--shadow-sm); padding: 10px 11px; margin-bottom: 9px; cursor: pointer; border-left: 3px solid var(--blue); }
 .lead-card.buyer { border-left-color: var(--green); }
