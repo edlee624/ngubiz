@@ -967,13 +967,13 @@ create unique index if not exists listings_ref_no_key on public.listings (ref_no
 -- ===========================================================================
 
 -- ============================================================================
--- Date-based, human-friendly listing reference: NGU<YY><MM><N>  e.g. NGU26091
+-- Date-based, human-friendly listing reference: NGU<YY><MM><NNN>  e.g. NGU2609001
 --
 -- Replaces the plain NGU-#### display (the ref_no column stays but is no longer
--- shown). N is a per-calendar-month sequence based on created_at, so the first
--- listing created in a month is ...1 and each new month restarts at 1.
--- A BEFORE INSERT trigger assigns the code to new listings automatically.
--- Safe to re-run.
+-- shown). NNN is a per-calendar-month sequence based on created_at, zero-padded
+-- to 3 digits, so the first listing created in a month is ...001 and each new
+-- month restarts at 001. A BEFORE INSERT trigger assigns the code to new
+-- listings automatically. Safe to re-run.
 -- ============================================================================
 
 alter table public.listings add column if not exists ref_code text;
@@ -987,13 +987,13 @@ with ordered as (
   from public.listings
 )
 update public.listings l
-   set ref_code = 'NGU' || o.ym || o.seq
+   set ref_code = 'NGU' || o.ym || lpad(o.seq::text, 3, '0')
   from ordered o
  where l.id = o.id and l.ref_code is null;
 
 create unique index if not exists listings_ref_code_key on public.listings (ref_code);
 
--- Assign NGU<YY><MM><N> on insert. The prefix 'NGU'||YYMM is 7 chars, so the
+-- Assign NGU<YY><MM><NNN> on insert. The prefix 'NGU'||YYMM is 7 chars, so the
 -- sequence is everything from character 8 on. Uses max(existing N)+1 for the
 -- row's month, so it survives deletions without reusing a number. SECURITY
 -- DEFINER so the count sees every row regardless of the caller's RLS.
@@ -1012,7 +1012,7 @@ begin
     into v_seq
     from public.listings
    where ref_code like 'NGU' || v_ym || '%';
-  new.ref_code := 'NGU' || v_ym || v_seq;
+  new.ref_code := 'NGU' || v_ym || lpad(v_seq::text, 3, '0');
   return new;
 end; $$;
 
