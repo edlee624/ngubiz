@@ -47,10 +47,13 @@
     return p ? p.url : null;
   }
 
-  // Human-friendly listing reference, e.g. "NGU-1001". Null until the ref_no
-  // column exists (pre-migration / demo data), so callers can filter it out.
+  // Human-friendly listing reference, e.g. "NGU-2026-09-1". Falls back to the
+  // older NGU-#### number, then null (pre-migration / demo data) so callers can
+  // filter it out.
   function refCode(l) {
-    return l && l.ref_no != null ? 'NGU-' + l.ref_no : null;
+    if (!l) return null;
+    if (l.ref_code) return l.ref_code;
+    return l.ref_no != null ? 'NGU-' + l.ref_no : null;
   }
 
   function navigate(path) {

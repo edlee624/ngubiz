@@ -9,6 +9,8 @@
   const esc = (s) => String(s == null ? '' : s).replace(/[&<>"']/g, (c) =>
     ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   const val = (v) => (v == null ? '' : String(v));
+  // Display reference, e.g. "NGU26091"; falls back to the old NGU-#### number.
+  const refCode = (l) => (!l ? null : (l.ref_code ? l.ref_code : (l.ref_no != null ? 'NGU-' + l.ref_no : null)));
 
   function toast(msg, kind) {
     const t = document.createElement('div');
@@ -258,7 +260,7 @@
                 <button class="reorder-btn" data-up="${l.id}" ${idx === 0 ? 'disabled' : ''} title="Move up" aria-label="Move up">▲</button>
                 <button class="reorder-btn" data-down="${l.id}" ${idx === rows.length - 1 ? 'disabled' : ''} title="Move down" aria-label="Move down">▼</button>
               </td>
-              <td><strong>${esc(l.title)}</strong>${l.is_featured ? ' <span class="badge badge-featured" style="font-size:10px">Featured</span>' : ''}<div class="muted" style="font-size:12px">${l.ref_no != null ? 'NGU-' + l.ref_no + ' · ' : ''}/${esc(l.slug)}</div></td>
+              <td><strong>${esc(l.title)}</strong>${l.is_featured ? ' <span class="badge badge-featured" style="font-size:10px">Featured</span>' : ''}<div class="muted" style="font-size:12px">${refCode(l) ? esc(refCode(l)) + ' · ' : ''}/${esc(l.slug)}</div></td>
               <td><span class="badge badge-${l.status}">${fmt.statusLabel(l.status)}</span></td>
               <td>${esc(l.category || '—')}</td>
               <td>${esc(fmt.location(l))}</td>
@@ -339,7 +341,7 @@
     back.className = 'modal-back';
     back.innerHTML = `
       <div class="modal modal-wide">
-        <div class="modal-head"><h3>${isNew ? 'New Listing' : 'Edit Listing'}${l.ref_no != null ? ` <span class="muted" style="font-size:14px;font-weight:400">NGU-${l.ref_no}</span>` : ''}</h3><button class="modal-x">×</button></div>
+        <div class="modal-head"><h3>${isNew ? 'New Listing' : 'Edit Listing'}${refCode(l) ? ` <span class="muted" style="font-size:14px;font-weight:400">${esc(refCode(l))}</span>` : ''}</h3><button class="modal-x">×</button></div>
         <div class="modal-body">
           <form id="listing-form">
             <div class="form-row">
