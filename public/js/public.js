@@ -47,6 +47,12 @@
     return p ? p.url : null;
   }
 
+  // Human-friendly listing reference, e.g. "NGU-1001". Null until the ref_no
+  // column exists (pre-migration / demo data), so callers can filter it out.
+  function refCode(l) {
+    return l && l.ref_no != null ? 'NGU-' + l.ref_no : null;
+  }
+
   function navigate(path) {
     history.pushState({}, '', path);
     render();
@@ -202,6 +208,7 @@
       ['Rent', l.rent != null ? fmt.money(l.rent) + '/mo' : null],
     ].filter((r) => r[1]);
     const details = [
+      ['Listing ID', refCode(l)],
       ['Category', l.category],
       ['Location', fmt.location(l) + (l.county ? ` (${l.county})` : '')],
       ['Year Established', l.established_year],
