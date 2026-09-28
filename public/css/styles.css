@@ -394,6 +394,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
   border: 1px solid var(--line); border-radius: 8px; padding: 12px 14px; }
 .type-opt { display: flex; gap: 7px; align-items: center; font-size: 14px; cursor: pointer; }
 .type-opt input { width: auto; }
+.link-picker { display: grid; gap: 4px 14px; border: 1px solid var(--line); border-radius: 8px;
+  padding: 10px 14px; max-height: 220px; overflow-y: auto; margin-top: 6px; }
+.link-picker .type-opt { align-items: flex-start; }
 
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .img-tile { position: relative; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }

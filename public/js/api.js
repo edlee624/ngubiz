@@ -412,8 +412,33 @@
 
     // ===================== ADMIN: LEADS =================================
     async listLeads() {
-      if (this.isDemo) return demoState.leads.map((l) => Object.assign({}, l));
-      return wrap(sb.from('leads').select('*').order('created_at', { ascending: false }));
+      if (this.isDemo) return demoState.leads.map((l) => {
+        const c = Object.assign({}, l);
+        c.listing_ids = (c.listing_ids || (c.listing_id ? [c.listing_id] : [])).slice();
+        return c;
+      });
+      const rows = await wrap(sb.from('leads')
+        .select('*, lead_listings(listing_id)')
+        .order('created_at', { ascending: false }));
+      (rows || []).forEach((l) => {
+        const ids = new Set((l.lead_listings || []).map((x) => x.listing_id).filter(Boolean));
+        if (l.listing_id) ids.add(l.listing_id);   // keep the original inquiry listing
+        l.listing_ids = Array.from(ids);
+      });
+      return rows;
+    },
+    // Replace the set of listings a lead is linked to.
+    async setLeadListings(leadId, listingIds) {
+      const ids = Array.from(new Set((listingIds || []).filter(Boolean)));
+      if (this.isDemo) {
+        const l = demoState.leads.find((x) => x.id === leadId);
+        if (l) l.listing_ids = ids.slice();
+        return;
+      }
+      await wrap(sb.from('lead_listings').delete().eq('lead_id', leadId));
+      if (ids.length) {
+        await wrap(sb.from('lead_listings').insert(ids.map((lid) => ({ lead_id: leadId, listing_id: lid }))));
+      }
     },
     async updateLead(id, patch) {
       if (this.isDemo) {

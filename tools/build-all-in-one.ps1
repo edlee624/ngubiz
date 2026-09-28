@@ -40,6 +40,7 @@ $parts = @(
   @{ label = '0009_listing_order.sql'; file = Join-Path $p 'migrations\0009_listing_order.sql' },
   @{ label = '0010_listing_ref.sql'; file = Join-Path $p 'migrations\0010_listing_ref.sql' },
   @{ label = '0011_listing_ref_code.sql'; file = Join-Path $p 'migrations\0011_listing_ref_code.sql' },
+  @{ label = '0012_lead_pipeline_and_links.sql'; file = Join-Path $p 'migrations\0012_lead_pipeline_and_links.sql' },
   @{ label = 'seed.sql';         file = Join-Path $p 'seed.sql' }
 )
 

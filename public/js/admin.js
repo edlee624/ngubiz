@@ -20,8 +20,9 @@
   }
 
   const STAGES = [
-    ['new', 'New'], ['contacted', 'Contacted'],
-    ['negotiating', 'Negotiations'], ['closed_won', 'Closed — Won'],
+    ['new', 'New Lead'], ['contacted_noreply', 'Contacted-NoReply'],
+    ['contacted', 'Contacted'], ['showed', 'Showed Listing'],
+    ['offered', 'Offered'], ['closed', 'Closed'],
   ];
   // Pretty label for any legacy stage still stored on older leads, so a lead
   // saved before the pipeline was trimmed never silently disappears.
@@ -648,7 +649,7 @@
       ['email', 'Email'], ['phone', 'Phone'], ['company', 'Company'],
       ['investment_amount', 'Investment Amount'], ['timeframe', 'Timeframe'],
       ['interested_categories', 'Business Types'], ['budget', 'Budget / Notes'],
-      ['listing', 'Listing'], ['broker', 'Assigned Broker'],
+      ['listing', 'Linked Businesses'], ['broker', 'Assigned Broker'],
       ['message', 'Message'], ['notes', 'Private Notes'],
       ['source', 'Source'], ['created_at', 'Received'],
     ];
@@ -659,8 +660,12 @@
     };
     const lines = [cols.map((c) => cell(c[1])).join(',')];
     rows.forEach((l) => {
+      const linked = (l.listing_ids && l.listing_ids.length
+        ? l.listing_ids
+        : (l.listing_id ? [l.listing_id] : []))
+        .map(findListingTitle).filter(Boolean);
       const rec = Object.assign({}, l, {
-        listing: findListingTitle(l.listing_id) || '',
+        listing: linked.join('; '),
         broker: brokerName(l.broker_id) || '',
       });
       lines.push(cols.map((c) => cell(rec[c[0]])).join(','));
@@ -677,7 +682,10 @@
   }
 
   function leadCardHTML(l) {
-    const listing = findListingTitle(l.listing_id);
+    const linked = (l.listing_ids && l.listing_ids.length
+      ? l.listing_ids
+      : (l.listing_id ? [l.listing_id] : []))
+      .map(findListingTitle).filter(Boolean);
     const broker = brokerName(l.broker_id);
     const cats = (l.interested_categories || []);
     return `<div class="lead-card ${l.type}" data-lead="${l.id}">
@@ -686,7 +694,7 @@
         <span class="lead-type-tag ${l.type}">${l.type}</span>
       </div>
       <div class="lm">${esc(l.email || l.phone || '')}</div>
-      ${listing ? `<div class="lm" style="color:var(--blue)">${esc(listing)}</div>` : ''}
+      ${linked.length ? `<div class="lm" style="color:var(--blue)">${esc(linked.slice(0, 2).join(', '))}${linked.length > 2 ? ` +${linked.length - 2}` : ''}</div>` : ''}
       ${broker ? `<div class="lm">→ ${esc(broker)}</div>` : ''}
       ${l.investment_amount != null ? `<div class="lm" style="color:var(--green);font-weight:600">${esc(fmt.moneyOr(l.investment_amount))} to invest</div>` : ''}
       ${cats.length ? `<div class="lead-cats">${cats.slice(0, 3).map((c) => `<span class="lead-cat-chip">${esc(c)}</span>`).join('')}${cats.length > 3 ? ` +${cats.length - 3}` : ''}</div>` : ''}
@@ -743,7 +751,15 @@
             <div class="field"><label>Budget / other notes</label><input name="budget" value="${esc(l.budget)}"/></div>
             <div class="field"><label>Message</label><textarea name="message">${esc(l.message)}</textarea></div>
             <div class="field"><label>Private notes</label><textarea name="notes" placeholder="Internal notes — never shown publicly">${esc(l.notes)}</textarea></div>
-            ${l.listing_id ? `<p class="form-note">Interested in: <strong>${esc(findListingTitle(l.listing_id) || l.listing_id)}</strong></p>` : ''}
+            <div class="field"><label>Linked businesses</label>
+              <span class="form-note">Tie this lead to one or more of your listings.</span>
+              ${listingCache.length ? `<div class="link-picker">
+                ${listingCache.map((li) => `<label class="type-opt">
+                  <input type="checkbox" name="link_listings" value="${esc(li.id)}" ${(l.listing_ids || []).indexOf(li.id) !== -1 ? 'checked' : ''}/>
+                  <span>${refCode(li) ? `<span class="muted">${esc(refCode(li))}</span> ` : ''}${esc(li.title)}</span>
+                </label>`).join('')}
+              </div>` : '<span class="form-note">No listings yet.</span>'}
+            </div>
             ${l.created_at ? `<p class="form-note">Received ${esc(fmt.date(l.created_at))}${l.source ? ' · ' + esc(l.source) : ''}</p>` : ''}
             <button class="btn btn-primary" type="submit">${isNew ? 'Create Lead' : 'Save'}</button>
             ${l.email ? `<a class="btn btn-ghost" href="mailto:${esc(l.email)}" style="margin-left:8px">Email</a>` : ''}
@@ -769,9 +785,13 @@
       // Checkboxes: fromEntries keeps only the last, so pull all of them.
       d.interested_categories = fd.getAll('interested_categories');
       d.investment_amount = d.investment_amount === '' ? null : Number(d.investment_amount);
+      // Linked listings live in their own table, not on the lead row.
+      const linkIds = fd.getAll('link_listings');
+      delete d.link_listings;
       try {
-        if (isNew) await BK.createLead(d);
-        else await BK.updateLead(l.id, d);
+        const saved = isNew ? await BK.createLead(d) : await BK.updateLead(l.id, d);
+        const leadId = (saved && saved.id) || l.id;
+        await BK.setLeadListings(leadId, linkIds);
         toast('Lead saved', 'ok'); back.remove(); renderLeads();
       } catch (err) { toast(err.message, 'err'); }
     });
