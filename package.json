@@ -7,6 +7,9 @@
     "dev": "npx serve public -p 3000",
     "build": "echo 'Static site, no build step needed'"
   },
+  "dependencies": {
+    "pdf-lib": "^1.17.1"
+  },
   "devDependencies": {
     "serve": "^14.0.0"
   }

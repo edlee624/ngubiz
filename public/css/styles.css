@@ -398,6 +398,37 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
   padding: 10px 14px; max-height: 220px; overflow-y: auto; margin-top: 6px; }
 .link-picker .type-opt { align-items: flex-start; }
 
+/* ---- NDA signing (/nda) ---- */
+.nda-block { max-width: 760px; }
+.nda-steps { list-style: none; margin: 24px 0 0; padding: 0; counter-reset: none; }
+.nda-step { border: 1px solid var(--line); border-radius: 12px; padding: 18px 20px; margin-bottom: 16px; background: #fff; }
+.nda-step.is-locked { opacity: .45; pointer-events: none; }
+.nda-step h3 { display: flex; align-items: center; gap: 10px; margin: 0 0 4px; font-size: 18px; }
+.nda-num { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px;
+  border-radius: 50%; background: var(--blue, #1d6fb8); color: #fff; font-size: 15px; flex: none; }
+.nda-step-body { padding-top: 12px; }
+.nda-didit { width: 100%; height: 640px; border: 1px solid var(--line); border-radius: 10px; background: #fff; }
+.nda-verify-actions { display: flex; align-items: center; gap: 12px; margin-top: 12px; flex-wrap: wrap; }
+.nda-ok { color: #117a3d; font-weight: 600; }
+.nda-err { color: #b42318; font-weight: 600; }
+.nda-doc { max-height: 340px; overflow-y: auto; border: 1px solid var(--line); border-radius: 10px;
+  padding: 16px 18px; background: #fbfcfe; font-size: 13.5px; line-height: 1.55; }
+.nda-doc-title { margin: 0 0 10px; font-size: 15px; text-transform: uppercase; letter-spacing: .02em; }
+.nda-doc p { margin: 0 0 10px; }
+.nda-sign { margin-top: 18px; }
+.sign-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
+.sign-toggle button { border: 1px solid var(--line); background: #fff; padding: 5px 12px; cursor: pointer; font-size: 13px; }
+.sign-toggle button:first-child { border-radius: 6px 0 0 6px; }
+.sign-toggle button:last-child { border-radius: 0 6px 6px 0; border-left: none; }
+.sign-toggle button.active { background: var(--blue, #1d6fb8); color: #fff; border-color: var(--blue, #1d6fb8); }
+#sig-pad { width: 100%; max-width: 520px; height: 150px; border: 1px dashed #9db3cc; border-radius: 10px; background: #fff; touch-action: none; display: block; }
+#sig-draw-wrap .btn { margin-top: 8px; }
+.sig-typed { font-family: "Segoe Script", "Brush Script MT", cursive; font-size: 30px; max-width: 520px; padding: 10px 14px; }
+.nda-agree { display: flex; gap: 10px; align-items: flex-start; margin: 16px 0; font-size: 14px; }
+.nda-agree input { width: auto; margin-top: 3px; }
+.nda-success { border: 1px solid #b7e0c4; background: #f0faf3; border-radius: 12px; padding: 24px; }
+.nda-success h3 { margin: 0 0 8px; color: #117a3d; }
+
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .img-tile { position: relative; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }
 .img-tile img { aspect-ratio: 3/2; object-fit: cover; width: 100%; display: block; }

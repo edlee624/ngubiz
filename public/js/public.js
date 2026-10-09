@@ -354,6 +354,239 @@
     wireBuyersForm();
   }
 
+  // ---------- SIGN AN NDA (/nda) ----------
+  // Canonical text mirrors api/nda/_agreement.js (keep VERSION in sync).
+  const NDA_AGREEMENT = {
+    VERSION: 'v1-2026',
+    TITLE: "Buyer's Acknowledgement of Introduction and Confidentiality Agreement",
+    intro: (biz) => `The undersigned Buyer, individually and on behalf of any affiliated prospective buyer, acknowledges being first introduced to and requests Confidential Information about the following business: <strong>${esc(biz)}</strong>, identified herein by Brokerage NGU Business Real Estate, Edward Lee, an agent of NGU Business Real Estate (Broker). Such Confidential Information shall be provided to Buyer for the sole purpose of evaluating the possible purchase by Buyer of all or part of the stock or assets of the Business. As used in this agreement (Agreement), the term Buyer applies to the undersigned and any partnership, corporation, individual, or other entity with which the undersigned is affiliated. Buyer agrees as follows:`,
+    sections: [
+      ['1. Non-Disclosure of Information', "Buyer acknowledges that the owner of the Business (Seller) desires to maintain the confidentiality of the information disclosed. Buyer agrees not to disclose or permit access to any Confidential Information without the prior written consent of the Seller, to anyone other than Buyer's legal counsel, accountants, lenders, or other agents or advisors to whom disclosure or access is necessary for Buyer to evaluate the Business. Disclosure shall be made to these parties only in connection with the potential acquisition of the Business, and only if these parties agree to maintain confidentiality. Buyer shall be responsible for any breach of this Agreement by these parties. If the Buyer does not purchase the Business, Buyer, at the close of negotiations, will destroy or return to Broker (at Seller's direction) all information provided and will not retain any copy, reproduction, or record thereof."],
+      ['2. Definition of "Confidential Information"', 'The term "Confidential Information" shall mean all information including the fact that the Business is for sale, all financial, production, marketing and pricing information, business methods, manuals, procedures, correspondence, processes, data, contracts, customer lists, employee lists, and any other information whether written, oral, or otherwise made known to Buyer; (a) from any inspection or review of the books, records, assets, liabilities, processes, or production methods of Seller; (b) from any communication with Seller or Seller\'s broker, directors, officers, employees, agents, suppliers, customers or representatives; (c) during visits to Seller\'s premises; or (d) through disclosure or discovery in any other manner.'],
+      ["3. Buyer's Responsibility and Disclaimer of Broker's Liability", "NGU Business Real Estate has received information about this Business from the Seller which may include tax returns, financial statements, equipment lists, and facility leases, and often prepares a summary description which may include a cash flow projection or seller discretionary cash flow statement. Buyer understands that the Broker does not audit or verify any information or make any warranty as to its accuracy or completeness, nor guarantee future business performance. Buyer is solely responsible to examine and investigate the Business and all facts which might influence Buyer's purchase decision. Any decision to purchase shall be based solely on Buyer's own investigation and that of Buyer's advisors, not NGU Business Real Estate. Any costs from consultations with advisors are the sole responsibility of the Buyer."],
+      ['4. Non-Circumvention Agreement', "The Seller has agreed to pay a fee to the listing broker if, during the term of that agreement or up to twelve months thereafter, the Business is transferred to a buyer introduced by the listing or cooperating broker. Buyer shall conduct all inquiries and discussions solely through Broker and shall not directly contact the Seller or Seller's representatives. Should Buyer purchase any stock or assets of the Business, acquire any interest, execute any lease at the premises, or become affiliated with the Business without Broker's participation, or otherwise interfere with Brokers' right to a fee, Buyer shall be liable for such fee and other damages including reasonable attorney's fees. Buyer acknowledges that the Broker MUST BE NOTIFIED of ALL CONTRACTS, CLOSING DATES, TIMES AND LOCATIONS."],
+      ['5. Further Terms', "Neither Buyer nor Buyer's agents will contact Seller's employees, customers, landlords, or suppliers, nor linger or observe the Business, without Seller's consent. For three years, Buyer shall not solicit for employment any employees of Seller. Broker may act as a dual agent representing both Buyer and Seller. Seller and Seller's successors are intended beneficiaries and may enforce this Agreement. This Agreement can only be modified in writing signed by both Broker and Buyer, supersedes all prior understandings, and is governed by the laws of the State of New York. Venue for any action shall be the county in which the Business is located. This Agreement may be signed in counterparts; electronic signatures may be considered originals. Buyer acknowledges receipt of a fully completed copy of this Agreement."],
+    ],
+  };
+
+  const ndaState = { session_id: null, verified: false, listing: null, sigMode: 'draw', drew: false };
+
+  async function renderNDA() {
+    app.innerHTML = `<div class="wrap"><div class="empty">Loading…</div></div>`;
+    if (!ALL.length) { try { ALL = await BK.listPublicListings(); } catch (e) {} }
+    const live = ALL.filter((l) => l.status !== 'sold' && l.status !== 'withdrawn' && l.status !== 'draft');
+    const diditOn = !!(cfg.DIDIT_ENABLED === undefined ? true : cfg.DIDIT_ENABLED);
+
+    app.innerHTML = `
+      <div class="wrap">
+        <div class="breadcrumb"><a href="/" data-link>Home</a> › Confidentiality Agreement</div>
+        <div class="block nda-block">
+          <h2>Request Confidential Information</h2>
+          <p class="muted">To receive confidential details about one of our businesses, please verify your identity and sign our confidentiality agreement. It takes just a few minutes.</p>
+
+          <ol class="nda-steps">
+            <li class="nda-step" data-step="1">
+              <h3><span class="nda-num">1</span> Your details &amp; the business</h3>
+              <div class="nda-step-body">
+                <div class="field"><label>Business you're interested in *</label>
+                  <select id="nda-listing" required>
+                    <option value="">Select a business…</option>
+                    ${live.map((l) => `<option value="${esc(l.id)}">${refCode(l) ? esc(refCode(l)) + ' — ' : ''}${esc(l.title)}</option>`).join('')}
+                  </select>
+                </div>
+                <div class="form-row">
+                  <div class="field"><label>Full name *</label><input id="nda-name" required/></div>
+                  <div class="field"><label>Email *</label><input id="nda-email" type="email" required/></div>
+                </div>
+                <div class="field" style="max-width:300px"><label>Phone</label><input id="nda-phone"/></div>
+                <button class="btn btn-primary" id="nda-to-verify">Continue</button>
+              </div>
+            </li>
+
+            <li class="nda-step is-locked" data-step="2">
+              <h3><span class="nda-num">2</span> Verify your identity</h3>
+              <div class="nda-step-body">
+                <p class="muted">We use Didit to confirm your identity. Your documents go directly to Didit — NGU never sees them.</p>
+                <div id="nda-verify-area"></div>
+              </div>
+            </li>
+
+            <li class="nda-step is-locked" data-step="3">
+              <h3><span class="nda-num">3</span> Review &amp; sign</h3>
+              <div class="nda-step-body">
+                <div class="nda-doc" id="nda-doc"></div>
+                <div class="nda-sign">
+                  <div class="sign-head">
+                    <label>Signature *</label>
+                    <div class="sign-toggle">
+                      <button type="button" class="active" data-sig="draw">Draw</button>
+                      <button type="button" data-sig="type">Type</button>
+                    </div>
+                  </div>
+                  <div id="sig-draw-wrap"><canvas id="sig-pad" width="520" height="150"></canvas>
+                    <button type="button" class="btn btn-ghost btn-sm" id="sig-clear">Clear</button></div>
+                  <div id="sig-type-wrap" hidden><input id="sig-typed" class="sig-typed" placeholder="Type your full legal name"/></div>
+                </div>
+                <label class="nda-agree"><input type="checkbox" id="nda-agree"/> I have read and agree to the confidentiality agreement above, and I am signing it electronically.</label>
+                <button class="btn btn-primary" id="nda-submit" disabled>Sign &amp; Submit</button>
+                <p class="form-note">By signing you agree your electronic signature is legally binding.</p>
+              </div>
+            </li>
+          </ol>
+          <div id="nda-done" hidden></div>
+        </div>
+      </div>`;
+
+    wireNDA(diditOn);
+  }
+
+  function ndaUnlock(step) {
+    const el = app.querySelector(`.nda-step[data-step="${step}"]`);
+    if (el) { el.classList.remove('is-locked'); el.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+  }
+
+  function wireNDA(diditOn) {
+    const sel = app.querySelector('#nda-listing');
+    const nameEl = app.querySelector('#nda-name');
+    const emailEl = app.querySelector('#nda-email');
+    const phoneEl = app.querySelector('#nda-phone');
+
+    app.querySelector('#nda-to-verify').addEventListener('click', async () => {
+      if (!sel.value) return alert('Please select a business.');
+      if (!nameEl.value.trim() || !emailEl.value.trim()) return alert('Name and email are required.');
+      ndaState.listing = ALL.find((l) => l.id === sel.value);
+      // Render the agreement now that we know the business.
+      renderNDADoc(ndaState.listing);
+      ndaUnlock(2);
+      startVerification(diditOn);
+    });
+
+    // Signature mode toggle
+    app.querySelectorAll('.sign-toggle button').forEach((b) => b.addEventListener('click', () => {
+      app.querySelectorAll('.sign-toggle button').forEach((x) => x.classList.remove('active'));
+      b.classList.add('active');
+      ndaState.sigMode = b.dataset.sig;
+      app.querySelector('#sig-draw-wrap').hidden = b.dataset.sig !== 'draw';
+      app.querySelector('#sig-type-wrap').hidden = b.dataset.sig !== 'type';
+      refreshSubmit();
+    }));
+    setupSignaturePad();
+    app.querySelector('#sig-typed').addEventListener('input', refreshSubmit);
+    app.querySelector('#nda-agree').addEventListener('change', refreshSubmit);
+    app.querySelector('#nda-submit').addEventListener('click', submitNDA);
+  }
+
+  function renderNDADoc(listing) {
+    const biz = (refCode(listing) ? refCode(listing) + ' — ' : '') + listing.title;
+    app.querySelector('#nda-doc').innerHTML = `
+      <h4 class="nda-doc-title">${esc(NDA_AGREEMENT.TITLE)}</h4>
+      <p>${NDA_AGREEMENT.intro(biz)}</p>
+      ${NDA_AGREEMENT.sections.map((s) => `<p><strong>${esc(s[0])}:</strong> ${esc(s[1])}</p>`).join('')}
+      <p class="muted" style="font-size:13px">Broker: Edward Lee, NGU Business Real Estate · Governed by the laws of the State of New York.</p>`;
+  }
+
+  async function startVerification(diditOn) {
+    const area = app.querySelector('#nda-verify-area');
+    if (!diditOn) { ndaState.verified = true; area.innerHTML = '<p class="nda-ok">✓ Identity step skipped.</p>'; ndaUnlock(3); return; }
+    area.innerHTML = '<p class="muted">Starting secure verification…</p>';
+    try {
+      const r = await fetch('/api/didit/session', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ ref: 'nda-' + (ndaState.listing ? ndaState.listing.id : '') + '-' + Date.now() }),
+      });
+      const d = await r.json();
+      if (!r.ok || !d.url) { area.innerHTML = `<p class="nda-err">Couldn't start verification right now. Please try again later or contact us.</p>`; return; }
+      ndaState.session_id = d.session_id;
+      area.innerHTML = `
+        <iframe class="nda-didit" src="${esc(d.url)}" allow="camera; microphone; fullscreen; autoplay; encrypted-media"></iframe>
+        <p class="form-note">Camera not working? <a href="${esc(d.url)}" target="_blank" rel="noopener">Open verification in a new tab</a>.</p>
+        <div class="nda-verify-actions">
+          <button class="btn btn-primary" id="nda-check">I've finished — check status</button>
+          <span id="nda-vstatus" class="muted"></span>
+        </div>`;
+      app.querySelector('#nda-check').addEventListener('click', () => pollVerification(true));
+      // Gentle auto-poll in the background.
+      ndaPollTimer = setInterval(() => pollVerification(false), 6000);
+    } catch (e) { area.innerHTML = `<p class="nda-err">Verification service unreachable. Please try again later.</p>`; }
+  }
+
+  let ndaPollTimer = null;
+  async function pollVerification(manual) {
+    if (!ndaState.session_id || ndaState.verified) return;
+    const st = app.querySelector('#nda-vstatus');
+    if (manual && st) st.textContent = 'Checking…';
+    try {
+      const r = await fetch('/api/didit/status?session_id=' + encodeURIComponent(ndaState.session_id));
+      const d = await r.json();
+      if (d.status === 'Approved') {
+        ndaState.verified = true;
+        if (ndaPollTimer) clearInterval(ndaPollTimer);
+        app.querySelector('#nda-verify-area').innerHTML = '<p class="nda-ok">✓ Identity verified. You can now review and sign below.</p>';
+        ndaUnlock(3);
+      } else if (manual && st) {
+        st.textContent = (d.status === 'Declined') ? 'Verification was declined. Please retry or contact us.'
+          : 'Not verified yet (status: ' + (d.status || 'pending') + '). Finish in the window, then check again.';
+      }
+    } catch (e) { if (manual && st) st.textContent = 'Could not check status. Try again.'; }
+  }
+
+  function setupSignaturePad() {
+    const c = app.querySelector('#sig-pad'); if (!c) return;
+    const ctx = c.getContext('2d');
+    ctx.lineWidth = 2; ctx.lineCap = 'round'; ctx.strokeStyle = '#10243e';
+    let drawing = false, last = null;
+    const pos = (e) => { const r = c.getBoundingClientRect(); const t = e.touches ? e.touches[0] : e; return { x: (t.clientX - r.left) * (c.width / r.width), y: (t.clientY - r.top) * (c.height / r.height) }; };
+    const start = (e) => { drawing = true; last = pos(e); e.preventDefault(); };
+    const move = (e) => { if (!drawing) return; const p = pos(e); ctx.beginPath(); ctx.moveTo(last.x, last.y); ctx.lineTo(p.x, p.y); ctx.stroke(); last = p; ndaState.drew = true; refreshSubmit(); e.preventDefault(); };
+    const end = () => { drawing = false; };
+    c.addEventListener('mousedown', start); c.addEventListener('mousemove', move); window.addEventListener('mouseup', end);
+    c.addEventListener('touchstart', start, { passive: false }); c.addEventListener('touchmove', move, { passive: false }); c.addEventListener('touchend', end);
+    app.querySelector('#sig-clear').addEventListener('click', () => { ctx.clearRect(0, 0, c.width, c.height); ndaState.drew = false; refreshSubmit(); });
+  }
+
+  function signatureValue() {
+    if (ndaState.sigMode === 'draw') return ndaState.drew ? app.querySelector('#sig-pad').toDataURL('image/png') : '';
+    return (app.querySelector('#sig-typed').value || '').trim();
+  }
+
+  function refreshSubmit() {
+    const btn = app.querySelector('#nda-submit'); if (!btn) return;
+    const ok = ndaState.verified && app.querySelector('#nda-agree').checked && !!signatureValue();
+    btn.disabled = !ok;
+  }
+
+  async function submitNDA() {
+    const btn = app.querySelector('#nda-submit');
+    const sig = signatureValue();
+    if (!ndaState.verified || !sig || !app.querySelector('#nda-agree').checked) return;
+    btn.disabled = true; btn.textContent = 'Submitting…';
+    try {
+      const r = await fetch('/api/nda/submit', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          listing_id: ndaState.listing.id,
+          name: app.querySelector('#nda-name').value.trim(),
+          email: app.querySelector('#nda-email').value.trim(),
+          phone: app.querySelector('#nda-phone').value.trim(),
+          signature: sig,
+          signature_type: ndaState.sigMode === 'draw' ? 'drawn' : 'typed',
+          session_id: ndaState.session_id,
+        }),
+      });
+      const d = await r.json();
+      if (!r.ok) { btn.disabled = false; btn.textContent = 'Sign & Submit'; return alert(d.error || 'Could not submit. Please try again.'); }
+      const done = app.querySelector('#nda-done');
+      app.querySelector('.nda-steps').hidden = true;
+      done.hidden = false;
+      done.innerHTML = `<div class="nda-success">
+        <h3>✓ Thank you — your NDA is signed.</h3>
+        <p>You've signed the confidentiality agreement for <strong>${esc(d.business || ndaState.listing.title)}</strong>.${d.emailed ? ' A copy has been emailed to you.' : ''}</p>
+        <p class="muted">A member of our team will follow up shortly with the confidential information. Questions? <a href="/sell" data-link>Contact us</a>.</p>
+      </div>`;
+      done.scrollIntoView({ behavior: 'smooth' });
+    } catch (e) { btn.disabled = false; btn.textContent = 'Sign & Submit'; alert('Something went wrong. Please try again.'); }
+  }
+
   // Single-column row: image left, details right. Only shows the financial
   // figures a listing actually discloses.
   function cardHTML(l) {
@@ -697,6 +930,7 @@
     if (/^\/brokers\/?$/.test(path)) return renderBrokers();
     if (/^\/sell\/?$/.test(path)) return renderSell();
     if (/^\/buy\/?$/.test(path)) return renderBuy();
+    if (/^\/nda\/?$/.test(path)) return renderNDA();
 
     const m = path.match(/^\/listing\/([^\/?#]+)/);
     if (m) return renderDetail(decodeURIComponent(m[1]));
