@@ -8,75 +8,20 @@
 //   RESEND_API_KEY                     - Resend key (same account as the DB emails)
 //   SUPABASE_URL, SUPABASE_ANON_KEY    - optional; fall back to the public values
 
-const { PDFDocument, StandardFonts, rgb } = require('pdf-lib');
 const { fetchStatus } = require('../didit/status.js');
 const AGREEMENT = require('./_agreement.js');
+const { buildPdf, sendEmail, pdfFilename } = require('./_pdf.js');
 
 const SUPABASE_URL = process.env.SUPABASE_URL || 'https://zufqnaxouwlfjpainvsi.supabase.co';
 const SUPABASE_ANON = process.env.SUPABASE_ANON_KEY || 'sb_publishable_RI7yqJDNJ1XwXMNhcsO6Ww_IbQMbo-r';
-const BROKER_EMAIL = process.env.NDA_BROKER_EMAIL || 'nguedwardlee@gmail.com';
-const MAIL_FROM = 'NGU Business Real Estate <notifications@ngubiz.com>';
+// Broker copies of every signed NDA. Override with NDA_BROKER_EMAIL (comma-separated).
+const BROKER_RECIPIENTS = (process.env.NDA_BROKER_EMAIL || 'nguedwardlee@gmail.com')
+  .split(',').map((s) => s.trim()).filter(Boolean);
 
 function readBody(req) {
   let b = req.body;
   if (typeof b === 'string') { try { b = JSON.parse(b); } catch { b = {}; } }
   return b || {};
-}
-
-// Wrap text to a width in points for a given font/size.
-function wrapLines(text, font, size, maxWidth) {
-  const out = [];
-  String(text).split('\n').forEach((para) => {
-    let line = '';
-    para.split(/\s+/).forEach((word) => {
-      const next = line ? line + ' ' + word : word;
-      if (font.widthOfTextAtSize(next, size) > maxWidth && line) { out.push(line); line = word; }
-      else line = next;
-    });
-    out.push(line);
-  });
-  return out;
-}
-
-async function buildPdf({ business, name, email, signature, signatureType, didit, dateStr }) {
-  const pdf = await PDFDocument.create();
-  const font = await pdf.embedFont(StandardFonts.TimesRoman);
-  const bold = await pdf.embedFont(StandardFonts.TimesRomanBold);
-  const size = 9, lh = 12, margin = 54, pageW = 612, pageH = 792, maxW = pageW - margin * 2;
-  let page = pdf.addPage([pageW, pageH]);
-  let y = pageH - margin;
-
-  const ensure = (need) => { if (y - need < margin) { page = pdf.addPage([pageW, pageH]); y = pageH - margin; } };
-  const write = (text, f, s, gap) => {
-    wrapLines(text, f, s, maxW).forEach((ln) => { ensure(lh); page.drawText(ln, { x: margin, y, size: s, font: f, color: rgb(0, 0, 0) }); y -= lh; });
-    if (gap) y -= gap;
-  };
-
-  write(AGREEMENT.TITLE, bold, 11, 8);
-  write(AGREEMENT.intro(business), font, size, 8);
-  AGREEMENT.SECTIONS.forEach((sec) => { write(sec.n + '. ' + sec.heading + ':', bold, size, 2); write(sec.body, font, size, 8); });
-
-  ensure(90);
-  y -= 8;
-  write('Business: ' + business, bold, size, 2);
-  write('Name: ' + name + '    Date: ' + dateStr, font, size, 6);
-
-  // Signature: embedded image if drawn, otherwise the typed name in script-ish bold.
-  if (signatureType === 'drawn' && signature && signature.indexOf('data:image') === 0) {
-    try {
-      const png = await pdf.embedPng(signature);
-      const w = 180, h = (png.height / png.width) * w;
-      ensure(h + 16);
-      page.drawText('Signature:', { x: margin, y, size, font });
-      page.drawImage(png, { x: margin + 70, y: y - h + size, width: w, height: h });
-      y -= (h + 6);
-    } catch { write('Signature: ' + name + ' (electronic)', font, size, 2); }
-  } else {
-    write('Signature: ' + name + ' (typed / electronic)', font, size, 2);
-  }
-  if (didit) write('Identity verified via Didit - status ' + didit.status + ' (session ' + didit.session_id + ')', font, 8, 2);
-
-  return Buffer.from(await pdf.save());
 }
 
 async function rpcSubmit(payload) {
@@ -88,21 +33,6 @@ async function rpcSubmit(payload) {
   const data = await r.json().catch(() => ({}));
   if (!r.ok) throw new Error((data && (data.message || data.error)) || 'Could not record the NDA.');
   return data;
-}
-
-async function sendEmail(to, subject, html, pdfBuf, filename) {
-  const key = process.env.RESEND_API_KEY;
-  if (!key) return { ok: false, skipped: true };
-  const payload = { from: MAIL_FROM, to: [to], subject, html };
-  if (pdfBuf) payload.attachments = [{ filename, content: pdfBuf.toString('base64') }];
-  const r = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-    body: JSON.stringify(payload),
-  });
-  const body = await r.json().catch(() => ({}));
-  if (!r.ok) console.error('Resend error', r.status, body);
-  return { ok: r.ok, status: r.status, body };
 }
 
 module.exports = async (req, res) => {
@@ -148,14 +78,14 @@ module.exports = async (req, res) => {
     });
   } catch (e) { console.error('PDF build failed', String(e && e.message)); }
 
-  const filename = `NDA-${business}`.replace(/[^a-z0-9]+/gi, '-').slice(0, 60) + '.pdf';
+  const filename = pdfFilename(business);
   const buyerHtml = `<p>Hi ${name},</p><p>Thank you for signing the confidentiality agreement for <strong>${business}</strong>.${pdfBuf ? ' A copy is attached for your records.' : ''} A member of our team will follow up with the confidential information shortly.</p><p>— NGU Business Real Estate</p>`;
   const brokerHtml = `<p>New NDA signed.</p><ul><li><strong>Business:</strong> ${business}</li><li><strong>Name:</strong> ${name}</li><li><strong>Email:</strong> ${email}</li><li><strong>Phone:</strong> ${phone || '—'}</li><li><strong>Identity:</strong> ${diditStatus || 'n/a'}</li></ul><p><a href="https://www.ngubiz.com/admin.html">Open the admin</a></p>`;
 
   let emailed = false, emailError = null;
   try {
     const r1 = await sendEmail(email, `Your signed NDA — ${business}`, buyerHtml, pdfBuf, filename);
-    const r2 = await sendEmail(BROKER_EMAIL, `NDA signed: ${business} — ${name}`, brokerHtml, pdfBuf, filename);
+    const r2 = await sendEmail(BROKER_RECIPIENTS, `NDA signed: ${business} — ${name}`, brokerHtml, pdfBuf, filename);
     emailed = !!(r1.ok && r2.ok);
     if (!emailed) emailError = (r1.skipped || r2.skipped) ? 'RESEND_API_KEY not set' : ((r1.body && r1.body.message) || (r2.body && r2.body.message) || 'send failed');
   } catch (e) { emailError = String(e && e.message); console.error('Email send threw', emailError); }

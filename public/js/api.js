@@ -153,6 +153,11 @@
       const { data } = await sb.auth.getSession();
       return data.session ? data.session.user : null;
     },
+    async getAccessToken() {
+      if (this.isDemo) return null;
+      const { data } = await sb.auth.getSession();
+      return data.session ? data.session.access_token : null;
+    },
 
     // ===================== PUBLIC READS ==================================
     async listPublicListings() {
@@ -453,6 +458,12 @@
         demoState.leads.unshift(r); return r;
       }
       return wrap(sb.from('leads').insert(Object.assign({ source: 'manual' }, row)).select().single());
+    },
+    async listNdas() {
+      if (this.isDemo) return [];
+      return wrap(sb.from('ndas')
+        .select('*, listing:listings(title, ref_code, slug)')
+        .order('signed_at', { ascending: false }));
     },
     async deleteLead(id) {
       if (this.isDemo) {

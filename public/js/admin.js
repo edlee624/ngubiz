@@ -73,6 +73,7 @@
     if (tab === 'listings') return renderListings();
     if (tab === 'brokers') return renderBrokers();
     if (tab === 'leads') return renderLeads();
+    if (tab === 'ndas') return renderNdas();
     if (tab === 'stats') return renderStats();
   }
 
@@ -795,6 +796,146 @@
         toast('Lead saved', 'ok'); back.remove(); renderLeads();
       } catch (err) { toast(err.message, 'err'); }
     });
+  }
+
+  // ---------------- NDAs ----------------
+  let ndaCache = [];
+
+  async function renderNdas() {
+    main.innerHTML = '<div class="empty">Loading…</div>';
+    try { ndaCache = await BK.listNdas(); }
+    catch (e) { main.innerHTML = `<div class="empty">${esc(e.message)}</div>`; return; }
+
+    const rows = ndaCache;
+    main.innerHTML = `
+      <div class="toolbar">
+        <h2>Signed NDAs <span class="muted" style="font-size:15px;font-weight:400">(${rows.length})</span></h2>
+        <button class="btn btn-ghost" id="export-ndas">Export CSV</button>
+      </div>
+      <table class="table">
+        <thead><tr><th>Signer</th><th>Business</th><th>Identity</th><th>Signed</th><th></th></tr></thead>
+        <tbody>
+          ${rows.map((n) => `
+            <tr>
+              <td><strong>${esc(n.signer_name)}</strong><div class="muted" style="font-size:12px">${esc(n.signer_email || '')}${n.signer_phone ? ' · ' + esc(n.signer_phone) : ''}</div></td>
+              <td>${n.listing ? `${n.listing.ref_code ? esc(n.listing.ref_code) + ' — ' : ''}${esc(n.listing.title)}` : '<span class="muted">—</span>'}</td>
+              <td>${ndaIdentityBadge(n.didit_status)}</td>
+              <td>${esc(fmt.date(n.signed_at))}</td>
+              <td><div class="row-actions"><button class="btn btn-ghost btn-sm" data-view="${n.id}">View</button></div></td>
+            </tr>`).join('') || '<tr><td colspan="5" class="muted" style="text-align:center;padding:30px">No signed NDAs yet.</td></tr>'}
+        </tbody>
+      </table>`;
+
+    main.querySelectorAll('[data-view]').forEach((b) => b.addEventListener('click', () =>
+      openNdaView(rows.find((r) => r.id === b.dataset.view))));
+    document.getElementById('export-ndas').addEventListener('click', exportNdasCSV);
+  }
+
+  function ndaIdentityBadge(status) {
+    if (status === 'Approved') return '<span class="badge badge-active">Verified</span>';
+    if (!status) return '<span class="muted">—</span>';
+    return `<span class="badge badge-draft">${esc(status)}</span>`;
+  }
+
+  function ndaSignatureHTML(n) {
+    if (n.signature_type === 'drawn' && n.signature && n.signature.indexOf('data:image') === 0) {
+      return `<img src="${esc(n.signature)}" alt="signature" style="max-width:320px;border:1px solid var(--line);border-radius:6px;background:#fff"/>`;
+    }
+    if (n.signature) return `<div style="font-family:'Segoe Script','Brush Script MT',cursive;font-size:26px">${esc(n.signature)}</div>`;
+    return '<span class="muted">—</span>';
+  }
+
+  function openNdaView(n) {
+    if (!n) return;
+    const biz = n.listing ? `${n.listing.ref_code ? n.listing.ref_code + ' — ' : ''}${n.listing.title}` : '—';
+    const back = document.createElement('div');
+    back.className = 'modal-back';
+    back.innerHTML = `
+      <div class="modal">
+        <div class="modal-head"><h3>Signed NDA</h3><button class="modal-x">×</button></div>
+        <div class="modal-body" id="nda-view-body">
+          <table class="kv">
+            <tr><td>Signer</td><td><strong>${esc(n.signer_name)}</strong></td></tr>
+            <tr><td>Email</td><td>${esc(n.signer_email || '—')}</td></tr>
+            <tr><td>Phone</td><td>${esc(n.signer_phone || '—')}</td></tr>
+            <tr><td>Business</td><td>${esc(biz)}</td></tr>
+            <tr><td>Identity</td><td>${ndaIdentityBadge(n.didit_status)}${n.didit_session_id ? ` <span class="muted" style="font-size:12px">(Didit ${esc(n.didit_session_id)})</span>` : ''}</td></tr>
+            <tr><td>Agreement</td><td>${esc(n.agreement_version || 'v1')}</td></tr>
+            <tr><td>Signed</td><td>${esc(fmt.date(n.signed_at))}</td></tr>
+          </table>
+          <div class="field" style="margin-top:14px"><label>Signature</label>${ndaSignatureHTML(n)}</div>
+        </div>
+        <div style="padding:14px 20px;border-top:1px solid var(--line);display:flex;gap:8px;justify-content:flex-end">
+          ${n.signer_email ? `<button class="btn btn-ghost btn-sm" id="nda-resend">Email copy to ${esc(n.signer_email)}</button>` : ''}
+          <button class="btn btn-primary btn-sm" id="nda-print">Print / Save PDF</button>
+        </div>
+      </div>`;
+    document.body.appendChild(back);
+    back.querySelector('.modal-x').addEventListener('click', () => back.remove());
+    back.addEventListener('click', (e) => { if (e.target === back) back.remove(); });
+    back.querySelector('#nda-print').addEventListener('click', () => printNda(n, biz));
+    const resendBtn = back.querySelector('#nda-resend');
+    if (resendBtn) resendBtn.addEventListener('click', async () => {
+      resendBtn.disabled = true; resendBtn.textContent = 'Sending…';
+      try {
+        const token = await BK.getAccessToken();
+        const r = await fetch('/api/nda/resend', {
+          method: 'POST', headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ id: n.id, token }),
+        });
+        const d = await r.json();
+        if (!r.ok) throw new Error(d.error || 'Could not resend');
+        toast(`Emailed to ${d.to}`, 'ok');
+        resendBtn.textContent = 'Sent ✓';
+      } catch (e) { toast(e.message, 'err'); resendBtn.disabled = false; resendBtn.textContent = `Email copy to ${n.signer_email}`; }
+    });
+  }
+
+  // Open a clean, printable record the broker can save as PDF.
+  function printNda(n, biz) {
+    const sig = (n.signature_type === 'drawn' && n.signature && n.signature.indexOf('data:image') === 0)
+      ? `<img src="${n.signature}" style="max-width:320px"/>`
+      : `<div style="font-family:cursive;font-size:26px">${esc(n.signature || '')}</div>`;
+    const w = window.open('', '_blank', 'width=720,height=900');
+    if (!w) return toast('Allow pop-ups to print', 'err');
+    w.document.write(`<!doctype html><html><head><title>NDA — ${esc(n.signer_name)}</title>
+      <style>body{font-family:Georgia,serif;max-width:680px;margin:40px auto;color:#111;line-height:1.5}
+      h1{font-size:18px}table{border-collapse:collapse;margin:16px 0}td{padding:4px 12px 4px 0;vertical-align:top}
+      .lbl{color:#555}</style></head><body>
+      <h1>NGU Business Real Estate — Signed Confidentiality Agreement</h1>
+      <table>
+        <tr><td class="lbl">Signer</td><td>${esc(n.signer_name)}</td></tr>
+        <tr><td class="lbl">Email</td><td>${esc(n.signer_email || '')}</td></tr>
+        <tr><td class="lbl">Phone</td><td>${esc(n.signer_phone || '')}</td></tr>
+        <tr><td class="lbl">Business</td><td>${esc(biz)}</td></tr>
+        <tr><td class="lbl">Identity verified</td><td>${esc(n.didit_status || 'n/a')}${n.didit_session_id ? ' (Didit ' + esc(n.didit_session_id) + ')' : ''}</td></tr>
+        <tr><td class="lbl">Agreement version</td><td>${esc(n.agreement_version || 'v1')}</td></tr>
+        <tr><td class="lbl">Signed</td><td>${esc(fmt.date(n.signed_at))}</td></tr>
+      </table>
+      <p class="lbl">Signature:</p>${sig}
+      <p style="margin-top:24px;font-size:12px;color:#777">The full signed agreement PDF was emailed at the time of signing. This is the broker's record copy.</p>
+      </body></html>`);
+    w.document.close();
+    setTimeout(() => { w.focus(); w.print(); }, 300);
+  }
+
+  function exportNdasCSV() {
+    if (!ndaCache.length) return toast('No NDAs to export', 'err');
+    const cols = [['signer_name', 'Signer'], ['signer_email', 'Email'], ['signer_phone', 'Phone'],
+      ['business', 'Business'], ['didit_status', 'Identity'], ['agreement_version', 'Agreement'], ['signed_at', 'Signed']];
+    const cell = (v) => { const s = v == null ? '' : String(v); return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s; };
+    const lines = [cols.map((c) => cell(c[1])).join(',')];
+    ndaCache.forEach((n) => {
+      const rec = Object.assign({}, n, { business: n.listing ? `${n.listing.ref_code ? n.listing.ref_code + ' — ' : ''}${n.listing.title}` : '' });
+      lines.push(cols.map((c) => cell(rec[c[0]])).join(','));
+    });
+    const blob = new Blob(['﻿' + lines.join('\r\n')], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `ngu-ndas-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+    toast(`Exported ${ndaCache.length} NDA${ndaCache.length === 1 ? '' : 's'}`, 'ok');
   }
 
   // ---------------- STATS ----------------

@@ -428,6 +428,9 @@ h1, h2, h3 { line-height: 1.2; color: var(--navy); }
 .nda-agree input { width: auto; margin-top: 3px; }
 .nda-success { border: 1px solid #b7e0c4; background: #f0faf3; border-radius: 12px; padding: 24px; }
 .nda-success h3 { margin: 0 0 8px; color: #117a3d; }
+.kv { width: 100%; border-collapse: collapse; }
+.kv td { padding: 6px 10px 6px 0; vertical-align: top; font-size: 14px; border-bottom: 1px solid var(--line); }
+.kv td:first-child { color: var(--muted); white-space: nowrap; width: 110px; }
 
 .admin-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 16px; }
 .img-tile { position: relative; border-radius: 8px; overflow: hidden; box-shadow: var(--shadow-sm); }
