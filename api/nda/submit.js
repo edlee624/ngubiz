@@ -92,16 +92,17 @@ async function rpcSubmit(payload) {
 
 async function sendEmail(to, subject, html, pdfBuf, filename) {
   const key = process.env.RESEND_API_KEY;
-  if (!key) return { skipped: true };
+  if (!key) return { ok: false, skipped: true };
+  const payload = { from: MAIL_FROM, to: [to], subject, html };
+  if (pdfBuf) payload.attachments = [{ filename, content: pdfBuf.toString('base64') }];
   const r = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-    body: JSON.stringify({
-      from: MAIL_FROM, to: [to], subject, html,
-      attachments: [{ filename, content: pdfBuf.toString('base64') }],
-    }),
+    body: JSON.stringify(payload),
   });
-  return r.json().catch(() => ({}));
+  const body = await r.json().catch(() => ({}));
+  if (!r.ok) console.error('Resend error', r.status, body);
+  return { ok: r.ok, status: r.status, body };
 }
 
 module.exports = async (req, res) => {
@@ -138,19 +139,26 @@ module.exports = async (req, res) => {
   const dateStr = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
 
   // 3) PDF + emails (best-effort; a mail failure doesn't undo the record).
-  let emailed = false;
+  // PDF is decoupled: if it fails to build, we still send the emails without it.
+  let pdfBuf = null;
   try {
-    const pdfBuf = await buildPdf({
+    pdfBuf = await buildPdf({
       business, name, email, signature, signatureType: signature_type,
       didit: diditStatus ? { status: diditStatus, session_id } : null, dateStr,
     });
-    const filename = `NDA-${business}`.replace(/[^a-z0-9]+/gi, '-').slice(0, 60) + '.pdf';
-    const buyerHtml = `<p>Hi ${name},</p><p>Thank you for signing the confidentiality agreement for <strong>${business}</strong>. A copy is attached for your records. A member of our team will follow up with the confidential information shortly.</p><p>— NGU Business Real Estate</p>`;
-    const brokerHtml = `<p>New NDA signed.</p><ul><li><strong>Business:</strong> ${business}</li><li><strong>Name:</strong> ${name}</li><li><strong>Email:</strong> ${email}</li><li><strong>Phone:</strong> ${phone || '—'}</li><li><strong>Identity:</strong> ${diditStatus || 'n/a'}</li></ul><p><a href="https://www.ngubiz.com/admin.html">Open the admin</a></p>`;
-    await sendEmail(email, `Your signed NDA — ${business}`, buyerHtml, pdfBuf, filename);
-    await sendEmail(BROKER_EMAIL, `NDA signed: ${business} — ${name}`, brokerHtml, pdfBuf, filename);
-    emailed = true;
-  } catch (e) { /* recorded already; report partial success */ }
+  } catch (e) { console.error('PDF build failed', String(e && e.message)); }
 
-  return res.status(200).json({ ok: true, nda_id: rec && rec.nda_id, business, emailed });
+  const filename = `NDA-${business}`.replace(/[^a-z0-9]+/gi, '-').slice(0, 60) + '.pdf';
+  const buyerHtml = `<p>Hi ${name},</p><p>Thank you for signing the confidentiality agreement for <strong>${business}</strong>.${pdfBuf ? ' A copy is attached for your records.' : ''} A member of our team will follow up with the confidential information shortly.</p><p>— NGU Business Real Estate</p>`;
+  const brokerHtml = `<p>New NDA signed.</p><ul><li><strong>Business:</strong> ${business}</li><li><strong>Name:</strong> ${name}</li><li><strong>Email:</strong> ${email}</li><li><strong>Phone:</strong> ${phone || '—'}</li><li><strong>Identity:</strong> ${diditStatus || 'n/a'}</li></ul><p><a href="https://www.ngubiz.com/admin.html">Open the admin</a></p>`;
+
+  let emailed = false, emailError = null;
+  try {
+    const r1 = await sendEmail(email, `Your signed NDA — ${business}`, buyerHtml, pdfBuf, filename);
+    const r2 = await sendEmail(BROKER_EMAIL, `NDA signed: ${business} — ${name}`, brokerHtml, pdfBuf, filename);
+    emailed = !!(r1.ok && r2.ok);
+    if (!emailed) emailError = (r1.skipped || r2.skipped) ? 'RESEND_API_KEY not set' : ((r1.body && r1.body.message) || (r2.body && r2.body.message) || 'send failed');
+  } catch (e) { emailError = String(e && e.message); console.error('Email send threw', emailError); }
+
+  return res.status(200).json({ ok: true, nda_id: rec && rec.nda_id, business, emailed, emailError });
 };
