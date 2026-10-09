@@ -1,14 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    { "src": "public/**", "use": "@vercel/static" },
-    { "src": "api/**/*.js", "use": "@vercel/node" }
-  ],
-  "routes": [
-    { "handle": "filesystem" },
-    { "src": "/(.+\\.[a-zA-Z0-9]+)", "dest": "/public/$1" },
-    { "src": "/admin(.*)", "dest": "/public/admin.html" },
-    { "src": "/(.*)", "dest": "/public/index.html" }
+  "outputDirectory": "public",
+  "rewrites": [
+    { "source": "/admin", "destination": "/admin.html" },
+    { "source": "/admin/(.*)", "destination": "/admin.html" },
+    { "source": "/((?!api/).*)", "destination": "/index.html" }
   ],
   "headers": [
     {
