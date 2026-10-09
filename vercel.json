@@ -5,7 +5,7 @@
     { "src": "api/**/*.js", "use": "@vercel/node" }
   ],
   "routes": [
-    { "src": "/api/(.*)", "dest": "/api/$1" },
+    { "handle": "filesystem" },
     { "src": "/(.+\\.[a-zA-Z0-9]+)", "dest": "/public/$1" },
     { "src": "/admin(.*)", "dest": "/public/admin.html" },
     { "src": "/(.*)", "dest": "/public/index.html" }
